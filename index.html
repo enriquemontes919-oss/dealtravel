@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deal Travel</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a1628; color: #fff; overflow-x: hidden; }
+
+  /* NAV */
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; position: fixed; top: 0; width: 100%; z-index: 100; background: rgba(10,22,40,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .logo { font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+  .logo span { color: #38bdf8; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover { color: #38bdf8; }
+  .nav-cta { background: #38bdf8; color: #0a1628; padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: #7dd3fc; }
+
+  /* AD SLOTS */
+  .ad-slot { background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.15); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: rgba(255,255,255,0.25); font-size: 0.72rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; overflow: hidden; }
+  .ad-slot:hover { border-color: rgba(56,189,248,0.35); background: rgba(56,189,248,0.04); }
+  .ad-slot-icon { font-size: 1.2rem; opacity: 0.4; }
+  .ad-slot-size { font-size: 0.65rem; opacity: 0.5; }
+  .ad-label { position: absolute; top: 6px; right: 8px; font-size: 0.6rem; background: rgba(255,255,255,0.07); padding: 2px 6px; border-radius: 4px; color: rgba(255,255,255,0.3); }
+
+  /* LEADERBOARD top */
+  .ad-leaderboard-wrap { background: #07111f; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.6rem 5%; display: flex; justify-content: center; margin-top: 64px; }
+  .ad-leaderboard { width: 100%; max-width: 728px; height: 90px; }
+
+  /* HERO */
+  .hero { min-height: 92vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 5% 4rem; background: linear-gradient(135deg, #0a1628 0%, #0f2847 50%, #0a2240 100%); position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, rgba(56,189,248,0.12) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(99,102,241,0.1) 0%, transparent 50%); }
+  .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3); color: #7dd3fc; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; margin-bottom: 1.5rem; }
+  .hero-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #38bdf8; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .hero h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem; letter-spacing: -1.5px; }
+  .hero h1 em { font-style: normal; color: #38bdf8; }
+  .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.65); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7; }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: #38bdf8; color: #0a1628; padding: 0.85rem 2rem; border-radius: 10px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.2s; }
+  .btn-primary:hover { background: #7dd3fc; transform: translateY(-2px); }
+  .btn-outline { border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 0.85rem 2rem; border-radius: 10px; font-weight: 500; font-size: 1rem; text-decoration: none; transition: all 0.2s; }
+  .btn-outline:hover { border-color: #38bdf8; color: #38bdf8; }
+  .hero-stats { display: flex; gap: 3rem; justify-content: center; margin-top: 4rem; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-size: 1.8rem; font-weight: 800; color: #38bdf8; }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  /* SECTION BASE */
+  section { padding: 5rem 5%; }
+  .section-label { font-size: 0.78rem; font-weight: 600; color: #38bdf8; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.7rem; }
+  .section-title { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 1rem; }
+  .section-sub { color: rgba(255,255,255,0.55); font-size: 1rem; max-width: 520px; line-height: 1.7; }
+
+  /* HOW */
+  .how { background: #0d1f3c; }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+  .how-header { text-align: center; margin-bottom: 3.5rem; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .step { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; transition: border-color 0.3s; }
+  .step:hover { border-color: rgba(56,189,248,0.4); }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.3); color: #38bdf8; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
+  .step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .step p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+  /* CATEGORIES */
+  .categories { background: #0a1628; }
+  .categories-inner { max-width: 1100px; margin: 0 auto; }
+  .cat-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+  .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+  .cat-card { border-radius: 16px; padding: 2rem 1.5rem; cursor: pointer; transition: transform 0.2s; position: relative; overflow: hidden; }
+  .cat-card:hover { transform: translateY(-4px); }
+  .cat-card.vuelos { background: linear-gradient(135deg, #1e3a5f, #2563ab); }
+  .cat-card.hoteles { background: linear-gradient(135deg, #1a3a2e, #16a34a); }
+  .cat-card.cruceros { background: linear-gradient(135deg, #2d1b69, #7c3aed); }
+  .cat-card.paquetes { background: linear-gradient(135deg, #4a1942, #db2777); }
+  .cat-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .cat-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .cat-card p { font-size: 0.8rem; opacity: 0.75; margin-bottom: 1rem; }
+  .cat-tag { display: inline-block; background: rgba(255,255,255,0.15); font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; }
+
+  /* AD + CONTENT LAYOUT */
+  .content-with-sidebar { display: grid; grid-template-columns: 1fr 300px; gap: 2rem; max-width: 1100px; margin: 0 auto; }
+  .sidebar-ad-stack { display: flex; flex-direction: column; gap: 1.2rem; padding-top: 0.2rem; }
+  .ad-300x250 { width: 100%; height: 250px; }
+  .ad-300x600 { width: 100%; height: 300px; }
+
+  /* ALERT FORM */
+  .alert-section { background: linear-gradient(135deg, #0d1f3c, #0f2847); }
+  .alert-inner { max-width: 900px; margin: 0 auto; }
+  .alert-header { text-align: center; margin-bottom: 3rem; }
+  .alert-form { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2.5rem; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 0.78rem; color: rgba(255,255,255,0.5); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+  .form-group input, .form-group select { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 0.7rem 1rem; color: #fff; font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: inherit; }
+  .form-group input:focus, .form-group select:focus { border-color: #38bdf8; }
+  .form-group select option { background: #0d1f3c; }
+  .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+  .form-submit { width: 100%; background: #38bdf8; color: #0a1628; border: none; border-radius: 12px; padding: 1rem; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; font-family: inherit; }
+  .form-submit:hover { background: #7dd3fc; transform: translateY(-1px); }
+  .success-msg { display: none; text-align: center; padding: 1.5rem; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; color: #34d399; font-weight: 500; margin-top: 1rem; }
+
+  /* DEALS */
+  .deals { background: #0d1f3c; padding: 5rem 5%; }
+  .deals-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+  .deals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+  .deal-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; overflow: hidden; transition: all 0.2s; }
+  .deal-card:hover { border-color: rgba(56,189,248,0.35); transform: translateY(-3px); }
+  .deal-img { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; }
+  .deal-img.cancun { background: linear-gradient(135deg, #0c4a6e, #0284c7); }
+  .deal-img.paris { background: linear-gradient(135deg, #1e1b4b, #4338ca); }
+  .deal-img.caribe { background: linear-gradient(135deg, #064e3b, #059669); }
+  .deal-img.barcelona { background: linear-gradient(135deg, #7c2d12, #ea580c); }
+  .deal-badge { position: absolute; top: 10px; right: 10px; background: #ef4444; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+  .deal-body { padding: 1.2rem; }
+  .deal-type { font-size: 0.7rem; color: #38bdf8; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .deal-title { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .deal-dates { font-size: 0.8rem; color: rgba(255,255,255,0.45); margin-bottom: 1rem; }
+  .deal-footer { display: flex; align-items: center; justify-content: space-between; }
+  .deal-price { font-size: 1.4rem; font-weight: 800; color: #38bdf8; }
+  .deal-price span { font-size: 0.75rem; color: rgba(255,255,255,0.4); font-weight: 400; line-height: 1; display: block; }
+  .deal-old { font-size: 0.8rem; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+  .deal-btn { background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.3); color: #38bdf8; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .deal-btn:hover { background: rgba(56,189,248,0.2); }
+
+  /* AD STRIP between sections */
+  .ad-strip { background: #07111f; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem 5%; display: flex; justify-content: center; }
+  .ad-970x90 { width: 100%; max-width: 970px; height: 90px; }
+
+  /* TESTIMONIALS */
+  .testimonials { background: #0a1628; }
+  .testimonials-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+  .testimonials-header { margin-bottom: 3rem; }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+  .testi { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.8rem; text-align: left; }
+  .stars { color: #fbbf24; font-size: 0.85rem; margin-bottom: 0.8rem; letter-spacing: 2px; }
+  .testi-text { font-size: 0.9rem; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 1.2rem; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(56,189,248,0.2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #38bdf8; flex-shrink: 0; }
+  .testi-name { font-size: 0.875rem; font-weight: 600; }
+  .testi-loc { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+  /* FOOTER */
+  footer { background: #050e1d; border-top: 1px solid rgba(255,255,255,0.06); padding: 3rem 5% 2rem; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; margin-bottom: 2.5rem; }
+  .footer-brand p { color: rgba(255,255,255,0.45); font-size: 0.875rem; margin-top: 0.6rem; max-width: 260px; line-height: 1.6; }
+  .footer-links h4 { font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 1rem; }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #38bdf8; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+  .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+  .footer-ad-wrap { display: flex; justify-content: center; margin-bottom: 2rem; }
+  .ad-728x90-footer { width: 100%; max-width: 728px; height: 90px; }
+
+  @media (max-width: 900px) {
+    .content-with-sidebar { grid-template-columns: 1fr; }
+    .sidebar-ad-stack { flex-direction: row; flex-wrap: wrap; }
+    .ad-300x250, .ad-300x600 { flex: 1 1 280px; height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Deal<span>Travel</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Vuelos</a></li>
+    <li><a href="#">Hoteles</a></li>
+    <li><a href="#">Cruceros</a></li>
+    <li><a href="#">Paquetes</a></li>
+  </ul>
+  <a href="#alerta" class="nav-cta">Crear alerta</a>
+</nav>
+
+<!-- LEADERBOARD AD — 728x90 (top, debajo del nav) -->
+<div class="ad-leaderboard-wrap">
+  <div class="ad-slot ad-leaderboard">
+    <span class="ad-label">Publicidad</span>
+    <span class="ad-slot-icon">📢</span>
+    <span>Espacio publicitario</span>
+    <span class="ad-slot-size">728 × 90 — Leaderboard / Programática</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;">
+    <div class="hero-badge">Monitoreo en tiempo real de precios</div>
+    <h1>Viaja más,<br>paga <em>menos.</em></h1>
+    <p>Monitoreamos miles de vuelos, hoteles, cruceros y paquetes para alertarte cuando los precios bajen a tu presupuesto ideal.</p>
+    <div class="hero-btns">
+      <a href="#alerta" class="btn-primary">Crear mi alerta gratis</a>
+      <a href="#como" class="btn-outline">¿Cómo funciona?</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">+85K</div><div class="stat-label">Viajeros alertados</div></div>
+      <div class="stat"><div class="stat-num">$42M</div><div class="stat-label">Ahorrados en total (MXN)</div></div>
+      <div class="stat"><div class="stat-num">47%</div><div class="stat-label">Descuento promedio</div></div>
+      <div class="stat"><div class="stat-num">120+</div><div class="stat-label">Aerolíneas monitoreadas</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="como">
+  <div class="how-inner">
+    <div class="how-header">
+      <p class="section-label">Así funciona</p>
+      <h2 class="section-title">3 pasos para encontrar tu oferta ideal</h2>
+      <p class="section-sub" style="margin:0 auto;">Sin complicaciones. Configura tu alerta en menos de 2 minutos y nosotros hacemos el trabajo.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Configura tu destino</h3><p>Ingresa tu origen, destino, tipo de viaje y las fechas aproximadas en que quieres viajar.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Define tu presupuesto</h3><p>Establece el precio máximo en pesos mexicanos. Nosotros monitoreamos 24/7.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Recibe tu alerta</h3><p>Cuando encontremos una oferta dentro de tu rango, te notificamos al instante por email.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>¡Reserva y viaja!</h3><p>Accede directamente a la oferta y reserva antes de que desaparezca. Es así de sencillo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- AD STRIP — 970x90 entre secciones -->
+<div class="ad-strip">
+  <div class="ad-slot ad-970x90">
+    <span class="ad-label">Publicidad</span>
+    <span class="ad-slot-icon">📢</span>
+    <span>Espacio publicitario</span>
+    <span class="ad-slot-size">970 × 90 — Billboard / Programática</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="categories-inner">
+    <div class="cat-header">
+      <div>
+        <p class="section-label">Lo que monitoreamos</p>
+        <h2 class="section-title">Todo tipo de viaje, una sola plataforma</h2>
+      </div>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card vuelos"><div class="cat-icon">✈️</div><h3>Vuelos</h3><p>Vuelos nacionales e internacionales. Económicos, business y primera clase.</p><span class="cat-tag">+120 aerolíneas</span></div>
+      <div class="cat-card hoteles"><div class="cat-icon">🏨</div><h3>Hoteles</h3><p>Desde hostales hasta resorts 5 estrellas en más de 180 países.</p><span class="cat-tag">+500K propiedades</span></div>
+      <div class="cat-card cruceros"><div class="cat-icon">🚢</div><h3>Cruceros</h3><p>Rutas por el Caribe, Mediterráneo, Alaska y muchos destinos más.</p><span class="cat-tag">+30 navieras</span></div>
+      <div class="cat-card paquetes"><div class="cat-icon">🌴</div><h3>Paquetes</h3><p>Todo incluido: vuelo + hotel + traslados al mejor precio combinado.</p><span class="cat-tag">Máximo ahorro</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERT FORM -->
+<section class="alert-section" id="alerta">
+  <div class="alert-inner">
+    <div class="alert-header">
+      <p class="section-label">Crea tu alerta</p>
+      <h2 class="section-title">Dinos a dónde quieres ir</h2>
+      <p class="section-sub" style="margin:0 auto;">Te avisamos cuando el precio llegue a tu rango en pesos mexicanos. Sin costo, sin spam.</p>
+    </div>
+    <div class="alert-form">
+      <div class="form-grid">
+        <div class="form-group"><label>Ciudad de origen</label><input type="text" id="origen" placeholder="Ej. Ciudad de México"></div>
+        <div class="form-group"><label>Destino</label><input type="text" id="destino" placeholder="Ej. Cancún, París…"></div>
+        <div class="form-group"><label>Tipo de viaje</label>
+          <select id="tipo">
+            <option value="">Seleccionar...</option>
+            <option>Vuelo</option><option>Hotel</option><option>Crucero</option><option>Paquete todo incluido</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Presupuesto máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 9,500"></div>
+        <div class="form-group"><label>Fecha de salida (aprox.)</label><input type="date" id="fecha"></div>
+        <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
+      </div>
+      <button class="form-submit" onclick="submitAlert()">🔔 Activar alerta de precio</button>
+      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos una oferta que se adapte a tu presupuesto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEALS + SIDEBAR CON ADS -->
+<section class="deals">
+  <div class="content-with-sidebar">
+    <div>
+      <div class="deals-header">
+        <div>
+          <p class="section-label">Ofertas recientes</p>
+          <h2 class="section-title">Descuentos encontrados hoy</h2>
+        </div>
+      </div>
+      <div class="deals-grid">
+        <div class="deal-card">
+          <div class="deal-img cancun">🏖️<span class="deal-badge">-52%</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Paquete todo incluido</div>
+            <div class="deal-title">CDMX → Cancún</div>
+            <div class="deal-dates">15 – 22 Jun · 7 noches · 2 personas</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$7,250 <span>por persona / MXN</span></div><div class="deal-old">antes $15,100</div></div>
+              <button class="deal-btn">Ver oferta</button>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card">
+          <div class="deal-img paris">🗼<span class="deal-badge">-38%</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Vuelo + hotel</div>
+            <div class="deal-title">CDMX → París</div>
+            <div class="deal-dates">10 – 20 Jul · 10 noches · 1 persona</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$22,400 <span>por persona / MXN</span></div><div class="deal-old">antes $36,100</div></div>
+              <button class="deal-btn">Ver oferta</button>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card">
+          <div class="deal-img caribe">⚓<span class="deal-badge">-45%</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Crucero</div>
+            <div class="deal-title">Caribe Oriental</div>
+            <div class="deal-dates">3 – 10 Ago · 7 noches · 2 personas</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$10,800 <span>por persona / MXN</span></div><div class="deal-old">antes $19,600</div></div>
+              <button class="deal-btn">Ver oferta</button>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card">
+          <div class="deal-img barcelona">🏛️<span class="deal-badge">-41%</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Vuelo directo</div>
+            <div class="deal-title">CDMX → Barcelona</div>
+            <div class="deal-dates">Sep · Tarifa solo ida · Clase turista</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$9,000 <span>solo vuelo / MXN</span></div><div class="deal-old">antes $15,250</div></div>
+              <button class="deal-btn">Ver oferta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR ADS -->
+    <div class="sidebar-ad-stack">
+      <div class="ad-slot ad-300x250">
+        <span class="ad-label">Publicidad</span>
+        <span class="ad-slot-icon">📢</span>
+        <span>Espacio publicitario</span>
+        <span class="ad-slot-size">300 × 250 — Medium Rectangle</span>
+      </div>
+      <div class="ad-slot ad-300x600">
+        <span class="ad-label">Publicidad</span>
+        <span class="ad-slot-icon">📢</span>
+        <span>Espacio publicitario</span>
+        <span class="ad-slot-size">300 × 600 — Half Page / Skin</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AD STRIP entre deals y testimonios -->
+<div class="ad-strip">
+  <div class="ad-slot ad-970x90">
+    <span class="ad-label">Publicidad</span>
+    <span class="ad-slot-icon">📢</span>
+    <span>Espacio publicitario</span>
+    <span class="ad-slot-size">970 × 90 — Billboard / Programática</span>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <p class="section-label">Testimonios</p>
+      <h2 class="section-title">Lo que dicen nuestros viajeros</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Configuré una alerta para Cancún con $8,000 MXN y en 3 días me llegó la notificación. ¡Ahorré más de $9,000 pesos en el paquete!"</p>
+        <div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Llevaba meses buscando vuelo a Europa dentro de mi presupuesto. Deal Travel me avisó cuando bajó y no lo dudé. Pagué $21,000 MXN por algo que valía $35,000."</p>
+        <div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Encontré un crucero por el Caribe con 45% de descuento. Pensé que era error. La plataforma es increíble y muy fácil de usar desde el celular."</p>
+        <div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-ad-wrap">
+      <div class="ad-slot ad-728x90-footer">
+        <span class="ad-label">Publicidad</span>
+        <span class="ad-slot-icon">📢</span>
+        <span>Espacio publicitario</span>
+        <span class="ad-slot-size">728 × 90 — Leaderboard footer / Programática</span>
+      </div>
+    </div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">Deal<span>Travel</span></div>
+        <p>Monitoreo inteligente de precios para que viajes más gastando menos.</p>
+      </div>
+      <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#">Vuelos</a></li><li><a href="#">Hoteles</a></li><li><a href="#">Cruceros</a></li><li><a href="#">Paquetes</a></li></ul></div>
+      <div class="footer-links"><h4>Empresa</h4><ul><li><a href="#">Sobre nosotros</a></li><li><a href="#">Blog de viajes</a></li><li><a href="#">Cómo funciona</a></li><li><a href="#">Contacto</a></li></ul></div>
+      <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos de uso</a></li><li><a href="#">Cookies</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
+      <p>Hecho con ♡ para viajeros inteligentes</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+function submitAlert() {
+  const origen = document.getElementById('origen').value.trim();
+  const destino = document.getElementById('destino').value.trim();
+  const tipo = document.getElementById('tipo').value;
+  const presupuesto = document.getElementById('presupuesto').value;
+  const email = document.getElementById('email').value.trim();
+  if (!origen || !destino || !tipo || !presupuesto || !email) { alert('Por favor completa todos los campos para activar tu alerta.'); return; }
+  document.getElementById('success').style.display = 'block';
+  document.querySelector('.form-submit').disabled = true;
+  document.querySelector('.form-submit').textContent = '✓ Alerta activada';
+  document.querySelector('.form-submit').style.background = '#10b981';
+}
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
