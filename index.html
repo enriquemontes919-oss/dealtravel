@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deal Travel — Alertas de Descuentos en Vuelos, Hoteles y Cruceros</title>
+<meta name="description" content="Monitoreo de descuentos en vuelos, hoteles, cruceros y paquetes de viaje en México.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a1628;color:#fff;overflow-x:hidden;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5%;position:fixed;top:0;width:100%;z-index:100;background:rgba(10,22,40,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.07);}
+.logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+.logo span{color:#38bdf8;}
+.nav-links{display:flex;gap:1.5rem;list-style:none;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+.nav-links a:hover{color:#38bdf8;}
+.nav-cta{background:#38bdf8;color:#0a1628;padding:0.5rem 1.2rem;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;}
+
+/* AD SLOTS */
+.ad-slot{background:rgba(255,255,255,0.03);border:1.5px dashed rgba(255,255,255,0.12);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:rgba(255,255,255,0.2);font-size:0.68rem;letter-spacing:1px;text-transform:uppercase;position:relative;}
+.ad-label{position:absolute;top:5px;right:8px;font-size:0.58rem;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:rgba(255,255,255,0.25);}
+.ad-leaderboard-wrap{background:#07111f;padding:0.5rem 5%;display:flex;justify-content:center;margin-top:62px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.ad-leaderboard{width:100%;max-width:728px;height:90px;}
+.ad-strip{background:#07111f;padding:0.8rem 5%;display:flex;justify-content:center;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);}
+.ad-970x90{width:100%;max-width:970px;height:90px;}
+.ad-300x250{width:100%;height:250px;}
+.ad-300x600{width:100%;height:300px;}
+.ad-728x90-footer{width:100%;max-width:728px;height:90px;}
+
+/* HERO */
+.hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 5%;background:linear-gradient(135deg,#0a1628,#0f2847,#0a2240);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(56,189,248,0.12),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(99,102,241,0.1),transparent 50%);}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:#7dd3fc;padding:0.4rem 1rem;border-radius:20px;font-size:0.78rem;font-weight:500;margin-bottom:1.5rem;}
+.hero-badge::before{content:'';display:inline-block;width:6px;height:6px;background:#38bdf8;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-1.5px;}
+.hero h1 em{font-style:normal;color:#38bdf8;}
+.hero p{font-size:1.1rem;color:rgba(255,255,255,0.65);max-width:560px;margin:0 auto 2rem;line-height:1.7;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;}
+.btn-primary{background:#38bdf8;color:#0a1628;padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-primary:hover{background:#7dd3fc;transform:translateY(-2px);}
+.btn-outline{border:1px solid rgba(255,255,255,0.25);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:500;font-size:1rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-outline:hover{border-color:#38bdf8;color:#38bdf8;}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:1.7rem;font-weight:800;color:#38bdf8;}
+.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;}
+
+/* BUSCADOR */
+.search-section{background:#0d1f3c;padding:2.5rem 5%;}
+.search-inner{max-width:900px;margin:0 auto;}
+.search-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;}
+.search-field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px;}
+.search-field label{font-size:0.72rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;}
+.search-field input,.search-field select{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.65rem 0.9rem;color:#fff;font-size:0.9rem;outline:none;font-family:inherit;}
+.search-field input:focus,.search-field select:focus{border-color:#38bdf8;}
+.search-field input::placeholder{color:rgba(255,255,255,0.3);}
+.search-field select option{background:#0d1f3c;}
+.btn-search{background:#38bdf8;color:#0a1628;border:none;border-radius:8px;padding:0.7rem 1.5rem;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;}
+.btn-search:hover{background:#7dd3fc;}
+.search-results{margin-top:1.5rem;display:none;}
+.search-results.visible{display:block;}
+.search-results-title{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:1rem;}
+.no-results{text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-size:0.9rem;}
+
+/* SECTION BASE */
+section{padding:4.5rem 5%;}
+.section-label{font-size:0.75rem;font-weight:600;color:#38bdf8;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:0.8rem;}
+.section-sub{color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:500px;line-height:1.7;}
+
+/* HOW */
+.how{background:#0a1628;}
+.how-inner{max-width:1100px;margin:0 auto;}
+.how-header{text-align:center;margin-bottom:3rem;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
+.step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.8rem 1.4rem;text-align:center;transition:border-color 0.3s;}
+.step:hover{border-color:rgba(56,189,248,0.4);}
+.step-num{width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;}
+.step p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.6;}
+
+/* CATEGORIES */
+.categories{background:#0d1f3c;}
+.categories-inner{max-width:1100px;margin:0 auto;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;}
+.cat-card{border-radius:14px;padding:1.8rem 1.4rem;cursor:pointer;transition:transform 0.2s;}
+.cat-card:hover{transform:translateY(-4px);}
+.cat-card.vuelos{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
+.cat-card.hoteles{background:linear-gradient(135deg,#1a3a2e,#16a34a);}
+.cat-card.cruceros{background:linear-gradient(135deg,#2d1b69,#7c3aed);}
+.cat-card.paquetes{background:linear-gradient(135deg,#4a1942,#db2777);}
+.cat-icon{font-size:1.8rem;margin-bottom:0.8rem;}
+.cat-card h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;}
+.cat-card p{font-size:0.78rem;opacity:0.75;margin-bottom:0.8rem;}
+.cat-tag{display:inline-block;background:rgba(255,255,255,0.15);font-size:0.7rem;padding:2px 10px;border-radius:20px;}
+
+/* FUENTES */
+.fuentes{background:#0a1628;}
+.fuentes-inner{max-width:1100px;margin:0 auto;}
+.fuentes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-top:2rem;}
+.fuente-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1rem;text-align:center;transition:all 0.2s;text-decoration:none;color:#fff;}
+.fuente-card:hover{border-color:rgba(56,189,248,0.4);transform:translateY(-2px);}
+.fuente-icon{font-size:1.3rem;margin-bottom:0.4rem;}
+.fuente-name{font-size:0.8rem;font-weight:600;margin-bottom:2px;}
+.fuente-tipo{font-size:0.65rem;color:rgba(255,255,255,0.35);}
+.fuente-badge{display:inline-block;background:rgba(56,189,248,0.12);color:#38bdf8;font-size:0.62rem;padding:2px 7px;border-radius:8px;margin-top:5px;}
+
+/* DEALS */
+.deals{background:#0d1f3c;padding:4.5rem 5%;}
+.content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2rem;max-width:1100px;margin:0 auto;}
+.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.deals-filters{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.filter-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.35rem 0.9rem;border-radius:20px;font-size:0.78rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.filter-btn:hover,.filter-btn.active{background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);color:#38bdf8;}
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
+.deal-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;transition:all 0.2s;}
+.deal-card:hover{border-color:rgba(56,189,248,0.35);transform:translateY(-3px);}
+.deal-card[data-tipo]{display:block;}
+.deal-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;}
+.deal-img.cancun{background:linear-gradient(135deg,#0c4a6e,#0284c7);}
+.deal-img.paris{background:linear-gradient(135deg,#1e1b4b,#4338ca);}
+.deal-img.caribe{background:linear-gradient(135deg,#064e3b,#059669);}
+.deal-img.barcelona{background:linear-gradient(135deg,#7c2d12,#ea580c);}
+.deal-img.miami{background:linear-gradient(135deg,#134e4a,#0d9488);}
+.deal-img.cancun2{background:linear-gradient(135deg,#1e3a5f,#7c3aed);}
+.deal-badge{position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:5px;}
+.deal-source{position:absolute;bottom:6px;left:8px;background:rgba(0,0,0,0.55);font-size:0.6rem;padding:2px 7px;border-radius:4px;color:rgba(255,255,255,0.8);}
+.deal-body{padding:1rem;}
+.deal-type{font-size:0.65rem;color:#38bdf8;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.deal-title{font-size:0.95rem;font-weight:700;margin-bottom:3px;}
+.deal-dates{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:0.8rem;}
+.deal-footer{display:flex;align-items:center;justify-content:space-between;}
+.deal-price{font-size:1.3rem;font-weight:800;color:#38bdf8;}
+.deal-price span{font-size:0.7rem;color:rgba(255,255,255,0.35);font-weight:400;display:block;}
+.deal-old{font-size:0.75rem;color:rgba(255,255,255,0.3);text-decoration:line-through;}
+.deal-btn{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;padding:0.35rem 0.8rem;border-radius:7px;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;text-decoration:none;display:inline-block;}
+.deal-btn:hover{background:rgba(56,189,248,0.2);}
+.sidebar-ad-stack{display:flex;flex-direction:column;gap:1rem;}
+
+/* ALERT FORM */
+.alert-section{background:linear-gradient(135deg,#0d1f3c,#0f2847);}
+.alert-inner{max-width:860px;margin:0 auto;}
+.alert-header{text-align:center;margin-bottom:2.5rem;}
+.alert-form{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:2rem;}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1rem;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.72rem;color:rgba(255,255,255,0.45);font-weight:500;letter-spacing:0.5px;text-transform:uppercase;}
+.form-group input,.form-group select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:0.65rem 0.9rem;color:#fff;font-size:0.88rem;outline:none;transition:border-color 0.2s;font-family:inherit;}
+.form-group input:focus,.form-group select:focus{border-color:#38bdf8;}
+.form-group select option{background:#0d1f3c;}
+.form-group input::placeholder{color:rgba(255,255,255,0.25);}
+.notify-opts{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
+.notify-opt{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 1rem;cursor:pointer;flex:1;min-width:140px;transition:all 0.2s;}
+.notify-opt:hover,.notify-opt.selected{border-color:rgba(56,189,248,0.4);background:rgba(56,189,248,0.08);}
+.notify-opt input[type=checkbox]{accent-color:#38bdf8;width:16px;height:16px;}
+.notify-opt-label{font-size:0.85rem;font-weight:500;}
+.notify-opt-sub{font-size:0.7rem;color:rgba(255,255,255,0.4);}
+.form-submit{width:100%;background:#38bdf8;color:#0a1628;border:none;border-radius:11px;padding:0.95rem;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.form-submit:hover{background:#7dd3fc;}
+.success-msg{display:none;text-align:center;padding:1.2rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;color:#34d399;font-weight:500;margin-top:0.8rem;}
+
+/* TESTIMONIALS */
+.testimonials{background:#0a1628;}
+.testimonials-inner{max-width:1000px;margin:0 auto;text-align:center;}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2.5rem;}
+.testi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;text-align:left;}
+.stars{color:#fbbf24;font-size:0.8rem;margin-bottom:0.7rem;}
+.testi-text{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:1rem;}
+.testi-author{display:flex;align-items:center;gap:8px;}
+.testi-avatar{width:34px;height:34px;border-radius:50%;background:rgba(56,189,248,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#38bdf8;flex-shrink:0;}
+.testi-name{font-size:0.82rem;font-weight:600;}
+.testi-loc{font-size:0.7rem;color:rgba(255,255,255,0.35);}
+
+/* FOOTER */
+footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.5rem 5% 1.5rem;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:2rem;margin-bottom:2rem;}
+.footer-brand p{color:rgba(255,255,255,0.4);font-size:0.82rem;margin-top:0.5rem;max-width:240px;line-height:1.6;}
+.footer-links h4{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.8rem;}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
+.footer-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
+.footer-links a:hover{color:#38bdf8;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+.footer-bottom p{color:rgba(255,255,255,0.25);font-size:0.75rem;}
+.footer-ad-wrap{display:flex;justify-content:center;margin-bottom:2rem;}
+
+@media(max-width:900px){
+  .content-with-sidebar{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .search-box{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Deal<span>Travel</span></div>
+  <ul class="nav-links">
+    <li><a href="#buscador">Buscar</a></li>
+    <li><a href="#deals">Ofertas</a></li>
+    <li><a href="#alerta">Alertas</a></li>
+    <li><a href="#como">Cómo funciona</a></li>
+  </ul>
+  <a href="#alerta" class="nav-cta">Crear alerta gratis</a>
+</nav>
+
+<!-- AD: Leaderboard top -->
+<div class="ad-leaderboard-wrap">
+  <div class="ad-slot ad-leaderboard">
+    <span class="ad-label">Publicidad</span>
+    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div style="position:relative;z-index:1;width:100%;">
+    <div class="hero-badge">Monitoreo en tiempo real · 12 sitios simultáneos</div>
+    <h1>Viaja más,<br>paga <em>menos.</em></h1>
+    <p>Monitoreamos Despegar, Volaris, Aeroméxico, Skyscanner y más para alertarte cuando bajen los precios a tu presupuesto.</p>
+    <div class="hero-btns">
+      <a href="#alerta" class="btn-primary">🔔 Crear mi alerta gratis</a>
+      <a href="#buscador" class="btn-outline">🔍 Buscar ofertas ahora</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">+85K</div><div class="stat-label">Viajeros alertados</div></div>
+      <div class="stat"><div class="stat-num">$42M</div><div class="stat-label">Ahorrados (MXN)</div></div>
+      <div class="stat"><div class="stat-num">47%</div><div class="stat-label">Descuento promedio</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Sitios monitoreados</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSCADOR -->
+<div class="search-section" id="buscador">
+  <div class="search-inner">
+    <div style="margin-bottom:1.2rem;">
+      <p class="section-label">Buscador de ofertas</p>
+      <h2 class="section-title" style="font-size:1.5rem;">Busca por ciudad o país</h2>
+    </div>
+    <div class="search-box">
+      <div class="search-field">
+        <label>Destino</label>
+        <input type="text" id="search-destino" placeholder="Ej. Cancún, París, Miami...">
+      </div>
+      <div class="search-field">
+        <label>Tipo</label>
+        <select id="search-tipo">
+          <option value="todos">Todos</option>
+          <option value="vuelo">Vuelos</option>
+          <option value="hotel">Hoteles</option>
+          <option value="crucero">Cruceros</option>
+          <option value="paquete">Paquetes</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Presupuesto máx. (MXN)</label>
+        <input type="number" id="search-precio" placeholder="Sin límite">
+      </div>
+      <button class="btn-search" onclick="buscarOfertas()">🔍 Buscar</button>
+    </div>
+    <div class="search-results" id="search-results">
+      <div class="search-results-title" id="search-count"></div>
+      <div class="deals-grid" id="search-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- AD STRIP -->
+<div class="ad-strip">
+  <div class="ad-slot ad-970x90">
+    <span class="ad-label">Publicidad</span>
+    <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  </div>
+</div>
+
+<!-- HOW -->
+<section class="how" id="como">
+  <div class="how-inner">
+    <div class="how-header">
+      <p class="section-label">Así funciona</p>
+      <h2 class="section-title">4 pasos para tu oferta ideal</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Configura tu destino</h3><p>Elige origen, destino y tipo de viaje.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Define tu presupuesto</h3><p>Precio máximo en pesos mexicanos.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Recibe tu alerta</h3><p>Por email, WhatsApp o SMS al instante.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Reserva directo</h3><p>Te llevamos al sitio para comprar al mejor precio.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+  <div class="categories-inner">
+    <p class="section-label">Lo que monitoreamos</p>
+    <h2 class="section-title">Todo tipo de viaje</h2>
+    <div class="cat-grid">
+      <div class="cat-card vuelos" onclick="filtrarPor('vuelo')"><div class="cat-icon">✈️</div><h3>Vuelos</h3><p>Volaris, Viva Aerobus, Aeroméxico y más.</p><span class="cat-tag">+120 aerolíneas</span></div>
+      <div class="cat-card hoteles" onclick="filtrarPor('hotel')"><div class="cat-icon">🏨</div><h3>Hoteles</h3><p>Hotels.com, Best Day y más de 500K propiedades.</p><span class="cat-tag">+500K propiedades</span></div>
+      <div class="cat-card cruceros" onclick="filtrarPor('crucero')"><div class="cat-icon">🚢</div><h3>Cruceros</h3><p>Caribe, Mediterráneo, Alaska y más rutas.</p><span class="cat-tag">+30 navieras</span></div>
+      <div class="cat-card paquetes" onclick="filtrarPor('paquete')"><div class="cat-icon">🌴</div><h3>Paquetes</h3><p>Despegar, Liverpool Viajes, Best Day y más.</p><span class="cat-tag">Todo incluido</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FUENTES -->
+<section class="fuentes">
+  <div class="fuentes-inner">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <p class="section-label">Fuentes monitoreadas</p>
+      <h2 class="section-title">Buscamos en 12 sitios por ti</h2>
+    </div>
+    <div class="fuentes-grid">
+      <a href="https://www.despegar.com.mx/ofertas-de-viajes" target="_blank" class="fuente-card"><div class="fuente-icon">🌐</div><div class="fuente-name">Despegar</div><div class="fuente-tipo">Vuelos · Hoteles · Paquetes</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://aeromexico.com/es-mx/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Aeroméxico</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.vivaaerobus.com/mx/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Viva Aerobus</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.volaris.com/es/ofertas/" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Volaris</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.skyscanner.com.mx/vuelos-baratos/" target="_blank" class="fuente-card"><div class="fuente-icon">🔍</div><div class="fuente-name">Skyscanner</div><div class="fuente-tipo">Vuelos · Hoteles</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.kayak.com.mx/vuelos-baratos" target="_blank" class="fuente-card"><div class="fuente-icon">🔍</div><div class="fuente-name">Kayak</div><div class="fuente-tipo">Vuelos · Hoteles</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.pricetravel.com.mx/vuelos/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">💰</div><div class="fuente-name">PriceTravel</div><div class="fuente-tipo">Vuelos · Paquetes</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://es.hotels.com/deals/" target="_blank" class="fuente-card"><div class="fuente-icon">🏨</div><div class="fuente-name">Hotels.com</div><div class="fuente-tipo">Hoteles</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.bestday.com.mx/Ofertas-Especiales/" target="_blank" class="fuente-card"><div class="fuente-icon">🌟</div><div class="fuente-name">Best Day</div><div class="fuente-tipo">Hoteles · Cruceros</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://viajestr.liverpool.com.mx/" target="_blank" class="fuente-card"><div class="fuente-icon">🛍️</div><div class="fuente-name">Liverpool Viajes</div><div class="fuente-tipo">Paquetes</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.yavas.com/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">🎯</div><div class="fuente-name">Yavas</div><div class="fuente-tipo">Paquetes</div><span class="fuente-badge">Activo</span></a>
+      <a href="https://www.bestday.com.mx/Cruceros/" target="_blank" class="fuente-card"><div class="fuente-icon">🚢</div><div class="fuente-name">Cruceros Best Day</div><div class="fuente-tipo">Cruceros</div><span class="fuente-badge">Activo</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTA FORM -->
+<section class="alert-section" id="alerta">
+  <div class="alert-inner">
+    <div class="alert-header">
+      <p class="section-label">Crea tu alerta</p>
+      <h2 class="section-title">Te avisamos cuando baje el precio</h2>
+      <p class="section-sub" style="margin:0 auto;">Sin costo. Sin spam. Elige cómo quieres recibir tu notificación.</p>
+    </div>
+    <div class="alert-form">
+      <div class="form-grid">
+        <div class="form-group"><label>Ciudad de origen</label><input type="text" id="origen" placeholder="Ej. Ciudad de México"></div>
+        <div class="form-group"><label>Destino</label><input type="text" id="destino" placeholder="Ej. Cancún, París…"></div>
+        <div class="form-group"><label>Tipo de viaje</label>
+          <select id="tipo">
+            <option value="">Seleccionar...</option>
+            <option>Vuelo</option><option>Hotel</option><option>Crucero</option><option>Paquete todo incluido</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Fuente preferida</label>
+          <select id="fuente">
+            <option value="">Cualquier fuente</option>
+            <option>Despegar</option><option>Aeroméxico</option><option>Volaris</option>
+            <option>Viva Aerobus</option><option>Skyscanner</option><option>Kayak</option>
+            <option>PriceTravel</option><option>Hotels.com</option><option>Best Day</option>
+            <option>Liverpool Viajes</option><option>Yavas</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Presupuesto máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 9,500"></div>
+        <div class="form-group"><label>Fecha de salida (aprox.)</label><input type="date" id="fecha"></div>
+      </div>
+
+      <!-- NOTIFICACIONES -->
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.7rem;">¿Cómo quieres recibir tu alerta?</p>
+      <div class="notify-opts">
+        <label class="notify-opt selected" id="opt-email">
+          <input type="checkbox" checked onchange="toggleOpt('opt-email')">
+          <div><div class="notify-opt-label">📧 Email</div><div class="notify-opt-sub">Gratis · Recomendado</div></div>
+        </label>
+        <label class="notify-opt" id="opt-whatsapp">
+          <input type="checkbox" onchange="toggleOpt('opt-whatsapp')">
+          <div><div class="notify-opt-label">💬 WhatsApp</div><div class="notify-opt-sub">Notificación inmediata</div></div>
+        </label>
+        <label class="notify-opt" id="opt-sms">
+          <input type="checkbox" onchange="toggleOpt('opt-sms')">
+          <div><div class="notify-opt-label">📱 SMS</div><div class="notify-opt-sub">A tu celular</div></div>
+        </label>
+      </div>
+
+      <div class="form-grid" style="margin-top:0.5rem;">
+        <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
+        <div class="form-group" id="phone-group" style="display:none;"><label>Tu número de celular</label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
+      </div>
+
+      <button class="form-submit" onclick="submitAlert()">🔔 Activar mi alerta de precio</button>
+      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos una oferta dentro de tu presupuesto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEALS + SIDEBAR -->
+<section class="deals" id="deals">
+  <div class="content-with-sidebar">
+    <div>
+      <div class="deals-header">
+        <div>
+          <p class="section-label">Ofertas del día</p>
+          <h2 class="section-title">Descuentos encontrados hoy</h2>
+        </div>
+      </div>
+      <div class="deals-filters">
+        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrar('vuelo',this)">✈️ Vuelos</button>
+        <button class="filter-btn" onclick="filtrar('hotel',this)">🏨 Hoteles</button>
+        <button class="filter-btn" onclick="filtrar('crucero',this)">🚢 Cruceros</button>
+        <button class="filter-btn" onclick="filtrar('paquete',this)">🌴 Paquetes</button>
+      </div>
+      <div class="deals-grid" id="deals-grid">
+
+        <div class="deal-card" data-tipo="paquete" data-destino="cancun" data-precio="7250">
+          <div class="deal-img cancun">🏖️<span class="deal-badge">-52%</span><span class="deal-source">Despegar.com</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Paquete todo incluido</div>
+            <div class="deal-title">CDMX → Cancún</div>
+            <div class="deal-dates">15–22 Jun · 7 noches · 2 personas</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$7,250 <span>por persona / MXN</span></div><div class="deal-old">antes $15,100</div></div>
+              <a href="https://www.despegar.com.mx/paquetes/resultados/mexico/cancun/" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="deal-card" data-tipo="vuelo" data-destino="paris" data-precio="22400">
+          <div class="deal-img paris">🗼<span class="deal-badge">-38%</span><span class="deal-source">Skyscanner</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Vuelo internacional</div>
+            <div class="deal-title">CDMX → París</div>
+            <div class="deal-dates">10–20 Jul · ida y vuelta</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$22,400 <span>por persona / MXN</span></div><div class="deal-old">antes $36,100</div></div>
+              <a href="https://www.skyscanner.com.mx/vuelos/mex/par/" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="deal-card" data-tipo="crucero" data-destino="caribe" data-precio="10800">
+          <div class="deal-img caribe">⚓<span class="deal-badge">-45%</span><span class="deal-source">Best Day</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Crucero</div>
+            <div class="deal-title">Caribe Oriental</div>
+            <div class="deal-dates">3–10 Ago · 7 noches</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$10,800 <span>por persona / MXN</span></div><div class="deal-old">antes $19,600</div></div>
+              <a href="https://www.bestday.com.mx/Cruceros/" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="deal-card" data-tipo="vuelo" data-destino="barcelona" data-precio="9000">
+          <div class="deal-img barcelona">🏛️<span class="deal-badge">-41%</span><span class="deal-source">Volaris</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Vuelo directo</div>
+            <div class="deal-title">CDMX → Barcelona</div>
+            <div class="deal-dates">Sep · Solo ida · Clase turista</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$9,000 <span>solo vuelo / MXN</span></div><div class="deal-old">antes $15,250</div></div>
+              <a href="https://www.volaris.com/es/ofertas/" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="deal-card" data-tipo="hotel" data-destino="miami" data-precio="4200">
+          <div class="deal-img miami">🌆<span class="deal-badge">-35%</span><span class="deal-source">Hotels.com</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Hotel</div>
+            <div class="deal-title">Hotel en Miami Beach</div>
+            <div class="deal-dates">Aug · 5 noches · 4 estrellas</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$4,200 <span>por noche / MXN</span></div><div class="deal-old">antes $6,500</div></div>
+              <a href="https://www.awin1.com/cread.php?awinmid=105931&awinaffid=2876425&ued=https%3A%2F%2Fwww.trivago.com.mx" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="deal-card" data-tipo="paquete" data-destino="cancun" data-precio="11500">
+          <div class="deal-img cancun2">🌅<span class="deal-badge">-33%</span><span class="deal-source">Liverpool Viajes</span></div>
+          <div class="deal-body">
+            <div class="deal-type">Paquete todo incluido</div>
+            <div class="deal-title">GDL → Riviera Maya</div>
+            <div class="deal-dates">Sep · 5 noches · Resort 5★</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$11,500 <span>por persona / MXN</span></div><div class="deal-old">antes $17,200</div></div>
+              <a href="https://www.awin1.com/cread.php?awinmid=105931&awinaffid=2876425&ued=https%3A%2F%2Fwww.trivago.com.mx" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR ADS -->
+    <div class="sidebar-ad-stack">
+      <div class="ad-slot ad-300x250">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
+      <div class="ad-slot ad-300x600">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AD STRIP -->
+<div class="ad-strip">
+  <div class="ad-slot ad-970x90">
+    <span class="ad-label">Publicidad</span>
+    <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <p class="section-label">Testimonios</p>
+    <h2 class="section-title">Lo que dicen nuestros viajeros</h2>
+    <div class="testi-grid">
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Configuré una alerta para Cancún con $8,000 MXN y en 3 días me llegó el WhatsApp. ¡Ahorré más de $9,000 pesos!"</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses buscando vuelo a Europa. Me avisaron por SMS cuando bajó el precio. Pagué $21,000 MXN por algo que valía $35,000."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Crucero por el Caribe con 45% de descuento en Best Day. El botón me llevó directo a reservar. Increíble y facilísimo."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-ad-wrap">
+      <div class="ad-slot ad-728x90-footer">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
+    </div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">Deal<span>Travel</span></div>
+        <p>Monitoreo inteligente de precios para que viajes más gastando menos.</p>
+      </div>
+      <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#deals">Vuelos</a></li><li><a href="#deals">Hoteles</a></li><li><a href="#deals">Cruceros</a></li><li><a href="#deals">Paquetes</a></li></ul></div>
+      <div class="footer-links"><h4>Fuentes</h4><ul><li><a href="https://www.despegar.com.mx" target="_blank">Despegar</a></li><li><a href="https://www.volaris.com" target="_blank">Volaris</a></li><li><a href="https://www.vivaaerobus.com" target="_blank">Viva Aerobus</a></li><li><a href="https://www.bestday.com.mx" target="_blank">Best Day</a></li></ul></div>
+      <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos de uso</a></li><li><a href="#">Cookies</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
+      <p>Hecho con ♡ para viajeros inteligentes</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+// DATA de ofertas
+const ofertas = [
+  {tipo:'paquete',destino:'cancun',keywords:['cancún','cancun','mexico','quintana roo'],precio:7250,titulo:'CDMX → Cancún',subtipo:'Paquete todo incluido',fechas:'15–22 Jun · 7 noches',img:'cancun',badge:'-52%',source:'Despegar.com',link:'https://www.despegar.com.mx/paquetes/resultados/mexico/cancun/',antes:15100},
+  {tipo:'vuelo',destino:'paris',keywords:['parís','paris','francia'],precio:22400,titulo:'CDMX → París',subtipo:'Vuelo internacional',fechas:'10–20 Jul · ida y vuelta',img:'paris',badge:'-38%',source:'Skyscanner',link:'https://www.skyscanner.com.mx/vuelos/mex/par/',antes:36100},
+  {tipo:'crucero',destino:'caribe',keywords:['caribe','cuba','jamaica'],precio:10800,titulo:'Caribe Oriental',subtipo:'Crucero',fechas:'3–10 Ago · 7 noches',img:'caribe',badge:'-45%',source:'Best Day',link:'https://www.bestday.com.mx/Cruceros/',antes:19600},
+  {tipo:'vuelo',destino:'barcelona',keywords:['barcelona','españa','europa'],precio:9000,titulo:'CDMX → Barcelona',subtipo:'Vuelo directo',fechas:'Sep · Solo ida',img:'barcelona',badge:'-41%',source:'Volaris',link:'https://www.volaris.com/es/ofertas/',antes:15250},
+  {tipo:'hotel',destino:'miami',keywords:['miami','florida','estados unidos','usa'],precio:4200,titulo:'Hotel Miami Beach',subtipo:'Hotel',fechas:'Aug · 5 noches · 4★',img:'miami',badge:'-35%',source:'Hotels.com',link:'https://es.hotels.com/deals/',antes:6500},
+  {tipo:'paquete',destino:'cancun',keywords:['riviera maya','playa del carmen','tulum','quintana roo'],precio:11500,titulo:'GDL → Riviera Maya',subtipo:'Paquete todo incluido',fechas:'Sep · 5 noches · Resort 5★',img:'cancun2',badge:'-33%',source:'Liverpool Viajes',link:'https://viajestr.liverpool.com.mx/',antes:17200},
+];
+
+function crearCard(o){
+  return `<div class="deal-card" data-tipo="${o.tipo}" data-destino="${o.destino}" data-precio="${o.precio}">
+    <div class="deal-img ${o.img}">${o.tipo==='vuelo'?'✈️':o.tipo==='hotel'?'🏨':o.tipo==='crucero'?'⚓':'🌴'}<span class="deal-badge">${o.badge}</span><span class="deal-source">${o.source}</span></div>
+    <div class="deal-body">
+      <div class="deal-type">${o.subtipo}</div>
+      <div class="deal-title">${o.titulo}</div>
+      <div class="deal-dates">${o.fechas}</div>
+      <div class="deal-footer">
+        <div><div class="deal-price">$${o.precio.toLocaleString('es-MX')} <span>MXN</span></div><div class="deal-old">antes $${o.antes.toLocaleString('es-MX')}</div></div>
+        <a href="${o.link}" target="_blank" class="deal-btn">Ver oferta →</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function filtrar(tipo, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('#deals-grid .deal-card').forEach(c=>{
+    c.style.display = (tipo==='todos'||c.dataset.tipo===tipo)?'block':'none';
+  });
+}
+
+function filtrarPor(tipo){
+  document.getElementById('deals').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    const btn = [...document.querySelectorAll('.filter-btn')].find(b=>b.textContent.toLowerCase().includes(tipo));
+    filtrar(tipo, btn);
+  }, 600);
+}
+
+function buscarOfertas(){
+  const q = document.getElementById('search-destino').value.toLowerCase().trim();
+  const tipo = document.getElementById('search-tipo').value;
+  const maxPrecio = parseFloat(document.getElementById('search-precio').value)||Infinity;
+  const resultados = ofertas.filter(o=>{
+    const matchDest = !q || o.keywords.some(k=>k.includes(q)||q.includes(k));
+    const matchTipo = tipo==='todos'||o.tipo===tipo;
+    const matchPrecio = o.precio<=maxPrecio;
+    return matchDest&&matchTipo&&matchPrecio;
+  });
+  const grid = document.getElementById('search-grid');
+  const count = document.getElementById('search-count');
+  const results = document.getElementById('search-results');
+  results.classList.add('visible');
+  if(resultados.length===0){
+    grid.innerHTML='<div class="no-results">😕 No encontramos ofertas con esos filtros. Intenta con otro destino o amplía tu presupuesto.</div>';
+    count.textContent='Sin resultados';
+  } else {
+    grid.innerHTML = resultados.map(crearCard).join('');
+    count.textContent = `${resultados.length} oferta${resultados.length>1?'s':''} encontrada${resultados.length>1?'s':''}`;
+  }
+}
+
+document.getElementById('search-destino').addEventListener('keydown',e=>{if(e.key==='Enter')buscarOfertas();});
+
+function toggleOpt(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('selected', el.querySelector('input').checked);
+  const needPhone = document.getElementById('opt-whatsapp').querySelector('input').checked || document.getElementById('opt-sms').querySelector('input').checked;
+  document.getElementById('phone-group').style.display = needPhone?'flex':'none';
+}
+
+function submitAlert(){
+  const origen=document.getElementById('origen').value.trim();
+  const destino=document.getElementById('destino').value.trim();
+  const tipo=document.getElementById('tipo').value;
+  const presupuesto=document.getElementById('presupuesto').value;
+  const email=document.getElementById('email').value.trim();
+  if(!origen||!destino||!tipo||!presupuesto||!email){alert('Por favor completa todos los campos obligatorios.');return;}
+  document.getElementById('success').style.display='block';
+  const btn=document.querySelector('.form-submit');
+  btn.disabled=true;btn.textContent='✓ Alerta activada';btn.style.background='#10b981';
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
