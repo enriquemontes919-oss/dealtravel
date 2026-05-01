@@ -718,7 +718,7 @@ function renderOfertas(ofertas) {
             <div class="deal-price">${o.precio_fmt} <span>MXN</span></div>
             <div class="deal-old">Precio verificado</div>
           </div>
-          <a href="${o.url}" target="_blank" class="deal-btn">Ver oferta →</a>
+          <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn" onclick="window.open('${o.url}','_blank');return false;">Ver oferta →</a>
         </div>
       </div>
     </div>`).join('');
