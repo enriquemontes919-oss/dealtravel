@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deal Travel — Alertas de Descuentos en Vuelos, Hoteles y Cruceros</title>
 <meta name="description" content="Monitoreo de descuentos en vuelos, hoteles, cruceros y paquetes de viaje en México.">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-667044323720213" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a1628;color:#fff;overflow-x:hidden;}
@@ -680,16 +680,63 @@ function toggleOpt(id){
   document.getElementById('phone-group').style.display = needPhone?'flex':'none';
 }
 
-function submitAlert(){
-  const origen=document.getElementById('origen').value.trim();
-  const destino=document.getElementById('destino').value.trim();
-  const tipo=document.getElementById('tipo').value;
-  const presupuesto=document.getElementById('presupuesto').value;
-  const email=document.getElementById('email').value.trim();
-  if(!origen||!destino||!tipo||!presupuesto||!email){alert('Por favor completa todos los campos obligatorios.');return;}
-  document.getElementById('success').style.display='block';
-  const btn=document.querySelector('.form-submit');
-  btn.disabled=true;btn.textContent='✓ Alerta activada';btn.style.background='#10b981';
+const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
+
+async function submitAlert(){
+  const origen     = document.getElementById('origen').value.trim();
+  const destino    = document.getElementById('destino').value.trim();
+  const tipo       = document.getElementById('tipo').value;
+  const presupuesto= document.getElementById('presupuesto').value;
+  const fecha      = document.getElementById('fecha').value;
+  const email      = document.getElementById('email').value.trim();
+  const telefono   = document.getElementById('telefono') ? document.getElementById('telefono').value.trim() : '';
+  const fuente     = document.getElementById('fuente').value;
+
+  if(!origen||!destino||!tipo||!presupuesto||!email){
+    alert('Por favor completa todos los campos obligatorios.');
+    return;
+  }
+
+  const btn = document.querySelector('.form-submit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Guardando alerta...';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/alertas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        origen, destino, tipo,
+        presupuesto: parseFloat(presupuesto),
+        fecha_salida: fecha,
+        email, telefono, fuente,
+        activa: true
+      })
+    });
+
+    if(res.ok || res.status === 201){
+      document.getElementById('success').style.display = 'block';
+      btn.textContent = '✓ Alerta activada';
+      btn.style.background = '#10b981';
+    } else {
+      const err = await res.text();
+      console.error('Supabase error:', err);
+      btn.disabled = false;
+      btn.textContent = '🔔 Activar mi alerta de precio';
+      alert('Hubo un error al guardar tu alerta. Intenta de nuevo.');
+    }
+  } catch(e) {
+    console.error('Error de red:', e);
+    btn.disabled = false;
+    btn.textContent = '🔔 Activar mi alerta de precio';
+    alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+  }
 }
 
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
