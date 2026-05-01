@@ -683,7 +683,49 @@ function toggleOpt(id){
 const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
 
-async function submitAlert(){
+// Cargar ofertas reales de Supabase
+async function cargarOfertas() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=precio.asc&limit=20`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const ofertas = await res.json();
+    if (ofertas && ofertas.length > 0) {
+      renderOfertas(ofertas);
+    }
+  } catch(e) {
+    console.log('Usando ofertas de ejemplo:', e);
+  }
+}
+
+function renderOfertas(ofertas) {
+  const grid = document.getElementById('deals-grid');
+  const IMGS = ['cancun','paris','caribe','barcelona','miami','cancun2'];
+  const ICONS = {'vuelo':'✈️','hotel':'🏨','crucero':'🚢','paquete':'🌴'};
+  grid.innerHTML = ofertas.map((o, i) => `
+    <div class="deal-card" data-tipo="${o.tipo}" data-destino="${o.destino.toLowerCase()}" data-precio="${o.precio}">
+      <div class="deal-img ${IMGS[i % IMGS.length]}">
+        ${ICONS[o.tipo]||'🎯'}
+        <span class="deal-badge">${o.tipo_promo||'Oferta'}</span>
+        <span class="deal-source">${o.fuente}</span>
+      </div>
+      <div class="deal-body">
+        <div class="deal-type">🔥 ${o.tipo_promo||'Oferta especial'}</div>
+        <div class="deal-title">${o.destino}</div>
+        <div class="deal-dates">${o.fecha||'Hoy'} · ${o.palabras_clave||''}</div>
+        <div class="deal-footer">
+          <div>
+            <div class="deal-price">${o.precio_fmt} <span>MXN</span></div>
+            <div class="deal-old">Precio verificado</div>
+          </div>
+          <a href="${o.url}" target="_blank" class="deal-btn">Ver oferta →</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// Ejecutar al cargar la página
+window.addEventListener('DOMContentLoaded', cargarOfertas);
   const origen     = document.getElementById('origen').value.trim();
   const destino    = document.getElementById('destino').value.trim();
   const tipo       = document.getElementById('tipo').value;
