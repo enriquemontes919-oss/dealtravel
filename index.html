@@ -738,6 +738,16 @@ window.addEventListener('DOMContentLoaded', cargarOfertas);
   const telefono   = document.getElementById('telefono') ? document.getElementById('telefono').value.trim() : '';
   const fuente     = document.getElementById('fuente').value;
 
+async function submitAlert(){
+  const origen     = document.getElementById('origen').value.trim();
+  const destino    = document.getElementById('destino').value.trim();
+  const tipo       = document.getElementById('tipo').value;
+  const presupuesto= document.getElementById('presupuesto').value;
+  const fecha      = document.getElementById('fecha').value;
+  const email      = document.getElementById('email').value.trim();
+  const telefono   = document.getElementById('telefono') ? document.getElementById('telefono').value.trim() : '';
+  const fuente     = document.getElementById('fuente').value;
+
   if(!origen||!destino||!tipo||!presupuesto||!email){
     alert('Por favor completa: origen, destino, tipo de viaje, presupuesto y email.');
     return;
