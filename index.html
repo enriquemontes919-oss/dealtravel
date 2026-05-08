@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deal Travel — Alertas de Descuentos en Vuelos, Hoteles y Cruceros</title>
-<meta name="description" content="Monitoreo de descuentos en vuelos, hoteles, cruceros y paquetes de viaje en México.">
+<title>Deal Travel — Alertas de Ofertas y Descuentos en México</title>
+<meta name="description" content="Monitoreo de descuentos en Amazon, Liverpool, Walmart, Mercado Libre y más. Crea tu alerta y te avisamos cuando baje el precio.">
+<meta property="og:title" content="Deal Travel — Alertas de Ofertas">
+<meta property="og:description" content="Te avisamos cuando baje el precio de lo que quieres comprar.">
+<meta property="og:url" content="https://dealtravel.mx">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a1628;color:#fff;overflow-x:hidden;}
+
+/* NAV */
 nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5%;position:fixed;top:0;width:100%;z-index:100;background:rgba(10,22,40,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.07);}
 .logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.5px;}
 .logo span{color:#38bdf8;}
@@ -22,11 +27,10 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5
 .ad-label{position:absolute;top:5px;right:8px;font-size:0.58rem;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:rgba(255,255,255,0.25);}
 .ad-leaderboard-wrap{background:#07111f;padding:0.5rem 5%;display:flex;justify-content:center;margin-top:62px;border-bottom:1px solid rgba(255,255,255,0.05);}
 .ad-leaderboard{width:100%;max-width:728px;height:90px;}
-.ad-strip{background:#07111f;padding:0.8rem 5%;display:flex;justify-content:center;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);}
+.ad-strip{background:#07111f;padding:0.8rem 5%;display:flex;justify-content:center;}
 .ad-970x90{width:100%;max-width:970px;height:90px;}
 .ad-300x250{width:100%;height:250px;}
 .ad-300x600{width:100%;height:300px;}
-.ad-728x90-footer{width:100%;max-width:728px;height:90px;}
 
 /* HERO */
 .hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 5%;background:linear-gradient(135deg,#0a1628,#0f2847,#0a2240);position:relative;overflow:hidden;}
@@ -64,67 +68,56 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5
 .search-results-title{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:1rem;}
 .no-results{text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-size:0.9rem;}
 
-/* SECTION BASE */
+/* SECTIONS */
 section{padding:4.5rem 5%;}
 .section-label{font-size:0.75rem;font-weight:600;color:#38bdf8;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.6rem;}
 .section-title{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:0.8rem;}
-.section-sub{color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:500px;line-height:1.7;}
 
-/* HOW */
-.how{background:#0a1628;}
-.how-inner{max-width:1100px;margin:0 auto;}
-.how-header{text-align:center;margin-bottom:3rem;}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
-.step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.8rem 1.4rem;text-align:center;transition:border-color 0.3s;}
-.step:hover{border-color:rgba(56,189,248,0.4);}
-.step-num{width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
-.step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;}
-.step p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.6;}
+/* TIENDAS */
+.tiendas{background:#0a1628;}
+.tiendas-inner{max-width:1100px;margin:0 auto;}
+.tiendas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
+.tienda-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;text-align:center;transition:all 0.2s;text-decoration:none;color:#fff;cursor:pointer;}
+.tienda-card:hover{border-color:rgba(56,189,248,0.4);transform:translateY(-2px);}
+.tienda-icon{font-size:2rem;margin-bottom:0.5rem;}
+.tienda-name{font-size:0.9rem;font-weight:600;margin-bottom:2px;}
+.tienda-desc{font-size:0.65rem;color:rgba(255,255,255,0.35);}
+.tienda-badge{display:inline-block;background:rgba(56,189,248,0.12);color:#38bdf8;font-size:0.62rem;padding:2px 7px;border-radius:8px;margin-top:5px;}
 
-/* CATEGORIES */
-.categories{background:#0d1f3c;}
-.categories-inner{max-width:1100px;margin:0 auto;}
+/* CATEGORIAS */
+.categorias{background:#0d1f3c;}
+.categorias-inner{max-width:1100px;margin:0 auto;}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;}
 .cat-card{border-radius:14px;padding:1.8rem 1.4rem;cursor:pointer;transition:transform 0.2s;}
 .cat-card:hover{transform:translateY(-4px);}
-.cat-card.vuelos{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
-.cat-card.hoteles{background:linear-gradient(135deg,#1a3a2e,#16a34a);}
-.cat-card.cruceros{background:linear-gradient(135deg,#2d1b69,#7c3aed);}
-.cat-card.paquetes{background:linear-gradient(135deg,#4a1942,#db2777);}
-.cat-icon{font-size:1.8rem;margin-bottom:0.8rem;}
+.cat-card.electro{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
+.cat-card.moda{background:linear-gradient(135deg,#4a1942,#db2777);}
+.cat-card.hogar{background:linear-gradient(135deg,#1a3a2e,#16a34a);}
+.cat-card.deportes{background:linear-gradient(135deg,#2d1b69,#7c3aed);}
+.cat-card.belleza{background:linear-gradient(135deg,#7c2d12,#ea580c);}
+.cat-card.juguetes{background:linear-gradient(135deg,#134e4a,#0d9488);}
+.cat-icon{font-size:2rem;margin-bottom:0.8rem;}
 .cat-card h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;}
 .cat-card p{font-size:0.78rem;opacity:0.75;margin-bottom:0.8rem;}
 .cat-tag{display:inline-block;background:rgba(255,255,255,0.15);font-size:0.7rem;padding:2px 10px;border-radius:20px;}
 
-/* FUENTES */
-.fuentes{background:#0a1628;}
-.fuentes-inner{max-width:1100px;margin:0 auto;}
-.fuentes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.8rem;margin-top:2rem;}
-.fuente-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:1rem;text-align:center;transition:all 0.2s;text-decoration:none;color:#fff;}
-.fuente-card:hover{border-color:rgba(56,189,248,0.4);transform:translateY(-2px);}
-.fuente-icon{font-size:1.3rem;margin-bottom:0.4rem;}
-.fuente-name{font-size:0.8rem;font-weight:600;margin-bottom:2px;}
-.fuente-tipo{font-size:0.65rem;color:rgba(255,255,255,0.35);}
-.fuente-badge{display:inline-block;background:rgba(56,189,248,0.12);color:#38bdf8;font-size:0.62rem;padding:2px 7px;border-radius:8px;margin-top:5px;}
-
 /* DEALS */
 .deals{background:#0d1f3c;padding:4.5rem 5%;}
 .content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2rem;max-width:1100px;margin:0 auto;}
-.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .deals-filters{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem;}
 .filter-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.35rem 0.9rem;border-radius:20px;font-size:0.78rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}
 .filter-btn:hover,.filter-btn.active{background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);color:#38bdf8;}
 .deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
 .deal-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;transition:all 0.2s;}
 .deal-card:hover{border-color:rgba(56,189,248,0.35);transform:translateY(-3px);}
-.deal-card[data-tipo]{display:block;}
 .deal-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;}
-.deal-img.cancun{background:linear-gradient(135deg,#0c4a6e,#0284c7);}
-.deal-img.paris{background:linear-gradient(135deg,#1e1b4b,#4338ca);}
-.deal-img.caribe{background:linear-gradient(135deg,#064e3b,#059669);}
-.deal-img.barcelona{background:linear-gradient(135deg,#7c2d12,#ea580c);}
-.deal-img.miami{background:linear-gradient(135deg,#134e4a,#0d9488);}
-.deal-img.cancun2{background:linear-gradient(135deg,#1e3a5f,#7c3aed);}
+.deal-img.amazon{background:linear-gradient(135deg,#1a2e1a,#16a34a);}
+.deal-img.liverpool{background:linear-gradient(135deg,#4a1942,#db2777);}
+.deal-img.walmart{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
+.deal-img.mercadolibre{background:linear-gradient(135deg,#3d2800,#f59e0b);}
+.deal-img.bestbuy{background:linear-gradient(135deg,#1e1b4b,#4338ca);}
+.deal-img.coppel{background:linear-gradient(135deg,#064e3b,#059669);}
 .deal-badge{position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:5px;}
 .deal-source{position:absolute;bottom:6px;left:8px;background:rgba(0,0,0,0.55);font-size:0.6rem;padding:2px 7px;border-radius:4px;color:rgba(255,255,255,0.8);}
 .deal-body{padding:1rem;}
@@ -139,7 +132,7 @@ section{padding:4.5rem 5%;}
 .deal-btn:hover{background:rgba(56,189,248,0.2);}
 .sidebar-ad-stack{display:flex;flex-direction:column;gap:1rem;}
 
-/* ALERT FORM */
+/* ALERTA */
 .alert-section{background:linear-gradient(135deg,#0d1f3c,#0f2847);}
 .alert-inner{max-width:860px;margin:0 auto;}
 .alert-header{text-align:center;margin-bottom:2.5rem;}
@@ -161,7 +154,17 @@ section{padding:4.5rem 5%;}
 .form-submit:hover{background:#7dd3fc;}
 .success-msg{display:none;text-align:center;padding:1.2rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;color:#34d399;font-weight:500;margin-top:0.8rem;}
 
-/* TESTIMONIALS */
+/* COMO FUNCIONA */
+.how{background:#0a1628;}
+.how-inner{max-width:1100px;margin:0 auto;}
+.how-header{text-align:center;margin-bottom:3rem;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
+.step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.8rem 1.4rem;text-align:center;}
+.step-num{width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;}
+.step p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.6;}
+
+/* TESTIMONIOS */
 .testimonials{background:#0a1628;}
 .testimonials-inner{max-width:1000px;margin:0 auto;text-align:center;}
 .testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2.5rem;}
@@ -189,7 +192,6 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 @media(max-width:900px){
   .content-with-sidebar{grid-template-columns:1fr;}
   .nav-links{display:none;}
-  .search-box{flex-direction:column;}
 }
 </style>
 </head>
@@ -199,36 +201,37 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
   <div class="logo">Deal<span>Travel</span></div>
   <ul class="nav-links">
     <li><a href="#buscador">Buscar</a></li>
-    <li><a href="#deals">Ofertas</a></li>
-    <li><a href="#alerta">Alertas</a></li>
+    <li><a href="#ofertas">Ofertas</a></li>
+    <li><a href="#alerta">Mis Alertas</a></li>
     <li><a href="#como">Cómo funciona</a></li>
   </ul>
   <a href="#alerta" class="nav-cta">Crear alerta gratis</a>
 </nav>
 
-<!-- AD: Leaderboard top -->
+<!-- BANNER KIWI -->
 <div class="ad-leaderboard-wrap">
-  <div class="ad-slot ad-leaderboard">
-    <span class="ad-label">Publicidad</span>
-    <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  <div style="display:flex;justify-content:center;align-items:center;width:100%;max-width:728px;">
+    <a rel="sponsored" href="https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r=2876425">
+      <img src="https://www.awin1.com/cshow.php?s=2702014&v=20563&q=395852&r=2876425" border="0" style="max-width:728px;height:auto;">
+    </a>
   </div>
 </div>
 
 <!-- HERO -->
 <section class="hero">
   <div style="position:relative;z-index:1;width:100%;">
-    <div class="hero-badge">Monitoreo en tiempo real · 12 sitios simultáneos</div>
-    <h1>Viaja más,<br>paga <em>menos.</em></h1>
-    <p>Monitoreamos Despegar, Volaris, Aeroméxico, Skyscanner y más para alertarte cuando bajen los precios a tu presupuesto.</p>
+    <div class="hero-badge">Monitoreo en tiempo real · Amazon, Liverpool, Walmart y más</div>
+    <h1>Compra más,<br>paga <em>menos.</em></h1>
+    <p>Monitoreamos precios en Amazon, Liverpool, Walmart, Mercado Libre y más tiendas para avisarte cuando bajen al precio que quieres pagar.</p>
     <div class="hero-btns">
       <a href="#alerta" class="btn-primary">🔔 Crear mi alerta gratis</a>
       <a href="#buscador" class="btn-outline">🔍 Buscar ofertas ahora</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><div class="stat-num">+85K</div><div class="stat-label">Viajeros alertados</div></div>
-      <div class="stat"><div class="stat-num">$42M</div><div class="stat-label">Ahorrados (MXN)</div></div>
-      <div class="stat"><div class="stat-num">47%</div><div class="stat-label">Descuento promedio</div></div>
-      <div class="stat"><div class="stat-num">12</div><div class="stat-label">Sitios monitoreados</div></div>
+      <div class="stat"><div class="stat-num">+120K</div><div class="stat-label">Usuarios alertados</div></div>
+      <div class="stat"><div class="stat-num">$85M</div><div class="stat-label">Ahorrados (MXN)</div></div>
+      <div class="stat"><div class="stat-num">42%</div><div class="stat-label">Descuento promedio</div></div>
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label">Tiendas monitoreadas</div></div>
     </div>
   </div>
 </section>
@@ -238,25 +241,27 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
   <div class="search-inner">
     <div style="margin-bottom:1.2rem;">
       <p class="section-label">Buscador de ofertas</p>
-      <h2 class="section-title" style="font-size:1.5rem;">Busca por ciudad o país</h2>
+      <h2 class="section-title" style="font-size:1.5rem;">Busca por producto, marca o categoría</h2>
     </div>
     <div class="search-box">
       <div class="search-field">
-        <label>Destino</label>
-        <input type="text" id="search-destino" placeholder="Ej. Cancún, París, Miami...">
+        <label>Producto o marca</label>
+        <input type="text" id="search-producto" placeholder="Ej. iPhone, Samsung, Nike, Sofá...">
       </div>
       <div class="search-field">
-        <label>Tipo</label>
-        <select id="search-tipo">
-          <option value="todos">Todos</option>
-          <option value="vuelo">Vuelos</option>
-          <option value="hotel">Hoteles</option>
-          <option value="crucero">Cruceros</option>
-          <option value="paquete">Paquetes</option>
+        <label>Tienda</label>
+        <select id="search-tienda">
+          <option value="todas">Todas las tiendas</option>
+          <option value="amazon">Amazon MX</option>
+          <option value="liverpool">Liverpool</option>
+          <option value="walmart">Walmart</option>
+          <option value="mercadolibre">Mercado Libre</option>
+          <option value="bestbuy">Best Buy</option>
+          <option value="coppel">Coppel</option>
         </select>
       </div>
       <div class="search-field">
-        <label>Presupuesto máx. (MXN)</label>
+        <label>Precio máx. (MXN)</label>
         <input type="number" id="search-precio" placeholder="Sin límite">
       </div>
       <button class="btn-search" onclick="buscarOfertas()">🔍 Buscar</button>
@@ -276,95 +281,190 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
   </div>
 </div>
 
-<!-- HOW -->
-<section class="how" id="como">
-  <div class="how-inner">
-    <div class="how-header">
-      <p class="section-label">Así funciona</p>
-      <h2 class="section-title">4 pasos para tu oferta ideal</h2>
-    </div>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><h3>Configura tu destino</h3><p>Elige origen, destino y tipo de viaje.</p></div>
-      <div class="step"><div class="step-num">2</div><h3>Define tu presupuesto</h3><p>Precio máximo en pesos mexicanos.</p></div>
-      <div class="step"><div class="step-num">3</div><h3>Recibe tu alerta</h3><p>Por email, WhatsApp o SMS al instante.</p></div>
-      <div class="step"><div class="step-num">4</div><h3>Reserva directo</h3><p>Te llevamos al sitio para comprar al mejor precio.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- CATEGORIES -->
-<section class="categories">
-  <div class="categories-inner">
-    <p class="section-label">Lo que monitoreamos</p>
-    <h2 class="section-title">Todo tipo de viaje</h2>
-    <div class="cat-grid">
-      <div class="cat-card vuelos" onclick="filtrarPor('vuelo')"><div class="cat-icon">✈️</div><h3>Vuelos</h3><p>Volaris, Viva Aerobus, Aeroméxico y más.</p><span class="cat-tag">+120 aerolíneas</span></div>
-      <div class="cat-card hoteles" onclick="filtrarPor('hotel')"><div class="cat-icon">🏨</div><h3>Hoteles</h3><p>Hotels.com, Best Day y más de 500K propiedades.</p><span class="cat-tag">+500K propiedades</span></div>
-      <div class="cat-card cruceros" onclick="filtrarPor('crucero')"><div class="cat-icon">🚢</div><h3>Cruceros</h3><p>Caribe, Mediterráneo, Alaska y más rutas.</p><span class="cat-tag">+30 navieras</span></div>
-      <div class="cat-card paquetes" onclick="filtrarPor('paquete')"><div class="cat-icon">🌴</div><h3>Paquetes</h3><p>Despegar, Liverpool Viajes, Best Day y más.</p><span class="cat-tag">Todo incluido</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- FUENTES -->
-<section class="fuentes">
-  <div class="fuentes-inner">
+<!-- TIENDAS MONITOREADAS -->
+<section class="tiendas">
+  <div class="tiendas-inner">
     <div style="text-align:center;margin-bottom:1rem;">
-      <p class="section-label">Fuentes monitoreadas</p>
-      <h2 class="section-title">Buscamos en 12 sitios por ti</h2>
+      <p class="section-label">Tiendas monitoreadas</p>
+      <h2 class="section-title">Buscamos en 8 tiendas por ti</h2>
     </div>
-    <div class="fuentes-grid">
-      <a href="https://www.despegar.com.mx/ofertas-de-viajes" target="_blank" class="fuente-card"><div class="fuente-icon">🌐</div><div class="fuente-name">Despegar</div><div class="fuente-tipo">Vuelos · Hoteles · Paquetes</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://aeromexico.com/es-mx/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Aeroméxico</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.vivaaerobus.com/mx/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Viva Aerobus</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.volaris.com/es/ofertas/" target="_blank" class="fuente-card"><div class="fuente-icon">✈️</div><div class="fuente-name">Volaris</div><div class="fuente-tipo">Vuelos</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.skyscanner.com.mx/vuelos-baratos/" target="_blank" class="fuente-card"><div class="fuente-icon">🔍</div><div class="fuente-name">Skyscanner</div><div class="fuente-tipo">Vuelos · Hoteles</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.kayak.com.mx/vuelos-baratos" target="_blank" class="fuente-card"><div class="fuente-icon">🔍</div><div class="fuente-name">Kayak</div><div class="fuente-tipo">Vuelos · Hoteles</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.pricetravel.com.mx/vuelos/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">💰</div><div class="fuente-name">PriceTravel</div><div class="fuente-tipo">Vuelos · Paquetes</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://es.hotels.com/deals/" target="_blank" class="fuente-card"><div class="fuente-icon">🏨</div><div class="fuente-name">Hotels.com</div><div class="fuente-tipo">Hoteles</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.bestday.com.mx/Ofertas-Especiales/" target="_blank" class="fuente-card"><div class="fuente-icon">🌟</div><div class="fuente-name">Best Day</div><div class="fuente-tipo">Hoteles · Cruceros</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://viajestr.liverpool.com.mx/" target="_blank" class="fuente-card"><div class="fuente-icon">🛍️</div><div class="fuente-name">Liverpool Viajes</div><div class="fuente-tipo">Paquetes</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.yavas.com/ofertas" target="_blank" class="fuente-card"><div class="fuente-icon">🎯</div><div class="fuente-name">Yavas</div><div class="fuente-tipo">Paquetes</div><span class="fuente-badge">Activo</span></a>
-      <a href="https://www.bestday.com.mx/Cruceros/" target="_blank" class="fuente-card"><div class="fuente-icon">🚢</div><div class="fuente-name">Cruceros Best Day</div><div class="fuente-tipo">Cruceros</div><span class="fuente-badge">Activo</span></a>
+    <div class="tiendas-grid">
+      <div class="tienda-card" onclick="filtrarPor('amazon')"><div class="tienda-icon">📦</div><div class="tienda-name">Amazon MX</div><div class="tienda-desc">Electrónicos, hogar, moda</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('liverpool')"><div class="tienda-icon">🛍️</div><div class="tienda-name">Liverpool</div><div class="tienda-desc">Moda, hogar, electrónica</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('walmart')"><div class="tienda-icon">🏪</div><div class="tienda-name">Walmart MX</div><div class="tienda-desc">Todo en un solo lugar</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('mercadolibre')"><div class="tienda-icon">🛒</div><div class="tienda-name">Mercado Libre</div><div class="tienda-desc">Millones de productos</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('bestbuy')"><div class="tienda-icon">💻</div><div class="tienda-name">Best Buy MX</div><div class="tienda-desc">Electrónicos y tecnología</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('coppel')"><div class="tienda-icon">🏠</div><div class="tienda-name">Coppel</div><div class="tienda-desc">Hogar, moda y más</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('elektra')"><div class="tienda-icon">📱</div><div class="tienda-name">Elektra</div><div class="tienda-desc">Electrónicos y muebles</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card" onclick="filtrarPor('palacio')"><div class="tienda-icon">👑</div><div class="tienda-name">Palacio de Hierro</div><div class="tienda-desc">Moda y lujo</div><span class="tienda-badge">Activo</span></div>
     </div>
   </div>
 </section>
 
-<!-- ALERTA FORM -->
+<!-- CATEGORIAS -->
+<section class="categorias">
+  <div class="categorias-inner">
+    <p class="section-label">Categorías</p>
+    <h2 class="section-title">¿Qué estás buscando?</h2>
+    <div class="cat-grid">
+      <div class="cat-card electro" onclick="filtrarCategoria('electronico')"><div class="cat-icon">📱</div><h3>Electrónicos</h3><p>Celulares, laptops, TVs, audífonos y más</p><span class="cat-tag">Más alertas activas</span></div>
+      <div class="cat-card moda" onclick="filtrarCategoria('moda')"><div class="cat-icon">👗</div><h3>Moda</h3><p>Ropa, zapatos, bolsas y accesorios</p><span class="cat-tag">+50 marcas</span></div>
+      <div class="cat-card hogar" onclick="filtrarCategoria('hogar')"><div class="cat-icon">🏠</div><h3>Hogar</h3><p>Muebles, electrodomésticos y decoración</p><span class="cat-tag">Ofertas diarias</span></div>
+      <div class="cat-card deportes" onclick="filtrarCategoria('deporte')"><div class="cat-icon">⚽</div><h3>Deportes</h3><p>Ropa deportiva, equipos y accesorios</p><span class="cat-tag">Nike, Adidas y más</span></div>
+      <div class="cat-card belleza" onclick="filtrarCategoria('belleza')"><div class="cat-icon">💄</div><h3>Belleza</h3><p>Skincare, maquillaje y fragancias</p><span class="cat-tag">Tendencia</span></div>
+      <div class="cat-card juguetes" onclick="filtrarCategoria('juguetes')"><div class="cat-icon">🧸</div><h3>Juguetes</h3><p>Para niños de todas las edades</p><span class="cat-tag">Temporada</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTAS DEL DÍA -->
+<section class="deals" id="ofertas">
+  <div class="content-with-sidebar">
+    <div>
+      <div class="deals-header">
+        <div>
+          <p class="section-label">Ofertas del día</p>
+          <h2 class="section-title">Descuentos encontrados hoy</h2>
+        </div>
+      </div>
+      <div class="deals-filters">
+        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrar('electronico',this)">📱 Electrónicos</button>
+        <button class="filter-btn" onclick="filtrar('moda',this)">👗 Moda</button>
+        <button class="filter-btn" onclick="filtrar('hogar',this)">🏠 Hogar</button>
+        <button class="filter-btn" onclick="filtrar('deporte',this)">⚽ Deportes</button>
+        <button class="filter-btn" onclick="filtrar('belleza',this)">💄 Belleza</button>
+      </div>
+      <div class="deals-grid" id="deals-grid">
+        <div class="deal-card" data-tipo="electronico" data-producto="iphone" data-precio="12999">
+          <div class="deal-img amazon">📱<span class="deal-badge">-25%</span><span class="deal-source">Amazon MX</span></div>
+          <div class="deal-body">
+            <div class="deal-type">📱 Electrónicos</div>
+            <div class="deal-title">iPhone 15 128GB</div>
+            <div class="deal-dates">Oferta del día · Envío gratis</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$12,999 <span>MXN</span></div><div class="deal-old">antes $17,999</div></div>
+              <a href="https://www.amazon.com.mx/s?k=iphone+15&tag=dealtravel-20" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card" data-tipo="electronico" data-producto="samsung tv" data-precio="8999">
+          <div class="deal-img walmart">📺<span class="deal-badge">-30%</span><span class="deal-source">Walmart MX</span></div>
+          <div class="deal-body">
+            <div class="deal-type">📱 Electrónicos</div>
+            <div class="deal-title">Samsung Smart TV 55"</div>
+            <div class="deal-dates">Oferta flash · Hoy únicamente</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$8,999 <span>MXN</span></div><div class="deal-old">antes $12,999</div></div>
+              <a href="https://www.walmart.com.mx/search?q=samsung+smart+tv+55" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card" data-tipo="moda" data-producto="nike" data-precio="1299">
+          <div class="deal-img liverpool">👟<span class="deal-badge">-40%</span><span class="deal-source">Liverpool</span></div>
+          <div class="deal-body">
+            <div class="deal-type">👗 Moda</div>
+            <div class="deal-title">Nike Air Max 2024</div>
+            <div class="deal-dates">Liquidación de temporada</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$1,299 <span>MXN</span></div><div class="deal-old">antes $2,199</div></div>
+              <a href="https://www.liverpool.com.mx/search?query=nike+air+max" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card" data-tipo="hogar" data-producto="sofa" data-precio="4999">
+          <div class="deal-img coppel">🛋️<span class="deal-badge">-35%</span><span class="deal-source">Coppel</span></div>
+          <div class="deal-body">
+            <div class="deal-type">🏠 Hogar</div>
+            <div class="deal-title">Sofá 3 plazas moderno</div>
+            <div class="deal-dates">MSI disponibles · Envío gratis</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$4,999 <span>MXN</span></div><div class="deal-old">antes $7,699</div></div>
+              <a href="https://www.coppel.com/muebles/salas" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card" data-tipo="electronico" data-producto="laptop" data-precio="9999">
+          <div class="deal-img bestbuy">💻<span class="deal-badge">-20%</span><span class="deal-source">Best Buy MX</span></div>
+          <div class="deal-body">
+            <div class="deal-type">📱 Electrónicos</div>
+            <div class="deal-title">Laptop HP 15" Core i5</div>
+            <div class="deal-dates">18 MSI sin intereses</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$9,999 <span>MXN</span></div><div class="deal-old">antes $12,499</div></div>
+              <a href="https://www.bestbuy.com.mx/laptops" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+        <div class="deal-card" data-tipo="belleza" data-producto="perfume" data-precio="799">
+          <div class="deal-img mercadolibre">💄<span class="deal-badge">-45%</span><span class="deal-source">Mercado Libre</span></div>
+          <div class="deal-body">
+            <div class="deal-type">💄 Belleza</div>
+            <div class="deal-title">Set perfumes importados</div>
+            <div class="deal-dates">Envío gratis · Stock limitado</div>
+            <div class="deal-footer">
+              <div><div class="deal-price">$799 <span>MXN</span></div><div class="deal-old">antes $1,450</div></div>
+              <a href="https://www.mercadolibre.com.mx/perfumes" target="_blank" class="deal-btn">Ver oferta →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar-ad-stack">
+      <div class="ad-slot ad-300x250">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
+      <div class="ad-slot ad-300x600">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTA -->
 <section class="alert-section" id="alerta">
   <div class="alert-inner">
     <div class="alert-header">
       <p class="section-label">Crea tu alerta</p>
-      <h2 class="section-title">Te avisamos cuando baje el precio</h2>
-      <p class="section-sub" style="margin:0 auto;">Sin costo. Sin spam. Elige cómo quieres recibir tu notificación.</p>
+      <h2 class="section-title">Dinos qué quieres comprar</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:500px;margin:0 auto;">Te avisamos cuando baje el precio. Sin costo, sin spam.</p>
     </div>
     <div class="alert-form">
       <div class="form-grid">
-        <div class="form-group"><label>Ciudad de origen</label><input type="text" id="origen" placeholder="Ej. Ciudad de México"></div>
-        <div class="form-group"><label>Destino</label><input type="text" id="destino" placeholder="Ej. Cancún, París…"></div>
-        <div class="form-group"><label>Tipo de viaje</label>
-          <select id="tipo">
-            <option value="">Seleccionar...</option>
-            <option>Vuelo</option><option>Hotel</option><option>Crucero</option><option>Paquete todo incluido</option>
+        <div class="form-group"><label>Producto o marca</label><input type="text" id="producto" placeholder="Ej. iPhone 15, Nike Air Max, Samsung TV..."></div>
+        <div class="form-group"><label>Categoría</label>
+          <select id="categoria">
+            <option value="">Cualquier categoría</option>
+            <option>Electrónicos / Tecnología</option>
+            <option>Ropa y Moda</option>
+            <option>Hogar y Muebles</option>
+            <option>Deportes</option>
+            <option>Belleza y Cuidado Personal</option>
+            <option>Juguetes</option>
+            <option>Alimentos y Bebidas</option>
+            <option>Libros y Entretenimiento</option>
           </select>
         </div>
-        <div class="form-group"><label>Fuente preferida</label>
-          <select id="fuente">
-            <option value="">Cualquier fuente</option>
-            <option>Trivago</option>
-            <option>Mundo Joven</option>
-            <option>Despegar</option><option>Aeroméxico</option><option>Volaris</option>
-            <option>Viva Aerobus</option><option>Skyscanner</option><option>Kayak</option>
-            <option>PriceTravel</option><option>Hotels.com</option><option>Best Day</option>
-            <option>Expedia</option><option>Kiwi</option>
-            <option>Liverpool Viajes</option>
+        <div class="form-group"><label>Tienda preferida</label>
+          <select id="tienda">
+            <option value="">Cualquier tienda</option>
+            <option>Amazon MX</option>
+            <option>Liverpool</option>
+            <option>Walmart MX</option>
+            <option>Mercado Libre</option>
+            <option>Best Buy MX</option>
+            <option>Coppel</option>
+            <option>Elektra</option>
+            <option>Palacio de Hierro</option>
           </select>
         </div>
-        <div class="form-group"><label>Presupuesto máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 9,500"></div>
-        <div class="form-group"><label>Fecha de salida (aprox.) <span style="color:rgba(255,255,255,0.3);font-size:0.7rem;">opcional</span></label><input type="date" id="fecha"></div>
+        <div class="form-group"><label>Precio máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 5,000"></div>
+        <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
+        <div class="form-group"><label>Tu celular <span style="color:rgba(255,255,255,0.3);font-size:0.7rem;">opcional</span></label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
       </div>
-
-      <!-- NOTIFICACIONES -->
       <p style="font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.7rem;">¿Cómo quieres recibir tu alerta?</p>
       <div class="notify-opts">
         <label class="notify-opt selected" id="opt-email">
@@ -380,204 +480,37 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
           <div><div class="notify-opt-label">📱 SMS</div><div class="notify-opt-sub">A tu celular</div></div>
         </label>
       </div>
-
-      <div class="form-grid" style="margin-top:0.5rem;">
-        <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
-        <div class="form-group" id="phone-group" style="display:none;"><label>Tu número de celular</label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
-      </div>
-
       <button class="form-submit" onclick="submitAlert()">🔔 Activar mi alerta de precio</button>
-      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos una oferta dentro de tu presupuesto.</div>
+      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos una oferta para <span id="success-producto"></span> dentro de tu presupuesto.</div>
     </div>
   </div>
 </section>
 
-<!-- DEALS + SIDEBAR -->
-<section class="deals" id="deals">
-  <div class="content-with-sidebar">
-    <div>
-      <div class="deals-header">
-        <div>
-          <p class="section-label">Ofertas del día</p>
-          <h2 class="section-title">Descuentos encontrados hoy</h2>
-        </div>
-      </div>
-      <div class="deals-filters">
-        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrar('vuelo',this)">✈️ Vuelos</button>
-        <button class="filter-btn" onclick="filtrar('hotel',this)">🏨 Hoteles</button>
-        <button class="filter-btn" onclick="filtrar('crucero',this)">🚢 Cruceros</button>
-        <button class="filter-btn" onclick="filtrar('paquete',this)">🌴 Paquetes</button>
-      </div>
-      <div class="deals-grid" id="deals-grid">
-
-        <!-- TRIVAGO -->
-        <div class="deal-card" data-tipo="hotel" data-destino="cancun" data-precio="6533">
-          <div class="deal-img cancun">🏖️<span class="deal-badge">HOY</span><span class="deal-source">Trivago</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🔥 Hotel — Cancún</div>
-            <div class="deal-title">CDMX → Cancún</div>
-            <div class="deal-dates">Jun 15–22 · 7 noches · 2 adultos</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$6,533 <span>por noche / MXN</span></div><div class="deal-old">Precio mínimo verificado</div></div>
-              <a href="https://www.awin1.com/cread.php?awinmid=105931&awinaffid=2876425&ued=https%3A%2F%2Fwww.trivago.com.mx%2Fes-MX%2Fssp%2Fsearch%3FiPathId%3D119%26aDateRange%5Bstart%5D%3D2026-06-15%26aDateRange%5Bend%5D%3D2026-06-22%26iRoomType%3D7" target="_blank" class="deal-btn">Ver en Trivago →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="hotel" data-destino="riviera maya" data-precio="8399">
-          <div class="deal-img caribe">🌴<span class="deal-badge">HOY</span><span class="deal-source">Trivago</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🔥 Hotel — Riviera Maya</div>
-            <div class="deal-title">CDMX → Riviera Maya</div>
-            <div class="deal-dates">Jul 10–17 · 7 noches · 2 adultos</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,399 <span>por noche / MXN</span></div><div class="deal-old">Precio mínimo verificado</div></div>
-              <a href="https://www.awin1.com/cread.php?awinmid=105931&awinaffid=2876425&ued=https%3A%2F%2Fwww.trivago.com.mx%2Fes-MX%2Fssp%2Fsearch%3FiPathId%3D18225%26aDateRange%5Bstart%5D%3D2026-07-10%26aDateRange%5Bend%5D%3D2026-07-17%26iRoomType%3D7" target="_blank" class="deal-btn">Ver en Trivago →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="hotel" data-destino="cabos" data-precio="8199">
-          <div class="deal-img barcelona">🌊<span class="deal-badge">HOY</span><span class="deal-source">Trivago</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🔥 Hotel — Los Cabos</div>
-            <div class="deal-title">CDMX → Los Cabos</div>
-            <div class="deal-dates">Jul 1–7 · 6 noches · 2 adultos</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,199 <span>por noche / MXN</span></div><div class="deal-old">Precio mínimo verificado</div></div>
-              <a href="https://www.awin1.com/cread.php?awinmid=105931&awinaffid=2876425&ued=https%3A%2F%2Fwww.trivago.com.mx%2Fes-MX%2Fssp%2Fsearch%3FiPathId%3D18218%26aDateRange%5Bstart%5D%3D2026-07-01%26aDateRange%5Bend%5D%3D2026-07-07%26iRoomType%3D7" target="_blank" class="deal-btn">Ver en Trivago →</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- MUNDO JOVEN -->
-        <div class="deal-card" data-tipo="paquete" data-destino="cancun" data-precio="6533">
-          <div class="deal-img cancun">🏝️<span class="deal-badge">-40%</span><span class="deal-source">Mundo Joven</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🌴 Paquete todo incluido</div>
-            <div class="deal-title">CDMX → Cancún</div>
-            <div class="deal-dates">Salidas Jun–Ago · 7 noches · Meses sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$6,533 <span>por persona / MXN</span></div><div class="deal-old">Precio verificado hoy</div></div>
-              <a href="https://www.mundojoven.com/paquetes/cancun" target="_blank" class="deal-btn">Ver en Mundo Joven →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="paquete" data-destino="riviera maya" data-precio="8199">
-          <div class="deal-img caribe">🌅<span class="deal-badge">-35%</span><span class="deal-source">Mundo Joven</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🌴 Paquete todo incluido</div>
-            <div class="deal-title">CDMX → Riviera Maya</div>
-            <div class="deal-dates">Salidas Jul–Sep · 7 noches · Meses sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,199 <span>por persona / MXN</span></div><div class="deal-old">Precio verificado hoy</div></div>
-              <a href="https://www.mundojoven.com/paquetes/riviera-maya" target="_blank" class="deal-btn">Ver en Mundo Joven →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="paquete" data-destino="acapulco" data-precio="8399">
-          <div class="deal-img miami">🏄<span class="deal-badge">-30%</span><span class="deal-source">Mundo Joven</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🌴 Paquete todo incluido</div>
-            <div class="deal-title">CDMX → Acapulco</div>
-            <div class="deal-dates">Salidas Jun–Ago · 4 noches · Meses sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,399 <span>por persona / MXN</span></div><div class="deal-old">Precio verificado hoy</div></div>
-              <a href="https://www.mundojoven.com/paquetes/acapulco" target="_blank" class="deal-btn">Ver en Mundo Joven →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="paquete" data-destino="huatulco" data-precio="8999">
-          <div class="deal-img cancun2">🌞<span class="deal-badge">-32%</span><span class="deal-source">Mundo Joven</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🌴 Paquete todo incluido</div>
-            <div class="deal-title">CDMX → Huatulco</div>
-            <div class="deal-dates">Salidas Jul–Sep · 5 noches · Meses sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,999 <span>por persona / MXN</span></div><div class="deal-old">Precio verificado hoy</div></div>
-              <a href="https://www.mundojoven.com/paquetes/huatulco" target="_blank" class="deal-btn">Ver en Mundo Joven →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="paquete" data-destino="miami" data-precio="9999">
-          <div class="deal-img paris">🗽<span class="deal-badge">-28%</span><span class="deal-source">Mundo Joven</span></div>
-          <div class="deal-body">
-            <div class="deal-type">✈️ Vuelo + Hotel</div>
-            <div class="deal-title">CDMX → Miami</div>
-            <div class="deal-dates">Salidas Ago–Oct · 6 noches · Meses sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$9,999 <span>por persona / MXN</span></div><div class="deal-old">Precio verificado hoy</div></div>
-              <a href="https://www.mundojoven.com/paquetes/miami" target="_blank" class="deal-btn">Ver en Mundo Joven →</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- DESPEGAR -->
-        <div class="deal-card" data-tipo="vuelo" data-destino="cancun" data-precio="4200">
-          <div class="deal-img cancun">✈️<span class="deal-badge">HOY</span><span class="deal-source">Despegar</span></div>
-          <div class="deal-body">
-            <div class="deal-type">✈️ Vuelo ida y vuelta</div>
-            <div class="deal-title">CDMX → Cancún</div>
-            <div class="deal-dates">Fechas flexibles · Clase turista</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$4,200 <span>desde / MXN</span></div><div class="deal-old">Precio desde</div></div>
-              <a href="https://www.despegar.com.mx/vuelos/resultados/mexico-city/cancun/2026-06-15/2026-06-22/1/0/0/economy/usd" target="_blank" class="deal-btn">Ver en Despegar →</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="deal-card" data-tipo="crucero" data-destino="caribe" data-precio="10800">
-          <div class="deal-img caribe">🚢<span class="deal-badge">-45%</span><span class="deal-source">Best Day</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🚢 Crucero todo incluido</div>
-            <div class="deal-title">Caribe Oriental</div>
-            <div class="deal-dates">Ago 3–10 · 7 noches · Desde CDMX</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$10,800 <span>por persona / MXN</span></div><div class="deal-old">antes $19,600</div></div>
-              <a href="https://www.bestday.com.mx/Cruceros/" target="_blank" class="deal-btn">Ver en Best Day →</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
+<!-- COMO FUNCIONA -->
+<section class="how" id="como">
+  <div class="how-inner">
+    <div class="how-header">
+      <p class="section-label">Así funciona</p>
+      <h2 class="section-title">4 pasos para ahorrar</h2>
     </div>
-
-    <!-- SIDEBAR ADS -->
-    <div class="sidebar-ad-stack">
-      <div class="ad-slot ad-300x250">
-        <span class="ad-label">Publicidad</span>
-        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      </div>
-      <div class="ad-slot ad-300x600">
-        <span class="ad-label">Publicidad</span>
-        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Dinos qué quieres</h3><p>Ingresa el producto, marca o categoría que buscas.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Define tu precio</h3><p>Pon el precio máximo que estás dispuesto a pagar.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Nosotros vigilamos</h3><p>Monitoreamos 8 tiendas cada hora automáticamente.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Tú ahorras</h3><p>Te avisamos al instante cuando baje el precio.</p></div>
     </div>
   </div>
 </section>
 
-<!-- AD STRIP -->
-<div class="ad-strip">
-  <div class="ad-slot ad-970x90">
-    <span class="ad-label">Publicidad</span>
-    <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-  </div>
-</div>
-
-<!-- TESTIMONIALS -->
+<!-- TESTIMONIOS -->
 <section class="testimonials">
   <div class="testimonials-inner">
     <p class="section-label">Testimonios</p>
-    <h2 class="section-title">Lo que dicen nuestros viajeros</h2>
+    <h2 class="section-title">Lo que dicen nuestros usuarios</h2>
     <div class="testi-grid">
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Configuré una alerta para Cancún con $8,000 MXN y en 3 días me llegó el WhatsApp. ¡Ahorré más de $9,000 pesos!"</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses buscando vuelo a Europa. Me avisaron por SMS cuando bajó el precio. Pagué $21,000 MXN por algo que valía $35,000."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Crucero por el Caribe con 45% de descuento en Best Day. El botón me llevó directo a reservar. Increíble y facilísimo."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Puse una alerta para un iPhone y en 3 días me llegó la notificación. Lo compré $4,000 más barato en Amazon. ¡Increíble!"</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses esperando el precio correcto para una laptop. Deal Travel me avisó en cuanto bajó en Best Buy. Ahorré $2,500 MXN."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Compré un sofá en Coppel con 40% de descuento gracias a la alerta. El proceso fue facilísimo y el email llegó al instante."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
     </div>
   </div>
 </section>
@@ -586,7 +519,7 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <footer>
   <div class="footer-inner">
     <div class="footer-ad-wrap">
-      <div class="ad-slot ad-728x90-footer">
+      <div class="ad-slot" style="width:100%;max-width:728px;height:90px;">
         <span class="ad-label">Publicidad</span>
         <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
       </div>
@@ -594,203 +527,181 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
     <div class="footer-top">
       <div class="footer-brand">
         <div class="logo">Deal<span>Travel</span></div>
-        <p>Monitoreo inteligente de precios para que viajes más gastando menos.</p>
+        <p>Alertas inteligentes de precios para que compres más pagando menos.</p>
       </div>
-      <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#deals">Vuelos</a></li><li><a href="#deals">Hoteles</a></li><li><a href="#deals">Cruceros</a></li><li><a href="#deals">Paquetes</a></li></ul></div>
-      <div class="footer-links"><h4>Fuentes</h4><ul><li><a href="https://www.despegar.com.mx" target="_blank">Despegar</a></li><li><a href="https://www.volaris.com" target="_blank">Volaris</a></li><li><a href="https://www.vivaaerobus.com" target="_blank">Viva Aerobus</a></li><li><a href="https://www.bestday.com.mx" target="_blank">Best Day</a></li></ul></div>
+      <div class="footer-links"><h4>Tiendas</h4><ul><li><a href="#">Amazon MX</a></li><li><a href="#">Liverpool</a></li><li><a href="#">Walmart MX</a></li><li><a href="#">Mercado Libre</a></li></ul></div>
+      <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#">Electrónicos</a></li><li><a href="#">Moda</a></li><li><a href="#">Hogar</a></li><li><a href="#">Deportes</a></li></ul></div>
       <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos de uso</a></li><li><a href="#">Cookies</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
-      <p>Hecho con ♡ para viajeros inteligentes</p>
+      <p>Hecho con ♡ para compradores inteligentes</p>
     </div>
   </div>
 </footer>
 
 <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-
-// DATA de ofertas
-const ofertas = [
-  {tipo:'paquete',destino:'cancun',keywords:['cancún','cancun','mexico','quintana roo'],precio:7250,titulo:'CDMX → Cancún',subtipo:'Paquete todo incluido',fechas:'15–22 Jun · 7 noches',img:'cancun',badge:'-52%',source:'Despegar.com',link:'https://www.despegar.com.mx/paquetes/resultados/mexico/cancun/',antes:15100},
-  {tipo:'vuelo',destino:'paris',keywords:['parís','paris','francia'],precio:22400,titulo:'CDMX → París',subtipo:'Vuelo internacional',fechas:'10–20 Jul · ida y vuelta',img:'paris',badge:'-38%',source:'Skyscanner',link:'https://www.skyscanner.com.mx/vuelos/mex/par/',antes:36100},
-  {tipo:'crucero',destino:'caribe',keywords:['caribe','cuba','jamaica'],precio:10800,titulo:'Caribe Oriental',subtipo:'Crucero',fechas:'3–10 Ago · 7 noches',img:'caribe',badge:'-45%',source:'Best Day',link:'https://www.bestday.com.mx/Cruceros/',antes:19600},
-  {tipo:'vuelo',destino:'barcelona',keywords:['barcelona','españa','europa'],precio:9000,titulo:'CDMX → Barcelona',subtipo:'Vuelo directo',fechas:'Sep · Solo ida',img:'barcelona',badge:'-41%',source:'Volaris',link:'https://www.volaris.com/es/ofertas/',antes:15250},
-  {tipo:'hotel',destino:'miami',keywords:['miami','florida','estados unidos','usa'],precio:4200,titulo:'Hotel Miami Beach',subtipo:'Hotel',fechas:'Aug · 5 noches · 4★',img:'miami',badge:'-35%',source:'Hotels.com',link:'https://es.hotels.com/deals/',antes:6500},
-  {tipo:'paquete',destino:'cancun',keywords:['riviera maya','playa del carmen','tulum','quintana roo'],precio:11500,titulo:'GDL → Riviera Maya',subtipo:'Paquete todo incluido',fechas:'Sep · 5 noches · Resort 5★',img:'cancun2',badge:'-33%',source:'Liverpool Viajes',link:'https://viajestr.liverpool.com.mx/',antes:17200},
-];
-
-function crearCard(o){
-  return `<div class="deal-card" data-tipo="${o.tipo}" data-destino="${o.destino}" data-precio="${o.precio}">
-    <div class="deal-img ${o.img}">${o.tipo==='vuelo'?'✈️':o.tipo==='hotel'?'🏨':o.tipo==='crucero'?'⚓':'🌴'}<span class="deal-badge">${o.badge}</span><span class="deal-source">${o.source}</span></div>
-    <div class="deal-body">
-      <div class="deal-type">${o.subtipo}</div>
-      <div class="deal-title">${o.titulo}</div>
-      <div class="deal-dates">${o.fechas}</div>
-      <div class="deal-footer">
-        <div><div class="deal-price">$${o.precio.toLocaleString('es-MX')} <span>MXN</span></div><div class="deal-old">antes $${o.antes.toLocaleString('es-MX')}</div></div>
-        <a href="${o.link}" target="_blank" class="deal-btn">Ver oferta →</a>
-      </div>
-    </div>
-  </div>`;
-}
-
-function filtrar(tipo, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  document.querySelectorAll('#deals-grid .deal-card').forEach(c=>{
-    c.style.display = (tipo==='todos'||c.dataset.tipo===tipo)?'block':'none';
-  });
-}
-
-function filtrarPor(tipo){
-  document.getElementById('deals').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    const btn = [...document.querySelectorAll('.filter-btn')].find(b=>b.textContent.toLowerCase().includes(tipo));
-    filtrar(tipo, btn);
-  }, 600);
-}
-
-function buscarOfertas(){
-  const q = document.getElementById('search-destino').value.toLowerCase().trim();
-  const tipo = document.getElementById('search-tipo').value;
-  const maxPrecio = parseFloat(document.getElementById('search-precio').value)||Infinity;
-  const resultados = ofertas.filter(o=>{
-    const matchDest = !q || o.keywords.some(k=>k.includes(q)||q.includes(k));
-    const matchTipo = tipo==='todos'||o.tipo===tipo;
-    const matchPrecio = o.precio<=maxPrecio;
-    return matchDest&&matchTipo&&matchPrecio;
-  });
-  const grid = document.getElementById('search-grid');
-  const count = document.getElementById('search-count');
-  const results = document.getElementById('search-results');
-  results.classList.add('visible');
-  if(resultados.length===0){
-    grid.innerHTML='<div class="no-results">😕 No encontramos ofertas con esos filtros. Intenta con otro destino o amplía tu presupuesto.</div>';
-    count.textContent='Sin resultados';
-  } else {
-    grid.innerHTML = resultados.map(crearCard).join('');
-    count.textContent = `${resultados.length} oferta${resultados.length>1?'s':''} encontrada${resultados.length>1?'s':''}`;
-  }
-}
-
-document.getElementById('search-destino').addEventListener('keydown',e=>{if(e.key==='Enter')buscarOfertas();});
-
-function toggleOpt(id){
-  const el = document.getElementById(id);
-  el.classList.toggle('selected', el.querySelector('input').checked);
-  const needPhone = document.getElementById('opt-whatsapp').querySelector('input').checked || document.getElementById('opt-sms').querySelector('input').checked;
-  document.getElementById('phone-group').style.display = needPhone?'flex':'none';
-}
-
 const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
 
-// Cargar ofertas reales de Supabase
+// Cargar ofertas de Supabase
 async function cargarOfertas() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=precio.asc&limit=20`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=12`, {
+      headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}
     });
     const ofertas = await res.json();
-    if (ofertas && ofertas.length > 0) {
-      renderOfertas(ofertas);
-    }
-  } catch(e) {
-    console.log('Usando ofertas de ejemplo:', e);
-  }
+    if(ofertas && ofertas.length > 0) renderOfertas(ofertas);
+  } catch(e) { console.log('Usando ofertas de ejemplo'); }
 }
 
 function renderOfertas(ofertas) {
   const grid = document.getElementById('deals-grid');
-  const IMGS = ['cancun','paris','caribe','barcelona','miami','cancun2'];
-  const ICONS = {'vuelo':'✈️','hotel':'🏨','crucero':'🚢','paquete':'🌴'};
-  grid.innerHTML = ofertas.map((o, i) => `
-    <div class="deal-card" data-tipo="${o.tipo}" data-destino="${o.destino.toLowerCase()}" data-precio="${o.precio}">
-      <div class="deal-img ${IMGS[i % IMGS.length]}">
-        ${ICONS[o.tipo]||'🎯'}
+  const IMGS = ['amazon','liverpool','walmart','mercadolibre','bestbuy','coppel'];
+  const ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸'};
+  grid.innerHTML = ofertas.map((o,i) => `
+    <div class="deal-card" data-tipo="${o.tipo||'electronico'}" data-producto="${(o.destino||'').toLowerCase()}" data-precio="${o.precio}">
+      <div class="deal-img ${IMGS[i%IMGS.length]}">
+        ${ICONS[o.tipo]||'🛍️'}
         <span class="deal-badge">${o.tipo_promo||'Oferta'}</span>
         <span class="deal-source">${o.fuente}</span>
       </div>
       <div class="deal-body">
-        <div class="deal-type">🔥 ${o.tipo_promo||'Oferta especial'}</div>
-        <div class="deal-title">${o.destino}</div>
+        <div class="deal-type">${ICONS[o.tipo]||'🛍️'} ${o.tipo_promo||'Oferta especial'}</div>
+        <div class="deal-title">${o.destino||'Producto en oferta'}</div>
         <div class="deal-dates">${o.fecha||'Hoy'} · ${o.palabras_clave||''}</div>
         <div class="deal-footer">
-          <div>
-            <div class="deal-price">${o.precio_fmt} <span>MXN</span></div>
-            <div class="deal-old">Precio verificado</div>
-          </div>
+          <div><div class="deal-price">${o.precio_fmt} <span>MXN</span></div><div class="deal-old">Precio verificado</div></div>
           <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn" onclick="window.open('${o.url}','_blank');return false;">Ver oferta →</a>
         </div>
       </div>
     </div>`).join('');
 }
 
-// Ejecutar al cargar la página
-window.addEventListener('DOMContentLoaded', cargarOfertas);
-  const origen     = document.getElementById('origen').value.trim();
-  const destino    = document.getElementById('destino').value.trim();
-  const tipo       = document.getElementById('tipo').value;
-  const presupuesto= document.getElementById('presupuesto').value;
-  const fecha      = document.getElementById('fecha').value;
-  const email      = document.getElementById('email').value.trim();
-  const telefono   = document.getElementById('telefono') ? document.getElementById('telefono').value.trim() : '';
-  const fuente     = document.getElementById('fuente').value;
+// Data local para búsqueda
+const ofertasLocales = [
+  {tipo:'electronico',producto:'iphone 15',tienda:'amazon',precio:12999,titulo:'iPhone 15 128GB',desc:'Oferta del día · Envío gratis',img:'amazon',badge:'-25%',url:'https://www.amazon.com.mx/s?k=iphone+15',antes:17999},
+  {tipo:'electronico',producto:'samsung tv',tienda:'walmart',precio:8999,titulo:'Samsung Smart TV 55"',desc:'Oferta flash · Hoy únicamente',img:'walmart',badge:'-30%',url:'https://www.walmart.com.mx/search?q=samsung+tv',antes:12999},
+  {tipo:'moda',producto:'nike air max',tienda:'liverpool',precio:1299,titulo:'Nike Air Max 2024',desc:'Liquidación de temporada',img:'liverpool',badge:'-40%',url:'https://www.liverpool.com.mx/search?query=nike',antes:2199},
+  {tipo:'hogar',producto:'sofa sala',tienda:'coppel',precio:4999,titulo:'Sofá 3 plazas moderno',desc:'MSI disponibles · Envío gratis',img:'coppel',badge:'-35%',url:'https://www.coppel.com/muebles/salas',antes:7699},
+  {tipo:'electronico',producto:'laptop hp',tienda:'bestbuy',precio:9999,titulo:'Laptop HP 15" Core i5',desc:'18 MSI sin intereses',img:'bestbuy',badge:'-20%',url:'https://www.bestbuy.com.mx/laptops',antes:12499},
+  {tipo:'belleza',producto:'perfume set',tienda:'mercadolibre',precio:799,titulo:'Set perfumes importados',desc:'Envío gratis · Stock limitado',img:'mercadolibre',badge:'-45%',url:'https://www.mercadolibre.com.mx/perfumes',antes:1450},
+];
+
+function crearCard(o){
+  const ICONS={'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸'};
+  return `<div class="deal-card" data-tipo="${o.tipo}" data-producto="${o.producto}" data-precio="${o.precio}">
+    <div class="deal-img ${o.img}">${ICONS[o.tipo]||'🛍️'}<span class="deal-badge">${o.badge}</span><span class="deal-source">${o.tienda}</span></div>
+    <div class="deal-body">
+      <div class="deal-type">${ICONS[o.tipo]||'🛍️'} ${o.tipo}</div>
+      <div class="deal-title">${o.titulo}</div>
+      <div class="deal-dates">${o.desc}</div>
+      <div class="deal-footer">
+        <div><div class="deal-price">$${o.precio.toLocaleString('es-MX')} <span>MXN</span></div><div class="deal-old">antes $${o.antes.toLocaleString('es-MX')}</div></div>
+        <a href="${o.url}" target="_blank" class="deal-btn">Ver oferta →</a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buscarOfertas(){
+  const q = document.getElementById('search-producto').value.toLowerCase().trim();
+  const tienda = document.getElementById('search-tienda').value;
+  const maxPrecio = parseFloat(document.getElementById('search-precio').value)||Infinity;
+  const resultados = ofertasLocales.filter(o=>{
+    const matchProd = !q || o.producto.includes(q) || o.titulo.toLowerCase().includes(q);
+    const matchTienda = tienda==='todas' || o.tienda===tienda;
+    const matchPrecio = o.precio<=maxPrecio;
+    return matchProd&&matchTienda&&matchPrecio;
+  });
+  const grid=document.getElementById('search-grid');
+  const count=document.getElementById('search-count');
+  document.getElementById('search-results').classList.add('visible');
+  if(resultados.length===0){
+    grid.innerHTML='<div class="no-results">😕 No encontramos ofertas con esos filtros. Intenta con otro producto o amplía tu presupuesto.</div>';
+    count.textContent='Sin resultados';
+  } else {
+    grid.innerHTML=resultados.map(crearCard).join('');
+    count.textContent=`${resultados.length} oferta${resultados.length>1?'s':''} encontrada${resultados.length>1?'s':''}`;
+  }
+}
+
+document.getElementById('search-producto').addEventListener('keydown',e=>{if(e.key==='Enter')buscarOfertas();});
+
+function filtrar(tipo,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.querySelectorAll('#deals-grid .deal-card').forEach(c=>{
+    c.style.display=(tipo==='todos'||c.dataset.tipo===tipo)?'block':'none';
+  });
+}
+
+function filtrarPor(tienda){
+  document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
+}
+
+function filtrarCategoria(tipo){
+  document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    const btn=[...document.querySelectorAll('.filter-btn')].find(b=>b.textContent.toLowerCase().includes(tipo));
+    filtrar(tipo,btn);
+  },600);
+}
+
+function toggleOpt(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('selected',el.querySelector('input').checked);
+}
 
 async function submitAlert(){
-  const origen     = document.getElementById('origen').value.trim();
-  const destino    = document.getElementById('destino').value.trim();
-  const tipo       = document.getElementById('tipo').value;
-  const presupuesto= document.getElementById('presupuesto').value;
-  const fecha      = document.getElementById('fecha').value;
-  const email      = document.getElementById('email').value.trim();
-  const telefono   = document.getElementById('telefono') ? document.getElementById('telefono').value.trim() : '';
-  const fuente     = document.getElementById('fuente').value;
+  const producto=document.getElementById('producto').value.trim();
+  const categoria=document.getElementById('categoria').value;
+  const tienda=document.getElementById('tienda').value;
+  const presupuesto=document.getElementById('presupuesto').value;
+  const email=document.getElementById('email').value.trim();
+  const telefono=document.getElementById('telefono').value.trim();
 
-  if(!origen||!destino||!tipo||!presupuesto||!email){
-    alert('Por favor completa: origen, destino, tipo de viaje, presupuesto y email.');
+  if(!producto||!presupuesto||!email){
+    alert('Por favor completa: producto, precio máximo y email.');
     return;
   }
 
-  const btn = document.querySelector('.form-submit');
-  btn.disabled = true;
-  btn.textContent = '⏳ Guardando alerta...';
+  const btn=document.querySelector('.form-submit');
+  btn.disabled=true;
+  btn.textContent='⏳ Guardando alerta...';
 
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/alertas`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({
-        origen, destino, tipo,
-        presupuesto: parseFloat(presupuesto),
-        fecha_salida: fecha,
-        email, telefono, fuente,
-        activa: true
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/alertas`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
+      body:JSON.stringify({
+        origen:'dealtravel.mx',
+        destino:producto,
+        tipo:categoria||'General',
+        presupuesto:parseFloat(presupuesto),
+        fecha_salida:'',
+        email,telefono,
+        fuente:tienda||'Cualquier tienda',
+        activa:true
       })
     });
-
-    if(res.ok || res.status === 201){
-      document.getElementById('success').style.display = 'block';
-      btn.textContent = '✓ Alerta activada';
-      btn.style.background = '#10b981';
+    if(res.ok||res.status===201){
+      document.getElementById('success-producto').textContent=producto;
+      document.getElementById('success').style.display='block';
+      btn.textContent='✓ Alerta activada';
+      btn.style.background='#10b981';
     } else {
-      const err = await res.text();
-      console.error('Supabase error:', err);
-      btn.disabled = false;
-      btn.textContent = '🔔 Activar mi alerta de precio';
-      alert('Hubo un error al guardar tu alerta. Intenta de nuevo.');
+      const err=await res.text();
+      console.error('Error:',err);
+      btn.disabled=false;
+      btn.textContent='🔔 Activar mi alerta de precio';
+      alert('Error al guardar. Intenta de nuevo.');
     }
-  } catch(e) {
-    console.error('Error de red:', e);
-    btn.disabled = false;
-    btn.textContent = '🔔 Activar mi alerta de precio';
-    alert('Error de conexión. Verifica tu internet e intenta de nuevo.');
+  }catch(e){
+    console.error(e);
+    btn.disabled=false;
+    btn.textContent='🔔 Activar mi alerta de precio';
+    alert('Error de conexión.');
   }
 }
 
@@ -800,6 +711,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
   });
 });
+
+window.addEventListener('DOMContentLoaded',cargarOfertas);
 </script>
 </body>
 </html>
