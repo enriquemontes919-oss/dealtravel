@@ -128,7 +128,6 @@ def guardar_en_supabase(ofertas):
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Prefer": "return=minimal"
     }
-    # Solo borrar ofertas del scraper, no las manuales
     TIENDAS_SCRAPER = ["Amazon MX","Liverpool","Walmart MX","Mercado Libre","Best Buy MX","Coppel","Elektra"]
     for tienda in TIENDAS_SCRAPER:
         try:
@@ -151,11 +150,9 @@ def revisar_alertas(ofertas):
         return
     try:
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
-        # Obtener alertas activas
         r = requests.get(f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*", headers=headers)
         alertas = r.json()
         print(f"[Alertas] {len(alertas)} alertas activas")
-        # Obtener TODOS los productos de Supabase (scrapeados + manuales)
         r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
         todas_ofertas = r2.json()
         print(f"[Ofertas] {len(todas_ofertas)} ofertas en Supabase")
