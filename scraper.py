@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 load_dotenv()
 
 EMAIL_DESTINO  = os.getenv("EMAIL_DESTINO", "enrique.montes919@gmail.com")
-RESEND_API_KEY = os.getenv("RESEND_API_KEY", "re_DV7PhLwQ_HJcHdKQ2SRz4NNyxHY3BW8Q4")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 SUPABASE_URL   = "https://zutcsoloxabwtrvfzmlm.supabase.co"
 SUPABASE_KEY   = "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT"
 PRECIO_MAX_MXN = 50000
