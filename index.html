@@ -240,6 +240,17 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
         <label>Precio máx. (MXN)</label>
         <input type="number" id="search-precio" placeholder="Sin límite">
       </div>
+      <div class="search-field">
+        <label>Descuento mínimo</label>
+        <select id="search-descuento">
+          <option value="0">Cualquier descuento</option>
+          <option value="10">10% o más</option>
+          <option value="20">20% o más</option>
+          <option value="30">30% o más</option>
+          <option value="40">40% o más</option>
+          <option value="50">50% o más</option>
+        </select>
+      </div>
       <button class="btn-search" onclick="buscarOfertas()">Buscar →</button>
     </div>
     <div class="search-results" id="search-results">
@@ -521,9 +532,13 @@ function buscarOfertas(){
   const q = document.getElementById('search-producto').value.toLowerCase().trim();
   const tienda = document.getElementById('search-tienda').value;
   const max = parseFloat(document.getElementById('search-precio').value)||Infinity;
+  const minDescuento = parseInt(document.getElementById('search-descuento').value)||0;
   const res = ofertasLocales.filter(o=>{
+    const descuento = o.antes ? Math.round((1 - o.precio/o.antes)*100) : 0;
     return (!q||o.producto.includes(q)||o.titulo.toLowerCase().includes(q))&&
-           (tienda==='todas'||o.tienda===tienda)&&o.precio<=max;
+           (tienda==='todas'||o.tienda===tienda)&&
+           o.precio<=max &&
+           descuento>=minDescuento;
   });
   const grid=document.getElementById('search-grid');
   const count=document.getElementById('search-count');
