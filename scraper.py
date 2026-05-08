@@ -128,6 +128,24 @@ def guardar_en_supabase(ofertas):
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Prefer": "return=minimal"
     }
+    # Solo borrar ofertas del scraper, no las manuales
+    TIENDAS_SCRAPER = ["Amazon MX","Liverpool","Walmart MX","Mercado Libre","Best Buy MX","Coppel","Elektra"]
+    for tienda in TIENDAS_SCRAPER:
+        try:
+            tienda_encoded = tienda.replace(" ", "%20")
+            requests.delete(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&fuente=eq.{tienda_encoded}", headers=headers)
+        except:
+            pass
+    if ofertas:
+        try:
+            r = requests.post(f"{SUPABASE_URL}/rest/v1/ofertas", headers=headers, json=ofertas)
+            if r.status_code in [200, 201]:
+                print(f"[Supabase] {len(ofertas)} ofertas guardadas!")
+            else:
+                print(f"[Supabase] Error: {r.text[:200]}")
+        except Exception as e:
+            print(f"[Supabase] Error: {e}")
+    }
     try:
         r = requests.delete(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true", headers=headers)
         print(f"[Supabase] Anteriores eliminadas: {r.status_code}")
