@@ -1,5 +1,5 @@
-import os, time, re, schedule, requests
-from datetime import datetime
+import os, time, re, schedule, requests, hashlib
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,14 +8,16 @@ RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 SUPABASE_URL   = "https://zutcsoloxabwtrvfzmlm.supabase.co"
 SUPABASE_KEY   = "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT"
 PRECIO_MAX_MXN = 50000
+AWIN_ID        = "2876425"
 
 CATEGORIAS_KEYWORDS = {
     "electronico": ["celular","iphone","samsung","laptop","computadora","tablet","tv","television","audifonos","smartwatch","nintendo","playstation","xbox","camara","apple","macbook","ipad"],
-    "moda": ["ropa","zapatos","tenis","vestido","camisa","pantalon","bolsa","cartera","nike","adidas","zara","puma","reebok","vans","converse"],
+    "moda": ["ropa","zapatos","tenis","vestido","camisa","pantalon","bolsa","cartera","nike","adidas","zara","puma","reebok","vans","converse","lacoste","shein"],
     "hogar": ["sofa","cama","colchon","sala","comedor","cocina","refrigerador","lavadora","microondas","licuadora","mueble","silla","mesa"],
     "deporte": ["pesas","bicicleta","yoga","running","gym","proteina","futbol","tenis","pelota"],
     "belleza": ["perfume","crema","maquillaje","shampoo","serum","labial","skincare"],
     "juguetes": ["juguete","lego","barbie","hot wheels","muneca","peluche"],
+    "viajes": ["hotel","vuelo","viaje","hospedaje","resort","vacaciones","aeropuerto"],
 }
 
 def detectar_categoria(texto):
@@ -25,20 +27,39 @@ def detectar_categoria(texto):
             return cat
     return "general"
 
-# ─── FUENTES QUE SÍ FUNCIONAN ────────────────────────────────────────────────
+def generar_id(destino, precio, fuente):
+    """ID único para evitar duplicados"""
+    key = f"{destino[:30]}-{precio}-{fuente}"
+    return hashlib.md5(key.encode()).hexdigest()[:12]
+
+def oferta_ya_existe(headers_sb, destino, precio, fuente):
+    """Verifica si la oferta ya está en Supabase"""
+    try:
+        destino_encoded = requests.utils.quote(destino[:30])
+        r = requests.get(
+            f"{SUPABASE_URL}/rest/v1/ofertas?destino=ilike.*{destino_encoded[:20]}*&precio=eq.{precio}&fuente=eq.{fuente}",
+            headers=headers_sb,
+            timeout=10
+        )
+        data = r.json()
+        return len(data) > 0
+    except:
+        return False
+
+# ─── MERCADO LIBRE ────────────────────────────────────────────────────────────
 
 def scrape_mercadolibre():
-    """Usa la API oficial de Mercado Libre — sin bloqueos"""
     ofertas = []
     categorias = [
         ("MLM1055", "electronico"),
         ("MLM1430", "moda"),
         ("MLM1574", "hogar"),
         ("MLM1276", "deporte"),
+        ("MLM1246", "belleza"),
     ]
     for cat_id, tipo in categorias:
         try:
-            url = f"https://api.mercadolibre.com/sites/MLM/search?category={cat_id}&sort=price_asc&limit=5"
+            url = f"https://api.mercadolibre.com/sites/MLM/search?category={cat_id}&sort=price_asc&limit=6"
             r = requests.get(url, timeout=15)
             if r.status_code != 200:
                 continue
@@ -49,7 +70,7 @@ def scrape_mercadolibre():
                 if not (100 <= precio <= PRECIO_MAX_MXN):
                     continue
                 if original <= precio:
-                    continue  # sin descuento real
+                    continue
                 descuento = round((1 - precio / original) * 100)
                 if descuento < 10:
                     continue
@@ -66,20 +87,23 @@ def scrape_mercadolibre():
                     "activa": True
                 })
         except Exception as e:
-            print(f"[MercadoLibre API] Error: {e}")
-    print(f"[Mercado Libre] {len(ofertas)} ofertas")
+            print(f"[MercadoLibre] Error: {e}")
+    print(f"[Mercado Libre] {len(ofertas)} ofertas nuevas")
     return ofertas
 
-def scrape_amazon_pa():
-    """Productos de Amazon con descuento real vía búsquedas públicas"""
+# ─── AMAZON ───────────────────────────────────────────────────────────────────
+
+def scrape_amazon():
     ofertas = []
     busquedas = [
         ("laptop", "electronico"),
         ("iphone", "electronico"),
         ("samsung tv", "electronico"),
-        ("nike tenis", "moda"),
         ("audifonos bluetooth", "electronico"),
         ("cafetera", "hogar"),
+        ("nintendo switch", "electronico"),
+        ("perfume mujer", "belleza"),
+        ("tenis deportivos", "moda"),
     ]
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
@@ -87,9 +111,8 @@ def scrape_amazon_pa():
     }
     for query, tipo in busquedas:
         try:
-            url = f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}&deals-widget=%7B%22version%22%3A1%2C%22memberDealsOnly%22%3Afalse%7D"
+            url = f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}"
             r = requests.get(url, headers=headers, timeout=15)
-            # Extraer precios del HTML
             precios = re.findall(r'\$\s*(\d{1,3}(?:,\d{3})*)', r.text)
             titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
             if precios and titulos:
@@ -113,21 +136,21 @@ def scrape_amazon_pa():
                         pass
         except Exception as e:
             print(f"[Amazon] Error {query}: {e}")
-    print(f"[Amazon MX] {len(ofertas)} ofertas")
+    print(f"[Amazon MX] {len(ofertas)} ofertas nuevas")
     return ofertas
 
+# ─── NIKE ─────────────────────────────────────────────────────────────────────
+
 def scrape_nike():
-    """Nike MX tiene API pública sin bloqueo"""
     ofertas = []
     try:
-        url = "https://api.nike.com/product_feed/threads/v2/?filter=marketplace(MX)&filter=language(es-419)&filter=employeePrice(true)&filter=attribute(Style%2CColor)&filter=activeHero(true)&anchor=0&count=20&filter=productInfo.merchProduct.status(ACTIVE)"
+        url = "https://api.nike.com/product_feed/threads/v2/?filter=marketplace(MX)&filter=language(es-419)&filter=employeePrice(true)&anchor=0&count=20"
         r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
         if r.status_code == 200:
             data = r.json()
-            for thread in data.get("objects", [])[:8]:
+            for thread in data.get("objects", [])[:10]:
                 try:
                     info = thread.get("productInfo", [{}])[0]
-                    merch = info.get("merchProduct", {})
                     prices = info.get("merchPrice", {})
                     nombre = thread.get("publishedContent", {}).get("properties", {}).get("title", "")
                     precio = prices.get("currentPrice", 0)
@@ -137,15 +160,14 @@ def scrape_nike():
                     if not (300 <= precio <= PRECIO_MAX_MXN):
                         continue
                     descuento = round((1 - precio / original) * 100) if original > precio else 0
-                    tipo_promo = f"-{descuento}% en Nike" if descuento > 0 else "Precio Nike MX"
                     ofertas.append({
                         "fuente": "Nike MX",
                         "tipo": "moda",
                         "destino": nombre[:80],
                         "precio": precio,
                         "precio_fmt": f"${precio:,.0f} MXN",
-                        "url": f"https://www.nike.com/mx/launch",
-                        "tipo_promo": tipo_promo,
+                        "url": "https://www.nike.com/mx/w/sale-3yaep",
+                        "tipo_promo": f"-{descuento}% en Nike" if descuento > 0 else "Nike MX",
                         "palabras_clave": "nike, tenis, ropa deportiva",
                         "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
                         "activa": True
@@ -154,17 +176,58 @@ def scrape_nike():
                     pass
     except Exception as e:
         print(f"[Nike] Error: {e}")
-    print(f"[Nike MX] {len(ofertas)} ofertas")
+    print(f"[Nike MX] {len(ofertas)} ofertas nuevas")
     return ofertas
 
+# ─── ADIDAS ───────────────────────────────────────────────────────────────────
+
+def scrape_adidas():
+    ofertas = []
+    try:
+        url = "https://www.adidas.mx/api/products/search?query=sale&start=0&count=10"
+        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+        if r.status_code == 200:
+            data = r.json()
+            for item in data.get("products", [])[:6]:
+                try:
+                    nombre = item.get("name", "")
+                    precio = item.get("salePrice", 0) or item.get("price", 0)
+                    original = item.get("price", precio)
+                    if not nombre or not precio:
+                        continue
+                    if not (300 <= precio <= PRECIO_MAX_MXN):
+                        continue
+                    descuento = round((1 - precio / original) * 100) if original > precio else 0
+                    ofertas.append({
+                        "fuente": "Adidas MX",
+                        "tipo": "moda",
+                        "destino": nombre[:80],
+                        "precio": precio,
+                        "precio_fmt": f"${precio:,.0f} MXN",
+                        "url": "https://www.adidas.mx/sale",
+                        "tipo_promo": f"-{descuento}% Adidas" if descuento > 0 else "Sale Adidas",
+                        "palabras_clave": "adidas, tenis, ropa deportiva",
+                        "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                        "activa": True
+                    })
+                except:
+                    pass
+    except Exception as e:
+        print(f"[Adidas] Error: {e}")
+    print(f"[Adidas MX] {len(ofertas)} ofertas nuevas")
+    return ofertas
+
+# ─── WALMART ──────────────────────────────────────────────────────────────────
+
 def scrape_walmart():
-    """Walmart MX API pública"""
     ofertas = []
     busquedas = [
         ("laptop", "electronico"),
         ("television", "electronico"),
         ("refrigerador", "hogar"),
         ("licuadora", "hogar"),
+        ("tenis", "moda"),
+        ("videojuegos", "electronico"),
     ]
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
@@ -172,7 +235,7 @@ def scrape_walmart():
     }
     for query, tipo in busquedas:
         try:
-            url = f"https://www.walmart.com.mx/api/2/page/namespace/search?query={query}&page=1&pageSize=5&sort=best_seller"
+            url = f"https://www.walmart.com.mx/api/2/page/namespace/search?query={query}&page=1&pageSize=5"
             r = requests.get(url, headers=headers, timeout=15)
             if r.status_code != 200:
                 continue
@@ -205,47 +268,192 @@ def scrape_walmart():
                 })
         except Exception as e:
             print(f"[Walmart] Error {query}: {e}")
-    print(f"[Walmart MX] {len(ofertas)} ofertas")
+    print(f"[Walmart MX] {len(ofertas)} ofertas nuevas")
     return ofertas
 
-def scrape_adidas():
-    """Adidas MX API pública"""
+# ─── SHEIN ────────────────────────────────────────────────────────────────────
+
+def scrape_shein():
     ofertas = []
     try:
-        url = "https://www.adidas.mx/api/products/search?query=sale&start=0&count=10"
-        r = requests.get(url, timeout=15, headers={"Accept": "application/json"})
+        url = "https://mx.shein.com/api/productList/info/v1?cat_id=1727&limit=10&sort=8&page=1"
+        r = requests.get(url, timeout=15, headers={
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json"
+        })
         if r.status_code == 200:
             data = r.json()
-            for item in data.get("products", [])[:6]:
+            for item in data.get("info", {}).get("products", [])[:6]:
                 try:
-                    nombre = item.get("name", "")
-                    precio = item.get("salePrice", 0) or item.get("price", 0)
-                    original = item.get("price", precio)
+                    nombre = item.get("goods_name", "")
+                    precio = float(item.get("salePrice", {}).get("amount", 0))
+                    original = float(item.get("retailPrice", {}).get("amount", precio))
                     if not nombre or not precio:
                         continue
-                    if not (300 <= precio <= PRECIO_MAX_MXN):
+                    if not (100 <= precio <= PRECIO_MAX_MXN):
                         continue
                     descuento = round((1 - precio / original) * 100) if original > precio else 0
                     ofertas.append({
-                        "fuente": "Adidas MX",
+                        "fuente": "Shein MX",
                         "tipo": "moda",
                         "destino": nombre[:80],
                         "precio": precio,
                         "precio_fmt": f"${precio:,.0f} MXN",
-                        "url": f"https://www.adidas.mx/sale",
-                        "tipo_promo": f"-{descuento}% Adidas" if descuento > 0 else "Sale Adidas",
-                        "palabras_clave": "adidas, tenis, ropa deportiva",
+                        "url": "https://mx.shein.com/promotion/flash-sale.html",
+                        "tipo_promo": f"-{descuento}% Shein" if descuento > 0 else "Oferta Shein",
+                        "palabras_clave": "shein, moda, ropa",
                         "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
                         "activa": True
                     })
                 except:
                     pass
     except Exception as e:
-        print(f"[Adidas] Error: {e}")
-    print(f"[Adidas MX] {len(ofertas)} ofertas")
+        print(f"[Shein] Error: {e}")
+    print(f"[Shein MX] {len(ofertas)} ofertas nuevas")
+    return ofertas
+
+# ─── ALIEXPRESS ───────────────────────────────────────────────────────────────
+
+def scrape_aliexpress():
+    ofertas = []
+    try:
+        url = "https://gw.aliexpress.com/ajaxapi/v2/search/product?keywords=ofertas&page=1&pageSize=10&currency=MXN&locale=es_MX&country=MX"
+        r = requests.get(url, timeout=15, headers={
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json"
+        })
+        if r.status_code == 200:
+            data = r.json()
+            items = data.get("data", {}).get("products", [])
+            for item in items[:6]:
+                try:
+                    nombre = item.get("title", "")
+                    precio = float(item.get("prices", {}).get("salePrice", {}).get("minPrice", 0))
+                    original = float(item.get("prices", {}).get("originalPrice", {}).get("minPrice", precio))
+                    if not nombre or not precio:
+                        continue
+                    if not (100 <= precio <= PRECIO_MAX_MXN):
+                        continue
+                    descuento = round((1 - precio / original) * 100) if original > precio else 0
+                    ofertas.append({
+                        "fuente": "AliExpress",
+                        "tipo": detectar_categoria(nombre),
+                        "destino": nombre[:80],
+                        "precio": precio,
+                        "precio_fmt": f"${precio:,.0f} MXN",
+                        "url": item.get("productDetailUrl", "https://www.aliexpress.com"),
+                        "tipo_promo": f"-{descuento}% AliExpress" if descuento > 0 else "Oferta AliExpress",
+                        "palabras_clave": "aliexpress, importado",
+                        "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                        "activa": True
+                    })
+                except:
+                    pass
+    except Exception as e:
+        print(f"[AliExpress] Error: {e}")
+    print(f"[AliExpress] {len(ofertas)} ofertas nuevas")
+    return ofertas
+
+# ─── AWIN — VIAJES ────────────────────────────────────────────────────────────
+
+def scrape_awin_viajes():
+    """Genera ofertas de viajes con links afiliados Awin"""
+    ofertas = []
+    destinos_trivago = [
+        ("Cancún, México", 1200, 1800),
+        ("Ciudad de México", 800, 1400),
+        ("Los Cabos", 1500, 2500),
+        ("Puerto Vallarta", 1100, 1900),
+        ("Playa del Carmen", 1300, 2100),
+    ]
+    for destino, precio_min, precio_max in destinos_trivago:
+        precio = precio_min
+        ofertas.append({
+            "fuente": "Trivago",
+            "tipo": "viajes",
+            "destino": f"Hotel en {destino}",
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "url": f"https://www.awin1.com/cread.php?s=3330897&v=20563&q=474350&r={AWIN_ID}&ued=https://www.trivago.com.mx/?search/200-{destino.replace(' ','%20')}",
+            "tipo_promo": "Precio por noche desde",
+            "palabras_clave": "hotel, viaje, hospedaje, trivago",
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
+
+    # Kiwi — vuelos
+    vuelos = [
+        ("CDMX → Cancún", 1800),
+        ("CDMX → Los Cabos", 2100),
+        ("CDMX → Guadalajara", 900),
+        ("CDMX → Monterrey", 950),
+        ("CDMX → Miami", 4500),
+    ]
+    for ruta, precio in vuelos:
+        ofertas.append({
+            "fuente": "Kiwi",
+            "tipo": "viajes",
+            "destino": f"Vuelo {ruta}",
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN",
+            "url": f"https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r={AWIN_ID}",
+            "tipo_promo": "Vuelo desde",
+            "palabras_clave": "vuelo, avion, kiwi, viaje",
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
+
+    # Sirenis Hotels
+    ofertas.append({
+        "fuente": "Sirenis Hotels",
+        "tipo": "viajes",
+        "destino": "Resort Todo Incluido Riviera Maya",
+        "precio": 2800,
+        "precio_fmt": "$2,800 MXN/noche",
+        "url": f"https://www.awin1.com/cread.php?s=SIRENIS&v=20563&q=SIRENIS&r={AWIN_ID}&ued=https://www.sirenishotels.com",
+        "tipo_promo": "Todo incluido desde",
+        "palabras_clave": "hotel, resort, todo incluido, sirenis",
+        "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "activa": True
+    })
+
+    print(f"[Awin Viajes] {len(ofertas)} ofertas")
     return ofertas
 
 # ─── SUPABASE ─────────────────────────────────────────────────────────────────
+
+def marcar_inactivas_viejas():
+    """Marca como inactivas ofertas del scraper con más de 7 días"""
+    headers = {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+    }
+    fecha_limite = (datetime.now() - timedelta(days=7)).strftime("%d/%m/%Y %H:%M")
+    TIENDAS_SCRAPER = ["Amazon MX","Mercado Libre","Walmart MX","Nike MX","Adidas MX","Shein MX","AliExpress","Trivago","Kiwi","Sirenis Hotels"]
+    try:
+        for tienda in TIENDAS_SCRAPER:
+            tienda_encoded = requests.utils.quote(tienda)
+            r = requests.get(
+                f"{SUPABASE_URL}/rest/v1/ofertas?fuente=eq.{tienda_encoded}&activa=eq.true&select=id,fecha",
+                headers=headers, timeout=10
+            )
+            items = r.json()
+            for item in items:
+                try:
+                    fecha_oferta = datetime.strptime(item["fecha"], "%d/%m/%Y %H:%M")
+                    if datetime.now() - fecha_oferta > timedelta(days=7):
+                        requests.patch(
+                            f"{SUPABASE_URL}/rest/v1/ofertas?id=eq.{item['id']}",
+                            headers={**headers, "Prefer": "return=minimal"},
+                            json={"activa": False},
+                            timeout=10
+                        )
+                except:
+                    pass
+        print("[Supabase] Ofertas viejas marcadas como inactivas")
+    except Exception as e:
+        print(f"[Supabase] Error limpieza: {e}")
 
 def guardar_en_supabase(ofertas):
     headers = {
@@ -254,23 +462,21 @@ def guardar_en_supabase(ofertas):
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Prefer": "return=minimal"
     }
-    # Solo borrar ofertas del scraper, no las manuales
-    TIENDAS_SCRAPER = ["Amazon MX", "Mercado Libre", "Walmart MX", "Nike MX", "Adidas MX"]
-    for tienda in TIENDAS_SCRAPER:
+    nuevas = 0
+    for oferta in ofertas:
         try:
-            tienda_encoded = tienda.replace(" ", "%20")
-            requests.delete(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&fuente=eq.{tienda_encoded}", headers=headers)
-        except:
-            pass
-    if ofertas:
-        try:
-            r = requests.post(f"{SUPABASE_URL}/rest/v1/ofertas", headers=headers, json=ofertas)
-            if r.status_code in [200, 201]:
-                print(f"[Supabase] {len(ofertas)} ofertas guardadas!")
-            else:
-                print(f"[Supabase] Error: {r.text[:200]}")
+            if not oferta_ya_existe(headers, oferta["destino"], oferta["precio"], oferta["fuente"]):
+                r = requests.post(
+                    f"{SUPABASE_URL}/rest/v1/ofertas",
+                    headers=headers,
+                    json=oferta,
+                    timeout=10
+                )
+                if r.status_code in [200, 201]:
+                    nuevas += 1
         except Exception as e:
-            print(f"[Supabase] Error: {e}")
+            print(f"[Supabase] Error guardando: {e}")
+    print(f"[Supabase] {nuevas} ofertas nuevas guardadas (de {len(ofertas)} encontradas)")
 
 # ─── ALERTAS ──────────────────────────────────────────────────────────────────
 
@@ -345,27 +551,27 @@ def monitorear():
     print("=" * 55)
     print(f"DEAL TRAVEL - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     print("=" * 55)
+
+    # Marcar inactivas las de más de 7 días
+    marcar_inactivas_viejas()
+
     todas = []
     todas.extend(scrape_mercadolibre())
-    todas.extend(scrape_amazon_pa())
+    todas.extend(scrape_amazon())
     todas.extend(scrape_nike())
-    todas.extend(scrape_walmart())
     todas.extend(scrape_adidas())
-    # Deduplicar
-    vistos = set()
-    unicas = []
-    for o in todas:
-        k = f"{o['destino'][:30]}-{o['precio']}"
-        if k not in vistos:
-            vistos.add(k)
-            unicas.append(o)
-    print(f"TOTAL: {len(unicas)} ofertas únicas")
-    guardar_en_supabase(unicas)
-    revisar_alertas(unicas)
-    return unicas
+    todas.extend(scrape_walmart())
+    todas.extend(scrape_shein())
+    todas.extend(scrape_aliexpress())
+    todas.extend(scrape_awin_viajes())
+
+    print(f"TOTAL encontradas: {len(todas)}")
+    guardar_en_supabase(todas)
+    revisar_alertas(todas)
+    return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper — Sin Playwright")
+    print("Deal Travel Scraper v3 — Acumulación inteligente")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
