@@ -145,7 +145,7 @@ def guardar_en_supabase(ofertas):
                 print(f"[Supabase] Error: {r.text[:200]}")
         except Exception as e:
             print(f"[Supabase] Error: {e}")
-    }
+    
     try:
         r = requests.delete(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true", headers=headers)
         print(f"[Supabase] Anteriores eliminadas: {r.status_code}")
