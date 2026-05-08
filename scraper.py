@@ -145,22 +145,6 @@ def guardar_en_supabase(ofertas):
                 print(f"[Supabase] Error: {r.text[:200]}")
         except Exception as e:
             print(f"[Supabase] Error: {e}")
-    }        
-    
-    try:
-        r = requests.delete(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true", headers=headers)
-        print(f"[Supabase] Anteriores eliminadas: {r.status_code}")
-    except Exception as e:
-        print(f"[Supabase] Error: {e}")
-    if ofertas:
-        try:
-            r = requests.post(f"{SUPABASE_URL}/rest/v1/ofertas", headers=headers, json=ofertas)
-            if r.status_code in [200, 201]:
-                print(f"[Supabase] {len(ofertas)} ofertas guardadas!")
-            else:
-                print(f"[Supabase] Error: {r.text[:200]}")
-        except Exception as e:
-            print(f"[Supabase] Error: {e}")
 
 def revisar_alertas(ofertas):
     if not RESEND_API_KEY:
