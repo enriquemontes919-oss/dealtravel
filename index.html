@@ -3,195 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deal Travel — Alertas de Ofertas y Descuentos en México</title>
-<meta name="description" content="Monitoreo de descuentos en Amazon, Liverpool, Walmart, Mercado Libre y más. Crea tu alerta y te avisamos cuando baje el precio.">
-<meta property="og:title" content="Deal Travel — Alertas de Ofertas">
-<meta property="og:description" content="Te avisamos cuando baje el precio de lo que quieres comprar.">
-<meta property="og:url" content="https://dealtravel.mx">
+<title>Deal Travel — Alertas de Ofertas en México</title>
+<meta name="description" content="Monitoreo de descuentos en Amazon, Liverpool, Walmart, Mercado Libre y más.">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a1628;color:#fff;overflow-x:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f7;color:#1d1d1f;overflow-x:hidden;}
 
 /* NAV */
-nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 5%;position:fixed;top:0;width:100%;z-index:100;background:rgba(10,22,40,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.07);}
-.logo{font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.5px;}
-.logo span{color:#38bdf8;}
-.nav-links{display:flex;gap:1.5rem;list-style:none;}
-.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
-.nav-links a:hover{color:#38bdf8;}
-.nav-cta{background:#38bdf8;color:#0a1628;padding:0.5rem 1.2rem;border-radius:8px;font-weight:700;font-size:0.85rem;text-decoration:none;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:64px;position:fixed;top:0;width:100%;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);}
+.logo{font-size:1.3rem;font-weight:700;color:#1d1d1f;letter-spacing:-0.5px;}
+.logo span{color:#0071e3;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{color:#1d1d1f;text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.2s;}
+.nav-links a:hover{color:#0071e3;}
+.nav-cta{background:#0071e3;color:#fff;padding:0.5rem 1.2rem;border-radius:980px;font-weight:600;font-size:0.85rem;text-decoration:none;transition:background 0.2s;}
+.nav-cta:hover{background:#0077ed;}
 
-/* AD SLOTS */
-.ad-slot{background:rgba(255,255,255,0.03);border:1.5px dashed rgba(255,255,255,0.12);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:rgba(255,255,255,0.2);font-size:0.68rem;letter-spacing:1px;text-transform:uppercase;position:relative;}
-.ad-label{position:absolute;top:5px;right:8px;font-size:0.58rem;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;color:rgba(255,255,255,0.25);}
-.ad-leaderboard-wrap{background:#07111f;padding:0.5rem 5%;display:flex;justify-content:center;margin-top:62px;border-bottom:1px solid rgba(255,255,255,0.05);}
-.ad-leaderboard{width:100%;max-width:728px;height:90px;}
-.ad-strip{background:#07111f;padding:0.8rem 5%;display:flex;justify-content:center;}
-.ad-970x90{width:100%;max-width:970px;height:90px;}
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 5% 4rem;background:linear-gradient(180deg,#fff 0%,#f5f5f7 100%);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,113,227,0.08) 0%,transparent 70%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#f0f8ff;border:1px solid #cce5ff;color:#0071e3;padding:0.4rem 1rem;border-radius:980px;font-size:0.78rem;font-weight:500;margin-bottom:1.5rem;}
+.hero-badge::before{content:'';width:6px;height:6px;background:#0071e3;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:700;line-height:1.05;margin-bottom:1.2rem;letter-spacing:-2px;color:#1d1d1f;}
+.hero h1 em{font-style:normal;color:#0071e3;}
+.hero p{font-size:1.2rem;color:#6e6e73;max-width:560px;margin:0 auto 2.5rem;line-height:1.6;font-weight:400;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem;}
+.btn-primary{background:#0071e3;color:#fff;padding:0.9rem 2rem;border-radius:980px;font-weight:600;font-size:1rem;text-decoration:none;transition:all 0.2s;}
+.btn-primary:hover{background:#0077ed;transform:scale(1.02);}
+.btn-outline{background:#fff;color:#0071e3;border:1.5px solid #0071e3;padding:0.9rem 2rem;border-radius:980px;font-weight:600;font-size:1rem;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{background:#f0f8ff;}
+.hero-stats{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:2rem;font-weight:700;color:#1d1d1f;letter-spacing:-1px;}
+.stat-label{font-size:0.8rem;color:#6e6e73;margin-top:2px;}
+
+/* BUSCADOR */
+.search-section{background:#fff;padding:2rem 5%;border-bottom:1px solid #f0f0f0;}
+.search-inner{max-width:900px;margin:0 auto;}
+.search-box{background:#f5f5f7;border-radius:18px;padding:1.2rem 1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;}
+.search-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:150px;}
+.search-field label{font-size:0.72rem;color:#6e6e73;font-weight:500;letter-spacing:0.3px;}
+.search-field input,.search-field select{background:#fff;border:1px solid #d2d2d7;border-radius:10px;padding:0.65rem 0.9rem;color:#1d1d1f;font-size:0.9rem;outline:none;font-family:inherit;transition:border-color 0.2s;}
+.search-field input:focus,.search-field select:focus{border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
+.search-field input::placeholder{color:#aeaeb2;}
+.btn-search{background:#0071e3;color:#fff;border:none;border-radius:980px;padding:0.7rem 1.5rem;font-weight:600;font-size:0.9rem;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;}
+.btn-search:hover{background:#0077ed;}
+.search-results{margin-top:1.5rem;display:none;}
+.search-results.visible{display:block;}
+.search-results-title{font-size:0.8rem;color:#6e6e73;margin-bottom:1rem;}
+.no-results{text-align:center;padding:2rem;color:#6e6e73;font-size:0.9rem;}
+
+/* SECCIONES */
+section{padding:5rem 5%;}
+.section-label{font-size:0.72rem;font-weight:600;color:#0071e3;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.5rem;}
+.section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-1px;margin-bottom:0.8rem;color:#1d1d1f;}
+.section-sub{color:#6e6e73;font-size:1rem;max-width:500px;line-height:1.6;}
+
+/* TIENDAS */
+.tiendas{background:#fff;}
+.tiendas-inner{max-width:1100px;margin:0 auto;}
+.tiendas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-top:2rem;}
+.tienda-card{background:#f5f5f7;border-radius:14px;padding:1.2rem 0.8rem;text-align:center;transition:all 0.2s;cursor:pointer;border:1.5px solid transparent;}
+.tienda-card:hover{background:#fff;border-color:#0071e3;transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,113,227,0.1);}
+.tienda-icon{font-size:1.8rem;margin-bottom:0.5rem;}
+.tienda-name{font-size:0.8rem;font-weight:600;color:#1d1d1f;}
+
+/* CATEGORIAS */
+.categorias{background:#f5f5f7;}
+.categorias-inner{max-width:1100px;margin:0 auto;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
+.cat-card{background:#fff;border-radius:16px;padding:1.5rem;cursor:pointer;transition:all 0.2s;text-align:center;border:1.5px solid transparent;}
+.cat-card:hover{border-color:#0071e3;transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.08);}
+.cat-icon{font-size:2.2rem;margin-bottom:0.8rem;}
+.cat-card h3{font-size:0.9rem;font-weight:600;color:#1d1d1f;margin-bottom:0.3rem;}
+.cat-card p{font-size:0.72rem;color:#6e6e73;}
+
+/* DEALS */
+.deals{background:#fff;padding:5rem 5%;}
+.content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2rem;max-width:1100px;margin:0 auto;}
+.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.deals-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:4px;}
+.filter-btn{background:#f5f5f7;border:none;color:#6e6e73;padding:0.4rem 1rem;border-radius:980px;font-size:0.8rem;cursor:pointer;font-family:inherit;transition:all 0.2s;white-space:nowrap;font-weight:500;}
+.filter-btn:hover,.filter-btn.active{background:#0071e3;color:#fff;}
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;}
+
+/* DEAL CARD */
+.deal-card{background:#fff;border:1px solid #f0f0f0;border-radius:18px;overflow:hidden;transition:all 0.25s;cursor:pointer;}
+.deal-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);border-color:transparent;}
+.deal-img-wrap{position:relative;background:#f5f5f7;height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.deal-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.deal-img-placeholder{font-size:4rem;}
+.deal-discount{position:absolute;top:12px;left:12px;background:#ff3b30;color:#fff;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:6px;}
+.deal-store{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.95);color:#1d1d1f;font-size:0.65rem;font-weight:600;padding:3px 8px;border-radius:6px;backdrop-filter:blur(4px);}
+.deal-body{padding:1rem;}
+.deal-category{font-size:0.65rem;color:#0071e3;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;}
+.deal-title{font-size:0.95rem;font-weight:600;color:#1d1d1f;margin-bottom:4px;line-height:1.3;}
+.deal-promo{font-size:0.72rem;color:#6e6e73;margin-bottom:0.8rem;}
+.deal-footer{display:flex;align-items:center;justify-content:space-between;}
+.deal-prices{display:flex;flex-direction:column;}
+.deal-price{font-size:1.4rem;font-weight:700;color:#1d1d1f;letter-spacing:-0.5px;}
+.deal-old{font-size:0.75rem;color:#aeaeb2;text-decoration:line-through;}
+.deal-btn{background:#0071e3;color:#fff;padding:0.45rem 1rem;border-radius:980px;font-size:0.78rem;font-weight:600;text-decoration:none;transition:all 0.2s;white-space:nowrap;}
+.deal-btn:hover{background:#0077ed;}
+
+/* SIDEBAR */
+.sidebar-ad-stack{display:flex;flex-direction:column;gap:1rem;}
+.ad-slot{background:#f5f5f7;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#aeaeb2;font-size:0.65rem;letter-spacing:1px;text-transform:uppercase;position:relative;border:1px dashed #d2d2d7;}
+.ad-label{position:absolute;top:5px;right:8px;font-size:0.58rem;color:#aeaeb2;}
 .ad-300x250{width:100%;height:250px;}
 .ad-300x600{width:100%;height:300px;}
 
-/* HERO */
-.hero{min-height:90vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 5%;background:linear-gradient(135deg,#0a1628,#0f2847,#0a2240);position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(56,189,248,0.12),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(99,102,241,0.1),transparent 50%);}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:#7dd3fc;padding:0.4rem 1rem;border-radius:20px;font-size:0.78rem;font-weight:500;margin-bottom:1.5rem;}
-.hero-badge::before{content:'';display:inline-block;width:6px;height:6px;background:#38bdf8;border-radius:50%;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.hero h1{font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1.2rem;letter-spacing:-1.5px;}
-.hero h1 em{font-style:normal;color:#38bdf8;}
-.hero p{font-size:1.1rem;color:rgba(255,255,255,0.65);max-width:560px;margin:0 auto 2rem;line-height:1.7;}
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;}
-.btn-primary{background:#38bdf8;color:#0a1628;padding:0.85rem 2rem;border-radius:10px;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
-.btn-primary:hover{background:#7dd3fc;transform:translateY(-2px);}
-.btn-outline{border:1px solid rgba(255,255,255,0.25);color:#fff;padding:0.85rem 2rem;border-radius:10px;font-weight:500;font-size:1rem;text-decoration:none;transition:all 0.2s;display:inline-block;}
-.btn-outline:hover{border-color:#38bdf8;color:#38bdf8;}
-.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;}
-.stat{text-align:center;}
-.stat-num{font-size:1.7rem;font-weight:800;color:#38bdf8;}
-.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.45);margin-top:2px;}
-
-/* BUSCADOR */
-.search-section{background:#0d1f3c;padding:2.5rem 5%;}
-.search-inner{max-width:900px;margin:0 auto;}
-.search-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;}
-.search-field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:150px;}
-.search-field label{font-size:0.72rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;}
-.search-field input,.search-field select{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:0.65rem 0.9rem;color:#fff;font-size:0.9rem;outline:none;font-family:inherit;}
-.search-field input:focus,.search-field select:focus{border-color:#38bdf8;}
-.search-field input::placeholder{color:rgba(255,255,255,0.3);}
-.search-field select option{background:#0d1f3c;}
-.btn-search{background:#38bdf8;color:#0a1628;border:none;border-radius:8px;padding:0.7rem 1.5rem;font-weight:700;font-size:0.9rem;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;}
-.btn-search:hover{background:#7dd3fc;}
-.search-results{margin-top:1.5rem;display:none;}
-.search-results.visible{display:block;}
-.search-results-title{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:1rem;}
-.no-results{text-align:center;padding:2rem;color:rgba(255,255,255,0.4);font-size:0.9rem;}
-
-/* SECTIONS */
-section{padding:4.5rem 5%;}
-.section-label{font-size:0.75rem;font-weight:600;color:#38bdf8;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.6rem;}
-.section-title{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:0.8rem;}
-
-/* TIENDAS */
-.tiendas{background:#0a1628;}
-.tiendas-inner{max-width:1100px;margin:0 auto;}
-.tiendas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
-.tienda-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;text-align:center;transition:all 0.2s;text-decoration:none;color:#fff;cursor:pointer;}
-.tienda-card:hover{border-color:rgba(56,189,248,0.4);transform:translateY(-2px);}
-.tienda-icon{font-size:2rem;margin-bottom:0.5rem;}
-.tienda-name{font-size:0.9rem;font-weight:600;margin-bottom:2px;}
-.tienda-desc{font-size:0.65rem;color:rgba(255,255,255,0.35);}
-.tienda-badge{display:inline-block;background:rgba(56,189,248,0.12);color:#38bdf8;font-size:0.62rem;padding:2px 7px;border-radius:8px;margin-top:5px;}
-
-/* CATEGORIAS */
-.categorias{background:#0d1f3c;}
-.categorias-inner{max-width:1100px;margin:0 auto;}
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:2rem;}
-.cat-card{border-radius:14px;padding:1.8rem 1.4rem;cursor:pointer;transition:transform 0.2s;}
-.cat-card:hover{transform:translateY(-4px);}
-.cat-card.electro{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
-.cat-card.moda{background:linear-gradient(135deg,#4a1942,#db2777);}
-.cat-card.hogar{background:linear-gradient(135deg,#1a3a2e,#16a34a);}
-.cat-card.deportes{background:linear-gradient(135deg,#2d1b69,#7c3aed);}
-.cat-card.belleza{background:linear-gradient(135deg,#7c2d12,#ea580c);}
-.cat-card.juguetes{background:linear-gradient(135deg,#134e4a,#0d9488);}
-.cat-icon{font-size:2rem;margin-bottom:0.8rem;}
-.cat-card h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;}
-.cat-card p{font-size:0.78rem;opacity:0.75;margin-bottom:0.8rem;}
-.cat-tag{display:inline-block;background:rgba(255,255,255,0.15);font-size:0.7rem;padding:2px 10px;border-radius:20px;}
-
-/* DEALS */
-.deals{background:#0d1f3c;padding:4.5rem 5%;}
-.content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2rem;max-width:1100px;margin:0 auto;}
-.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
-.deals-filters{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.filter-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.35rem 0.9rem;border-radius:20px;font-size:0.78rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}
-.filter-btn:hover,.filter-btn.active{background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);color:#38bdf8;}
-.deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
-.deal-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;overflow:hidden;transition:all 0.2s;}
-.deal-card:hover{border-color:rgba(56,189,248,0.35);transform:translateY(-3px);}
-.deal-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;}
-.deal-img.amazon{background:linear-gradient(135deg,#1a2e1a,#16a34a);}
-.deal-img.liverpool{background:linear-gradient(135deg,#4a1942,#db2777);}
-.deal-img.walmart{background:linear-gradient(135deg,#1e3a5f,#2563ab);}
-.deal-img.mercadolibre{background:linear-gradient(135deg,#3d2800,#f59e0b);}
-.deal-img.bestbuy{background:linear-gradient(135deg,#1e1b4b,#4338ca);}
-.deal-img.coppel{background:linear-gradient(135deg,#064e3b,#059669);}
-.deal-badge{position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:5px;}
-.deal-source{position:absolute;bottom:6px;left:8px;background:rgba(0,0,0,0.55);font-size:0.6rem;padding:2px 7px;border-radius:4px;color:rgba(255,255,255,0.8);}
-.deal-body{padding:1rem;}
-.deal-type{font-size:0.65rem;color:#38bdf8;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
-.deal-title{font-size:0.95rem;font-weight:700;margin-bottom:3px;}
-.deal-dates{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:0.8rem;}
-.deal-footer{display:flex;align-items:center;justify-content:space-between;}
-.deal-price{font-size:1.3rem;font-weight:800;color:#38bdf8;}
-.deal-price span{font-size:0.7rem;color:rgba(255,255,255,0.35);font-weight:400;display:block;}
-.deal-old{font-size:0.75rem;color:rgba(255,255,255,0.3);text-decoration:line-through;}
-.deal-btn{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;padding:0.35rem 0.8rem;border-radius:7px;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;text-decoration:none;display:inline-block;}
-.deal-btn:hover{background:rgba(56,189,248,0.2);}
-.sidebar-ad-stack{display:flex;flex-direction:column;gap:1rem;}
-
 /* ALERTA */
-.alert-section{background:linear-gradient(135deg,#0d1f3c,#0f2847);}
-.alert-inner{max-width:860px;margin:0 auto;}
+.alert-section{background:linear-gradient(180deg,#f5f5f7 0%,#fff 100%);}
+.alert-inner{max-width:780px;margin:0 auto;}
 .alert-header{text-align:center;margin-bottom:2.5rem;}
-.alert-form{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:2rem;}
+.alert-form{background:#fff;border-radius:20px;padding:2rem;box-shadow:0 4px 40px rgba(0,0,0,0.08);}
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1rem;}
 .form-group{display:flex;flex-direction:column;gap:5px;}
-.form-group label{font-size:0.72rem;color:rgba(255,255,255,0.45);font-weight:500;letter-spacing:0.5px;text-transform:uppercase;}
-.form-group input,.form-group select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:0.65rem 0.9rem;color:#fff;font-size:0.88rem;outline:none;transition:border-color 0.2s;font-family:inherit;}
-.form-group input:focus,.form-group select:focus{border-color:#38bdf8;}
-.form-group select option{background:#0d1f3c;}
-.form-group input::placeholder{color:rgba(255,255,255,0.25);}
-.notify-opts{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;}
-.notify-opt{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 1rem;cursor:pointer;flex:1;min-width:140px;transition:all 0.2s;}
-.notify-opt:hover,.notify-opt.selected{border-color:rgba(56,189,248,0.4);background:rgba(56,189,248,0.08);}
-.notify-opt input[type=checkbox]{accent-color:#38bdf8;width:16px;height:16px;}
-.notify-opt-label{font-size:0.85rem;font-weight:500;}
-.notify-opt-sub{font-size:0.7rem;color:rgba(255,255,255,0.4);}
-.form-submit{width:100%;background:#38bdf8;color:#0a1628;border:none;border-radius:11px;padding:0.95rem;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;font-family:inherit;}
-.form-submit:hover{background:#7dd3fc;}
-.success-msg{display:none;text-align:center;padding:1.2rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:10px;color:#34d399;font-weight:500;margin-top:0.8rem;}
+.form-group label{font-size:0.72rem;color:#6e6e73;font-weight:500;letter-spacing:0.3px;}
+.form-group input,.form-group select{background:#f5f5f7;border:1.5px solid transparent;border-radius:10px;padding:0.7rem 0.9rem;color:#1d1d1f;font-size:0.88rem;outline:none;transition:all 0.2s;font-family:inherit;}
+.form-group input:focus,.form-group select:focus{border-color:#0071e3;background:#fff;box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
+.form-group input::placeholder{color:#aeaeb2;}
+.notify-opts{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1rem;}
+.notify-opt{display:flex;align-items:center;gap:8px;background:#f5f5f7;border:1.5px solid transparent;border-radius:12px;padding:0.7rem 1rem;cursor:pointer;flex:1;min-width:130px;transition:all 0.2s;}
+.notify-opt:hover,.notify-opt.selected{border-color:#0071e3;background:#f0f8ff;}
+.notify-opt input[type=checkbox]{accent-color:#0071e3;width:15px;height:15px;}
+.notify-opt-label{font-size:0.85rem;font-weight:500;color:#1d1d1f;}
+.notify-opt-sub{font-size:0.68rem;color:#6e6e73;}
+.form-submit{width:100%;background:#0071e3;color:#fff;border:none;border-radius:980px;padding:1rem;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;letter-spacing:0.2px;}
+.form-submit:hover{background:#0077ed;transform:scale(1.01);}
+.success-msg{display:none;text-align:center;padding:1.2rem;background:#f0fff4;border:1.5px solid #86efac;border-radius:12px;color:#166534;font-weight:500;margin-top:0.8rem;}
 
 /* COMO FUNCIONA */
-.how{background:#0a1628;}
-.how-inner{max-width:1100px;margin:0 auto;}
+.how{background:#fff;}
+.how-inner{max-width:1000px;margin:0 auto;}
 .how-header{text-align:center;margin-bottom:3rem;}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
-.step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.8rem 1.4rem;text-align:center;}
-.step-num{width:40px;height:40px;border-radius:50%;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.3);color:#38bdf8;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
-.step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;}
-.step p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.6;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;}
+.step{text-align:center;}
+.step-num{width:44px;height:44px;border-radius:50%;background:#f0f8ff;color:#0071e3;font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.step h3{font-size:1rem;font-weight:600;color:#1d1d1f;margin-bottom:0.5rem;}
+.step p{font-size:0.85rem;color:#6e6e73;line-height:1.6;}
 
 /* TESTIMONIOS */
-.testimonials{background:#0a1628;}
+.testimonials{background:#f5f5f7;}
 .testimonials-inner{max-width:1000px;margin:0 auto;text-align:center;}
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2.5rem;}
-.testi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;text-align:left;}
-.stars{color:#fbbf24;font-size:0.8rem;margin-bottom:0.7rem;}
-.testi-text{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:1rem;}
-.testi-author{display:flex;align-items:center;gap:8px;}
-.testi-avatar{width:34px;height:34px;border-radius:50%;background:rgba(56,189,248,0.2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#38bdf8;flex-shrink:0;}
-.testi-name{font-size:0.82rem;font-weight:600;}
-.testi-loc{font-size:0.7rem;color:rgba(255,255,255,0.35);}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2.5rem;}
+.testi{background:#fff;border-radius:16px;padding:1.5rem;text-align:left;box-shadow:0 2px 12px rgba(0,0,0,0.04);}
+.stars{color:#ff9500;font-size:0.85rem;margin-bottom:0.7rem;}
+.testi-text{font-size:0.88rem;color:#3a3a3c;line-height:1.7;margin-bottom:1rem;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:#f0f8ff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#0071e3;flex-shrink:0;}
+.testi-name{font-size:0.85rem;font-weight:600;color:#1d1d1f;}
+.testi-loc{font-size:0.72rem;color:#aeaeb2;}
 
 /* FOOTER */
-footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.5rem 5% 1.5rem;}
+footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
 .footer-inner{max-width:1100px;margin:0 auto;}
 .footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:2rem;margin-bottom:2rem;}
-.footer-brand p{color:rgba(255,255,255,0.4);font-size:0.82rem;margin-top:0.5rem;max-width:240px;line-height:1.6;}
-.footer-links h4{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.8rem;}
+.footer-logo{font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;}
+.footer-logo span{color:#0071e3;}
+.footer-brand p{color:rgba(255,255,255,0.5);font-size:0.82rem;max-width:220px;line-height:1.6;}
+.footer-links h4{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.8rem;}
 .footer-links ul{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
-.footer-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
-.footer-links a:hover{color:#38bdf8;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
-.footer-bottom p{color:rgba(255,255,255,0.25);font-size:0.75rem;}
-.footer-ad-wrap{display:flex;justify-content:center;margin-bottom:2rem;}
+.footer-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.82rem;transition:color 0.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+.footer-bottom p{color:rgba(255,255,255,0.3);font-size:0.75rem;}
 
 @media(max-width:900px){
   .content-with-sidebar{grid-template-columns:1fr;}
   .nav-links{display:none;}
+  .hero h1{letter-spacing:-1px;}
 }
 </style>
 </head>
@@ -202,34 +186,32 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
   <ul class="nav-links">
     <li><a href="#buscador">Buscar</a></li>
     <li><a href="#ofertas">Ofertas</a></li>
-    <li><a href="#alerta">Mis Alertas</a></li>
+    <li><a href="#alerta">Alertas</a></li>
     <li><a href="#como">Cómo funciona</a></li>
   </ul>
   <a href="#alerta" class="nav-cta">Crear alerta gratis</a>
 </nav>
 
 <!-- BANNER KIWI -->
-<div class="ad-leaderboard-wrap">
-  <div style="display:flex;justify-content:center;align-items:center;width:100%;max-width:728px;">
-    <a rel="sponsored" href="https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r=2876425">
-      <img src="https://www.awin1.com/cshow.php?s=2702014&v=20563&q=395852&r=2876425" border="0" style="max-width:728px;height:auto;">
-    </a>
-  </div>
+<div style="background:#fff;padding:0.5rem 5%;display:flex;justify-content:center;margin-top:64px;border-bottom:1px solid #f0f0f0;">
+  <a rel="sponsored" href="https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r=2876425">
+    <img src="https://www.awin1.com/cshow.php?s=2702014&v=20563&q=395852&r=2876425" border="0" style="max-width:728px;height:auto;display:block;">
+  </a>
 </div>
 
 <!-- HERO -->
 <section class="hero">
   <div style="position:relative;z-index:1;width:100%;">
-    <div class="hero-badge">Monitoreo en tiempo real · Amazon, Liverpool, Walmart y más</div>
+    <div class="hero-badge">Monitoreo en tiempo real · 8 tiendas simultáneas</div>
     <h1>Compra más,<br>paga <em>menos.</em></h1>
-    <p>Monitoreamos precios en Amazon, Liverpool, Walmart, Mercado Libre y más tiendas para avisarte cuando bajen al precio que quieres pagar.</p>
+    <p>Te avisamos cuando bajen los precios en Amazon, Liverpool, Walmart, Mercado Libre y más tiendas.</p>
     <div class="hero-btns">
       <a href="#alerta" class="btn-primary">🔔 Crear mi alerta gratis</a>
-      <a href="#buscador" class="btn-outline">🔍 Buscar ofertas ahora</a>
+      <a href="#buscador" class="btn-outline">🔍 Ver ofertas ahora</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-num">+120K</div><div class="stat-label">Usuarios alertados</div></div>
-      <div class="stat"><div class="stat-num">$85M</div><div class="stat-label">Ahorrados (MXN)</div></div>
+      <div class="stat"><div class="stat-num">$85M</div><div class="stat-label">Ahorrados en MXN</div></div>
       <div class="stat"><div class="stat-num">42%</div><div class="stat-label">Descuento promedio</div></div>
       <div class="stat"><div class="stat-num">8</div><div class="stat-label">Tiendas monitoreadas</div></div>
     </div>
@@ -239,14 +221,13 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <!-- BUSCADOR -->
 <div class="search-section" id="buscador">
   <div class="search-inner">
-    <div style="margin-bottom:1.2rem;">
-      <p class="section-label">Buscador de ofertas</p>
-      <h2 class="section-title" style="font-size:1.5rem;">Busca por producto, marca o categoría</h2>
+    <div style="margin-bottom:1rem;">
+      <h2 style="font-size:1.3rem;font-weight:700;color:#1d1d1f;letter-spacing:-0.5px;">Busca tu producto</h2>
     </div>
     <div class="search-box">
       <div class="search-field">
         <label>Producto o marca</label>
-        <input type="text" id="search-producto" placeholder="Ej. iPhone, Samsung, Nike, Sofá...">
+        <input type="text" id="search-producto" placeholder="iPhone, Samsung TV, Nike, Sofá...">
       </div>
       <div class="search-field">
         <label>Tienda</label>
@@ -264,7 +245,7 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
         <label>Precio máx. (MXN)</label>
         <input type="number" id="search-precio" placeholder="Sin límite">
       </div>
-      <button class="btn-search" onclick="buscarOfertas()">🔍 Buscar</button>
+      <button class="btn-search" onclick="buscarOfertas()">Buscar →</button>
     </div>
     <div class="search-results" id="search-results">
       <div class="search-results-title" id="search-count"></div>
@@ -273,30 +254,20 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
   </div>
 </div>
 
-<!-- AD STRIP -->
-<div class="ad-strip">
-  <div class="ad-slot ad-970x90">
-    <span class="ad-label">Publicidad</span>
-    <ins class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-  </div>
-</div>
-
-<!-- TIENDAS MONITOREADAS -->
+<!-- TIENDAS -->
 <section class="tiendas">
   <div class="tiendas-inner">
-    <div style="text-align:center;margin-bottom:1rem;">
-      <p class="section-label">Tiendas monitoreadas</p>
-      <h2 class="section-title">Buscamos en 8 tiendas por ti</h2>
-    </div>
+    <p class="section-label">Donde buscamos</p>
+    <h2 class="section-title">8 tiendas monitoreadas</h2>
     <div class="tiendas-grid">
-      <div class="tienda-card" onclick="filtrarPor('amazon')"><div class="tienda-icon">📦</div><div class="tienda-name">Amazon MX</div><div class="tienda-desc">Electrónicos, hogar, moda</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('liverpool')"><div class="tienda-icon">🛍️</div><div class="tienda-name">Liverpool</div><div class="tienda-desc">Moda, hogar, electrónica</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('walmart')"><div class="tienda-icon">🏪</div><div class="tienda-name">Walmart MX</div><div class="tienda-desc">Todo en un solo lugar</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('mercadolibre')"><div class="tienda-icon">🛒</div><div class="tienda-name">Mercado Libre</div><div class="tienda-desc">Millones de productos</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('bestbuy')"><div class="tienda-icon">💻</div><div class="tienda-name">Best Buy MX</div><div class="tienda-desc">Electrónicos y tecnología</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('coppel')"><div class="tienda-icon">🏠</div><div class="tienda-name">Coppel</div><div class="tienda-desc">Hogar, moda y más</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('elektra')"><div class="tienda-icon">📱</div><div class="tienda-name">Elektra</div><div class="tienda-desc">Electrónicos y muebles</div><span class="tienda-badge">Activo</span></div>
-      <div class="tienda-card" onclick="filtrarPor('palacio')"><div class="tienda-icon">👑</div><div class="tienda-name">Palacio de Hierro</div><div class="tienda-desc">Moda y lujo</div><span class="tienda-badge">Activo</span></div>
+      <div class="tienda-card"><div class="tienda-icon">📦</div><div class="tienda-name">Amazon MX</div></div>
+      <div class="tienda-card"><div class="tienda-icon">🛍️</div><div class="tienda-name">Liverpool</div></div>
+      <div class="tienda-card"><div class="tienda-icon">🏪</div><div class="tienda-name">Walmart MX</div></div>
+      <div class="tienda-card"><div class="tienda-icon">🛒</div><div class="tienda-name">Mercado Libre</div></div>
+      <div class="tienda-card"><div class="tienda-icon">💻</div><div class="tienda-name">Best Buy MX</div></div>
+      <div class="tienda-card"><div class="tienda-icon">🏠</div><div class="tienda-name">Coppel</div></div>
+      <div class="tienda-card"><div class="tienda-icon">📱</div><div class="tienda-name">Elektra</div></div>
+      <div class="tienda-card"><div class="tienda-icon">👑</div><div class="tienda-name">Palacio de Hierro</div></div>
     </div>
   </div>
 </section>
@@ -307,24 +278,24 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
     <p class="section-label">Categorías</p>
     <h2 class="section-title">¿Qué estás buscando?</h2>
     <div class="cat-grid">
-      <div class="cat-card electro" onclick="filtrarCategoria('electronico')"><div class="cat-icon">📱</div><h3>Electrónicos</h3><p>Celulares, laptops, TVs, audífonos y más</p><span class="cat-tag">Más alertas activas</span></div>
-      <div class="cat-card moda" onclick="filtrarCategoria('moda')"><div class="cat-icon">👗</div><h3>Moda</h3><p>Ropa, zapatos, bolsas y accesorios</p><span class="cat-tag">+50 marcas</span></div>
-      <div class="cat-card hogar" onclick="filtrarCategoria('hogar')"><div class="cat-icon">🏠</div><h3>Hogar</h3><p>Muebles, electrodomésticos y decoración</p><span class="cat-tag">Ofertas diarias</span></div>
-      <div class="cat-card deportes" onclick="filtrarCategoria('deporte')"><div class="cat-icon">⚽</div><h3>Deportes</h3><p>Ropa deportiva, equipos y accesorios</p><span class="cat-tag">Nike, Adidas y más</span></div>
-      <div class="cat-card belleza" onclick="filtrarCategoria('belleza')"><div class="cat-icon">💄</div><h3>Belleza</h3><p>Skincare, maquillaje y fragancias</p><span class="cat-tag">Tendencia</span></div>
-      <div class="cat-card juguetes" onclick="filtrarCategoria('juguetes')"><div class="cat-icon">🧸</div><h3>Juguetes</h3><p>Para niños de todas las edades</p><span class="cat-tag">Temporada</span></div>
+      <div class="cat-card" onclick="filtrarCategoria('electronico')"><div class="cat-icon">📱</div><h3>Electrónicos</h3><p>Celulares, laptops, TVs</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('moda')"><div class="cat-icon">👗</div><h3>Moda</h3><p>Ropa, zapatos, accesorios</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('hogar')"><div class="cat-icon">🏠</div><h3>Hogar</h3><p>Muebles, electrodomésticos</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('deporte')"><div class="cat-icon">⚽</div><h3>Deportes</h3><p>Ropa y equipos deportivos</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('belleza')"><div class="cat-icon">💄</div><h3>Belleza</h3><p>Skincare y maquillaje</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('juguetes')"><div class="cat-icon">🧸</div><h3>Juguetes</h3><p>Para todas las edades</p></div>
     </div>
   </div>
 </section>
 
-<!-- OFERTAS DEL DÍA -->
+<!-- OFERTAS -->
 <section class="deals" id="ofertas">
   <div class="content-with-sidebar">
     <div>
       <div class="deals-header">
         <div>
-          <p class="section-label">Ofertas del día</p>
-          <h2 class="section-title">Descuentos encontrados hoy</h2>
+          <p class="section-label">Actualizadas hoy</p>
+          <h2 class="section-title">Ofertas del momento</h2>
         </div>
       </div>
       <div class="deals-filters">
@@ -337,89 +308,34 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
       </div>
       <div class="deals-grid" id="deals-grid">
         <div class="deal-card" data-tipo="electronico" data-producto="iphone" data-precio="12999">
-          <div class="deal-img amazon">📱<span class="deal-badge">-25%</span><span class="deal-source">Amazon MX</span></div>
-          <div class="deal-body">
-            <div class="deal-type">📱 Electrónicos</div>
-            <div class="deal-title">iPhone 15 128GB</div>
-            <div class="deal-dates">Oferta del día · Envío gratis</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$12,999 <span>MXN</span></div><div class="deal-old">antes $17,999</div></div>
-              <a href="https://www.amazon.com.mx/s?k=iphone+15&tag=dealtravel-20" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">📱</div><span class="deal-discount">-25%</span><span class="deal-store">Amazon MX</span></div>
+          <div class="deal-body"><div class="deal-category">Electrónicos</div><div class="deal-title">iPhone 15 128GB</div><div class="deal-promo">Oferta del día · Envío gratis</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$12,999</div><div class="deal-old">$17,999 MXN</div></div><a href="https://www.amazon.com.mx/s?k=iphone+15" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
         <div class="deal-card" data-tipo="electronico" data-producto="samsung tv" data-precio="8999">
-          <div class="deal-img walmart">📺<span class="deal-badge">-30%</span><span class="deal-source">Walmart MX</span></div>
-          <div class="deal-body">
-            <div class="deal-type">📱 Electrónicos</div>
-            <div class="deal-title">Samsung Smart TV 55"</div>
-            <div class="deal-dates">Oferta flash · Hoy únicamente</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$8,999 <span>MXN</span></div><div class="deal-old">antes $12,999</div></div>
-              <a href="https://www.walmart.com.mx/search?q=samsung+smart+tv+55" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">📺</div><span class="deal-discount">-30%</span><span class="deal-store">Walmart MX</span></div>
+          <div class="deal-body"><div class="deal-category">Electrónicos</div><div class="deal-title">Samsung Smart TV 55"</div><div class="deal-promo">Oferta flash · Hoy únicamente</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$8,999</div><div class="deal-old">$12,999 MXN</div></div><a href="https://www.walmart.com.mx/search?q=samsung+tv" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
         <div class="deal-card" data-tipo="moda" data-producto="nike" data-precio="1299">
-          <div class="deal-img liverpool">👟<span class="deal-badge">-40%</span><span class="deal-source">Liverpool</span></div>
-          <div class="deal-body">
-            <div class="deal-type">👗 Moda</div>
-            <div class="deal-title">Nike Air Max 2024</div>
-            <div class="deal-dates">Liquidación de temporada</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$1,299 <span>MXN</span></div><div class="deal-old">antes $2,199</div></div>
-              <a href="https://www.liverpool.com.mx/search?query=nike+air+max" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">👟</div><span class="deal-discount">-40%</span><span class="deal-store">Liverpool</span></div>
+          <div class="deal-body"><div class="deal-category">Moda</div><div class="deal-title">Nike Air Max 2024</div><div class="deal-promo">Liquidación de temporada</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$1,299</div><div class="deal-old">$2,199 MXN</div></div><a href="https://www.liverpool.com.mx/search?query=nike" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
         <div class="deal-card" data-tipo="hogar" data-producto="sofa" data-precio="4999">
-          <div class="deal-img coppel">🛋️<span class="deal-badge">-35%</span><span class="deal-source">Coppel</span></div>
-          <div class="deal-body">
-            <div class="deal-type">🏠 Hogar</div>
-            <div class="deal-title">Sofá 3 plazas moderno</div>
-            <div class="deal-dates">MSI disponibles · Envío gratis</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$4,999 <span>MXN</span></div><div class="deal-old">antes $7,699</div></div>
-              <a href="https://www.coppel.com/muebles/salas" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">🛋️</div><span class="deal-discount">-35%</span><span class="deal-store">Coppel</span></div>
+          <div class="deal-body"><div class="deal-category">Hogar</div><div class="deal-title">Sofá 3 plazas moderno</div><div class="deal-promo">MSI disponibles · Envío gratis</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$4,999</div><div class="deal-old">$7,699 MXN</div></div><a href="https://www.coppel.com/muebles/salas" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
         <div class="deal-card" data-tipo="electronico" data-producto="laptop" data-precio="9999">
-          <div class="deal-img bestbuy">💻<span class="deal-badge">-20%</span><span class="deal-source">Best Buy MX</span></div>
-          <div class="deal-body">
-            <div class="deal-type">📱 Electrónicos</div>
-            <div class="deal-title">Laptop HP 15" Core i5</div>
-            <div class="deal-dates">18 MSI sin intereses</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$9,999 <span>MXN</span></div><div class="deal-old">antes $12,499</div></div>
-              <a href="https://www.bestbuy.com.mx/laptops" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">💻</div><span class="deal-discount">-20%</span><span class="deal-store">Best Buy MX</span></div>
+          <div class="deal-body"><div class="deal-category">Electrónicos</div><div class="deal-title">Laptop HP 15" Core i5</div><div class="deal-promo">18 MSI sin intereses</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$9,999</div><div class="deal-old">$12,499 MXN</div></div><a href="https://www.bestbuy.com.mx/laptops" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
         <div class="deal-card" data-tipo="belleza" data-producto="perfume" data-precio="799">
-          <div class="deal-img mercadolibre">💄<span class="deal-badge">-45%</span><span class="deal-source">Mercado Libre</span></div>
-          <div class="deal-body">
-            <div class="deal-type">💄 Belleza</div>
-            <div class="deal-title">Set perfumes importados</div>
-            <div class="deal-dates">Envío gratis · Stock limitado</div>
-            <div class="deal-footer">
-              <div><div class="deal-price">$799 <span>MXN</span></div><div class="deal-old">antes $1,450</div></div>
-              <a href="https://www.mercadolibre.com.mx/perfumes" target="_blank" class="deal-btn">Ver oferta →</a>
-            </div>
-          </div>
+          <div class="deal-img-wrap"><div class="deal-img-placeholder">💄</div><span class="deal-discount">-45%</span><span class="deal-store">Mercado Libre</span></div>
+          <div class="deal-body"><div class="deal-category">Belleza</div><div class="deal-title">Set perfumes importados</div><div class="deal-promo">Envío gratis · Stock limitado</div><div class="deal-footer"><div class="deal-prices"><div class="deal-price">$799</div><div class="deal-old">$1,450 MXN</div></div><a href="https://www.mercadolibre.com.mx/perfumes" target="_blank" class="deal-btn">Ver →</a></div></div>
         </div>
       </div>
     </div>
-    <!-- SIDEBAR -->
     <div class="sidebar-ad-stack">
-      <div class="ad-slot ad-300x250">
-        <span class="ad-label">Publicidad</span>
-        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      </div>
-      <div class="ad-slot ad-300x600">
-        <span class="ad-label">Publicidad</span>
-        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      </div>
+      <div class="ad-slot ad-300x250"><span class="ad-label">Publicidad</span><ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins></div>
+      <div class="ad-slot ad-300x600"><span class="ad-label">Publicidad</span><ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins></div>
     </div>
   </div>
 </section>
@@ -428,9 +344,9 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <section class="alert-section" id="alerta">
   <div class="alert-inner">
     <div class="alert-header">
-      <p class="section-label">Crea tu alerta</p>
-      <h2 class="section-title">Dinos qué quieres comprar</h2>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.95rem;max-width:500px;margin:0 auto;">Te avisamos cuando baje el precio. Sin costo, sin spam.</p>
+      <p class="section-label">Gratis · Sin spam</p>
+      <h2 class="section-title">Crea tu alerta de precio</h2>
+      <p class="section-sub" style="margin:0 auto;">Dinos qué quieres comprar y te avisamos cuando baje el precio.</p>
     </div>
     <div class="alert-form">
       <div class="form-grid">
@@ -444,8 +360,6 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
             <option>Deportes</option>
             <option>Belleza y Cuidado Personal</option>
             <option>Juguetes</option>
-            <option>Alimentos y Bebidas</option>
-            <option>Libros y Entretenimiento</option>
           </select>
         </div>
         <div class="form-group"><label>Tienda preferida</label>
@@ -463,9 +377,9 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
         </div>
         <div class="form-group"><label>Precio máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 5,000"></div>
         <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
-        <div class="form-group"><label>Tu celular <span style="color:rgba(255,255,255,0.3);font-size:0.7rem;">opcional</span></label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
+        <div class="form-group"><label>Celular <span style="color:#aeaeb2;font-size:0.7rem;">opcional</span></label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
       </div>
-      <p style="font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.7rem;">¿Cómo quieres recibir tu alerta?</p>
+      <p style="font-size:0.72rem;color:#6e6e73;margin-bottom:0.7rem;font-weight:500;">¿Cómo quieres recibir tu alerta?</p>
       <div class="notify-opts">
         <label class="notify-opt selected" id="opt-email">
           <input type="checkbox" checked onchange="toggleOpt('opt-email')">
@@ -473,15 +387,15 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
         </label>
         <label class="notify-opt" id="opt-whatsapp">
           <input type="checkbox" onchange="toggleOpt('opt-whatsapp')">
-          <div><div class="notify-opt-label">💬 WhatsApp</div><div class="notify-opt-sub">Notificación inmediata</div></div>
+          <div><div class="notify-opt-label">💬 WhatsApp</div><div class="notify-opt-sub">Inmediato</div></div>
         </label>
         <label class="notify-opt" id="opt-sms">
           <input type="checkbox" onchange="toggleOpt('opt-sms')">
           <div><div class="notify-opt-label">📱 SMS</div><div class="notify-opt-sub">A tu celular</div></div>
         </label>
       </div>
-      <button class="form-submit" onclick="submitAlert()">🔔 Activar mi alerta de precio</button>
-      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos una oferta para <span id="success-producto"></span> dentro de tu presupuesto.</div>
+      <button class="form-submit" onclick="submitAlert()">Activar alerta de precio →</button>
+      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos <strong id="success-producto"></strong> dentro de tu presupuesto.</div>
     </div>
   </div>
 </section>
@@ -490,14 +404,14 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <section class="how" id="como">
   <div class="how-inner">
     <div class="how-header">
-      <p class="section-label">Así funciona</p>
-      <h2 class="section-title">4 pasos para ahorrar</h2>
+      <p class="section-label">Simple y rápido</p>
+      <h2 class="section-title">Cómo funciona</h2>
     </div>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><h3>Dinos qué quieres</h3><p>Ingresa el producto, marca o categoría que buscas.</p></div>
-      <div class="step"><div class="step-num">2</div><h3>Define tu precio</h3><p>Pon el precio máximo que estás dispuesto a pagar.</p></div>
-      <div class="step"><div class="step-num">3</div><h3>Nosotros vigilamos</h3><p>Monitoreamos 8 tiendas cada hora automáticamente.</p></div>
-      <div class="step"><div class="step-num">4</div><h3>Tú ahorras</h3><p>Te avisamos al instante cuando baje el precio.</p></div>
+      <div class="step"><div class="step-num">1</div><h3>Dinos qué quieres</h3><p>Ingresa el producto o marca que buscas y tu presupuesto máximo.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Nosotros vigilamos</h3><p>Monitoreamos 8 tiendas cada hora buscando el mejor precio.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Recibes tu alerta</h3><p>Te avisamos al instante por email o WhatsApp cuando baje el precio.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Compras y ahorras</h3><p>Haz clic en el link y compra directamente en la tienda al mejor precio.</p></div>
     </div>
   </div>
 </section>
@@ -505,12 +419,12 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <!-- TESTIMONIOS -->
 <section class="testimonials">
   <div class="testimonials-inner">
-    <p class="section-label">Testimonios</p>
-    <h2 class="section-title">Lo que dicen nuestros usuarios</h2>
+    <p class="section-label">Lo que dicen</p>
+    <h2 class="section-title">Nuestros usuarios ahorran de verdad</h2>
     <div class="testi-grid">
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Puse una alerta para un iPhone y en 3 días me llegó la notificación. Lo compré $4,000 más barato en Amazon. ¡Increíble!"</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses esperando el precio correcto para una laptop. Deal Travel me avisó en cuanto bajó en Best Buy. Ahorré $2,500 MXN."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
-      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Compré un sofá en Coppel con 40% de descuento gracias a la alerta. El proceso fue facilísimo y el email llegó al instante."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Puse una alerta para un iPhone y en 3 días me llegó la notificación. Lo compré $4,000 más barato en Amazon."</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses esperando el precio correcto para una laptop. Me avisaron en cuanto bajó en Best Buy. Ahorré $2,500."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Compré un sofá en Coppel con 40% de descuento gracias a la alerta. Facilísimo y el email llegó al instante."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
     </div>
   </div>
 </section>
@@ -518,24 +432,18 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-ad-wrap">
-      <div class="ad-slot" style="width:100%;max-width:728px;height:90px;">
-        <span class="ad-label">Publicidad</span>
-        <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-      </div>
-    </div>
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo">Deal<span>Travel</span></div>
+        <div class="footer-logo">Deal<span>Travel</span></div>
         <p>Alertas inteligentes de precios para que compres más pagando menos.</p>
       </div>
       <div class="footer-links"><h4>Tiendas</h4><ul><li><a href="#">Amazon MX</a></li><li><a href="#">Liverpool</a></li><li><a href="#">Walmart MX</a></li><li><a href="#">Mercado Libre</a></li></ul></div>
       <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#">Electrónicos</a></li><li><a href="#">Moda</a></li><li><a href="#">Hogar</a></li><li><a href="#">Deportes</a></li></ul></div>
-      <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos de uso</a></li><li><a href="#">Cookies</a></li></ul></div>
+      <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos</a></li><li><a href="#">Cookies</a></li></ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
-      <p>Hecho con ♡ para compradores inteligentes</p>
+      <p>Hecho para compradores inteligentes 🇲🇽</p>
     </div>
   </div>
 </footer>
@@ -544,7 +452,6 @@ footer{background:#050e1d;border-top:1px solid rgba(255,255,255,0.06);padding:2.
 const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
 
-// Cargar ofertas de Supabase
 async function cargarOfertas() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=12`, {
@@ -557,48 +464,48 @@ async function cargarOfertas() {
 
 function renderOfertas(ofertas) {
   const grid = document.getElementById('deals-grid');
-  const IMGS = ['amazon','liverpool','walmart','mercadolibre','bestbuy','coppel'];
-  const ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸'};
-  grid.innerHTML = ofertas.map((o,i) => `
-    <div class="deal-card" data-tipo="${o.tipo||'electronico'}" data-producto="${(o.destino||'').toLowerCase()}" data-precio="${o.precio}">
-      <div class="deal-img ${IMGS[i%IMGS.length]}">
-        ${ICONS[o.tipo]||'🛍️'}
-        <span class="deal-badge">${o.tipo_promo||'Oferta'}</span>
-        <span class="deal-source">${o.fuente}</span>
+  const ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸','general':'🛍️'};
+  grid.innerHTML = ofertas.map(o => `
+    <div class="deal-card" data-tipo="${o.tipo||'general'}" data-producto="${(o.destino||'').toLowerCase()}" data-precio="${o.precio}">
+      <div class="deal-img-wrap">
+        <div class="deal-img-placeholder">${ICONS[o.tipo]||'🛍️'}</div>
+        <span class="deal-discount">${o.tipo_promo||'Oferta'}</span>
+        <span class="deal-store">${o.fuente}</span>
       </div>
       <div class="deal-body">
-        <div class="deal-type">${ICONS[o.tipo]||'🛍️'} ${o.tipo_promo||'Oferta especial'}</div>
+        <div class="deal-category">${o.tipo||'General'}</div>
         <div class="deal-title">${o.destino||'Producto en oferta'}</div>
-        <div class="deal-dates">${o.fecha||'Hoy'} · ${o.palabras_clave||''}</div>
+        <div class="deal-promo">${o.palabras_clave||''}</div>
         <div class="deal-footer">
-          <div><div class="deal-price">${o.precio_fmt} <span>MXN</span></div><div class="deal-old">Precio verificado</div></div>
-          <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn" onclick="window.open('${o.url}','_blank');return false;">Ver oferta →</a>
+          <div class="deal-prices">
+            <div class="deal-price">${o.precio_fmt}</div>
+            <div class="deal-old">Precio verificado hoy</div>
+          </div>
+          <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn" onclick="window.open('${o.url}','_blank');return false;">Ver →</a>
         </div>
       </div>
     </div>`).join('');
 }
 
-// Data local para búsqueda
 const ofertasLocales = [
-  {tipo:'electronico',producto:'iphone 15',tienda:'amazon',precio:12999,titulo:'iPhone 15 128GB',desc:'Oferta del día · Envío gratis',img:'amazon',badge:'-25%',url:'https://www.amazon.com.mx/s?k=iphone+15',antes:17999},
-  {tipo:'electronico',producto:'samsung tv',tienda:'walmart',precio:8999,titulo:'Samsung Smart TV 55"',desc:'Oferta flash · Hoy únicamente',img:'walmart',badge:'-30%',url:'https://www.walmart.com.mx/search?q=samsung+tv',antes:12999},
-  {tipo:'moda',producto:'nike air max',tienda:'liverpool',precio:1299,titulo:'Nike Air Max 2024',desc:'Liquidación de temporada',img:'liverpool',badge:'-40%',url:'https://www.liverpool.com.mx/search?query=nike',antes:2199},
-  {tipo:'hogar',producto:'sofa sala',tienda:'coppel',precio:4999,titulo:'Sofá 3 plazas moderno',desc:'MSI disponibles · Envío gratis',img:'coppel',badge:'-35%',url:'https://www.coppel.com/muebles/salas',antes:7699},
-  {tipo:'electronico',producto:'laptop hp',tienda:'bestbuy',precio:9999,titulo:'Laptop HP 15" Core i5',desc:'18 MSI sin intereses',img:'bestbuy',badge:'-20%',url:'https://www.bestbuy.com.mx/laptops',antes:12499},
-  {tipo:'belleza',producto:'perfume set',tienda:'mercadolibre',precio:799,titulo:'Set perfumes importados',desc:'Envío gratis · Stock limitado',img:'mercadolibre',badge:'-45%',url:'https://www.mercadolibre.com.mx/perfumes',antes:1450},
+  {tipo:'electronico',producto:'iphone 15',tienda:'amazon',precio:12999,titulo:'iPhone 15 128GB',desc:'Oferta del día',img:'📱',badge:'-25%',url:'https://www.amazon.com.mx/s?k=iphone+15',antes:17999},
+  {tipo:'electronico',producto:'samsung tv',tienda:'walmart',precio:8999,titulo:'Samsung Smart TV 55"',desc:'Oferta flash',img:'📺',badge:'-30%',url:'https://www.walmart.com.mx/search?q=samsung+tv',antes:12999},
+  {tipo:'moda',producto:'nike',tienda:'liverpool',precio:1299,titulo:'Nike Air Max 2024',desc:'Liquidación',img:'👟',badge:'-40%',url:'https://www.liverpool.com.mx/search?query=nike',antes:2199},
+  {tipo:'hogar',producto:'sofa',tienda:'coppel',precio:4999,titulo:'Sofá 3 plazas',desc:'MSI disponibles',img:'🛋️',badge:'-35%',url:'https://www.coppel.com/muebles/salas',antes:7699},
+  {tipo:'electronico',producto:'laptop hp',tienda:'bestbuy',precio:9999,titulo:'Laptop HP 15"',desc:'18 MSI',img:'💻',badge:'-20%',url:'https://www.bestbuy.com.mx/laptops',antes:12499},
+  {tipo:'belleza',producto:'perfume',tienda:'mercadolibre',precio:799,titulo:'Set perfumes importados',desc:'Envío gratis',img:'💄',badge:'-45%',url:'https://www.mercadolibre.com.mx/perfumes',antes:1450},
 ];
 
-function crearCard(o){
-  const ICONS={'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸'};
+function crearCardLocal(o){
   return `<div class="deal-card" data-tipo="${o.tipo}" data-producto="${o.producto}" data-precio="${o.precio}">
-    <div class="deal-img ${o.img}">${ICONS[o.tipo]||'🛍️'}<span class="deal-badge">${o.badge}</span><span class="deal-source">${o.tienda}</span></div>
+    <div class="deal-img-wrap"><div class="deal-img-placeholder">${o.img}</div><span class="deal-discount">${o.badge}</span><span class="deal-store">${o.tienda}</span></div>
     <div class="deal-body">
-      <div class="deal-type">${ICONS[o.tipo]||'🛍️'} ${o.tipo}</div>
+      <div class="deal-category">${o.tipo}</div>
       <div class="deal-title">${o.titulo}</div>
-      <div class="deal-dates">${o.desc}</div>
+      <div class="deal-promo">${o.desc}</div>
       <div class="deal-footer">
-        <div><div class="deal-price">$${o.precio.toLocaleString('es-MX')} <span>MXN</span></div><div class="deal-old">antes $${o.antes.toLocaleString('es-MX')}</div></div>
-        <a href="${o.url}" target="_blank" class="deal-btn">Ver oferta →</a>
+        <div class="deal-prices"><div class="deal-price">$${o.precio.toLocaleString('es-MX')}</div><div class="deal-old">$${o.antes.toLocaleString('es-MX')} MXN</div></div>
+        <a href="${o.url}" target="_blank" class="deal-btn">Ver →</a>
       </div>
     </div>
   </div>`;
@@ -607,22 +514,20 @@ function crearCard(o){
 function buscarOfertas(){
   const q = document.getElementById('search-producto').value.toLowerCase().trim();
   const tienda = document.getElementById('search-tienda').value;
-  const maxPrecio = parseFloat(document.getElementById('search-precio').value)||Infinity;
-  const resultados = ofertasLocales.filter(o=>{
-    const matchProd = !q || o.producto.includes(q) || o.titulo.toLowerCase().includes(q);
-    const matchTienda = tienda==='todas' || o.tienda===tienda;
-    const matchPrecio = o.precio<=maxPrecio;
-    return matchProd&&matchTienda&&matchPrecio;
+  const max = parseFloat(document.getElementById('search-precio').value)||Infinity;
+  const res = ofertasLocales.filter(o=>{
+    return (!q||o.producto.includes(q)||o.titulo.toLowerCase().includes(q))&&
+           (tienda==='todas'||o.tienda===tienda)&&o.precio<=max;
   });
   const grid=document.getElementById('search-grid');
   const count=document.getElementById('search-count');
   document.getElementById('search-results').classList.add('visible');
-  if(resultados.length===0){
-    grid.innerHTML='<div class="no-results">😕 No encontramos ofertas con esos filtros. Intenta con otro producto o amplía tu presupuesto.</div>';
+  if(res.length===0){
+    grid.innerHTML='<div class="no-results">No encontramos ofertas. Intenta con otro producto.</div>';
     count.textContent='Sin resultados';
   } else {
-    grid.innerHTML=resultados.map(crearCard).join('');
-    count.textContent=`${resultados.length} oferta${resultados.length>1?'s':''} encontrada${resultados.length>1?'s':''}`;
+    grid.innerHTML=res.map(crearCardLocal).join('');
+    count.textContent=`${res.length} oferta${res.length>1?'s':''} encontrada${res.length>1?'s':''}`;
   }
 }
 
@@ -636,10 +541,6 @@ function filtrar(tipo,btn){
   });
 }
 
-function filtrarPor(tienda){
-  document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
-}
-
 function filtrarCategoria(tipo){
   document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>{
@@ -649,8 +550,7 @@ function filtrarCategoria(tipo){
 }
 
 function toggleOpt(id){
-  const el=document.getElementById(id);
-  el.classList.toggle('selected',el.querySelector('input').checked);
+  document.getElementById(id).classList.toggle('selected',document.getElementById(id).querySelector('input').checked);
 }
 
 async function submitAlert(){
@@ -660,47 +560,32 @@ async function submitAlert(){
   const presupuesto=document.getElementById('presupuesto').value;
   const email=document.getElementById('email').value.trim();
   const telefono=document.getElementById('telefono').value.trim();
-
   if(!producto||!presupuesto||!email){
     alert('Por favor completa: producto, precio máximo y email.');
     return;
   }
-
   const btn=document.querySelector('.form-submit');
   btn.disabled=true;
-  btn.textContent='⏳ Guardando alerta...';
-
+  btn.textContent='Guardando...';
   try{
     const res=await fetch(`${SUPABASE_URL}/rest/v1/alertas`,{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
-      body:JSON.stringify({
-        origen:'dealtravel.mx',
-        destino:producto,
-        tipo:categoria||'General',
-        presupuesto:parseFloat(presupuesto),
-        fecha_salida:'',
-        email,telefono,
-        fuente:tienda||'Cualquier tienda',
-        activa:true
-      })
+      body:JSON.stringify({origen:'dealtravel.mx',destino:producto,tipo:categoria||'General',presupuesto:parseFloat(presupuesto),fecha_salida:'',email,telefono,fuente:tienda||'Cualquier tienda',activa:true})
     });
     if(res.ok||res.status===201){
       document.getElementById('success-producto').textContent=producto;
       document.getElementById('success').style.display='block';
       btn.textContent='✓ Alerta activada';
-      btn.style.background='#10b981';
+      btn.style.background='#34c759';
     } else {
-      const err=await res.text();
-      console.error('Error:',err);
       btn.disabled=false;
-      btn.textContent='🔔 Activar mi alerta de precio';
+      btn.textContent='Activar alerta de precio →';
       alert('Error al guardar. Intenta de nuevo.');
     }
   }catch(e){
-    console.error(e);
     btn.disabled=false;
-    btn.textContent='🔔 Activar mi alerta de precio';
+    btn.textContent='Activar alerta de precio →';
     alert('Error de conexión.');
   }
 }
