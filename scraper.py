@@ -148,17 +148,24 @@ def revisar_alertas(ofertas):
         return
     try:
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+        # Obtener alertas activas
         r = requests.get(f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*", headers=headers)
         alertas = r.json()
         print(f"[Alertas] {len(alertas)} alertas activas")
+        # Obtener TODOS los productos de Supabase (scrapeados + manuales)
+        r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
+        todas_ofertas = r2.json()
+        print(f"[Ofertas] {len(todas_ofertas)} ofertas en Supabase")
         for alerta in alertas:
             producto_alerta = alerta.get("destino", "").lower()
-            for oferta in ofertas:
+            palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
+            for oferta in todas_ofertas:
                 producto_oferta = oferta["destino"].lower()
                 precio_ok = oferta["precio"] <= float(alerta.get("presupuesto") or 99999)
-                tienda_ok = not alerta.get("fuente") or alerta.get("fuente", "").lower() in oferta["fuente"].lower() or alerta.get("fuente", "") == "Cualquier tienda"
-                producto_match = any(word in producto_oferta for word in producto_alerta.split() if len(word) > 3)
+                tienda_ok = not alerta.get("fuente") or alerta.get("fuente","") == "Cualquier tienda" or alerta.get("fuente","").lower() in oferta["fuente"].lower()
+                producto_match = any(word in producto_oferta for word in palabras_alerta)
                 if precio_ok and tienda_ok and producto_match:
+                    print(f"[Match] {alerta['email']} -> {oferta['destino']}")
                     enviar_alerta_email(alerta, oferta)
                     break
     except Exception as e:
