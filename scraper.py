@@ -10,6 +10,8 @@ SUPABASE_KEY   = "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT"
 PRECIO_MAX_MXN = 50000
 AWIN_ID        = "2876425"
 
+TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"]
+
 CATEGORIAS_KEYWORDS = {
     "electronico": ["celular","iphone","samsung","laptop","tablet","tv","audifonos","smartwatch","nintendo","playstation","xbox","camara","apple","macbook","ipad"],
     "moda": ["ropa","zapatos","tenis","vestido","camisa","pantalon","bolsa","nike","adidas","zara","puma","shein","lacoste"],
@@ -39,8 +41,6 @@ def oferta_ya_existe(destino, precio, fuente):
     except:
         return False
 
-# ─── MERCADO LIBRE ────────────────────────────────────────────────────────────
-
 def scrape_mercadolibre():
     ofertas = []
     busquedas = [
@@ -57,7 +57,7 @@ def scrape_mercadolibre():
     ]
     for query, tipo in busquedas:
         try:
-            url = f"https://api.mercadolibre.com/sites/MLM/search?q={requests.utils.quote(query)}&sort=relevance&limit=5&offset=0"
+            url = f"https://api.mercadolibre.com/sites/MLM/search?q={requests.utils.quote(query)}&sort=relevance&limit=5"
             r = requests.get(url, timeout=15)
             if r.status_code != 200:
                 continue
@@ -70,7 +70,7 @@ def scrape_mercadolibre():
                 if original <= precio:
                     continue
                 descuento = round((1 - precio / original) * 100)
-                if descuento < 10:
+                if descuento < 5:
                     continue
                 ofertas.append({
                     "fuente": "Mercado Libre",
@@ -88,8 +88,6 @@ def scrape_mercadolibre():
             print(f"[MercadoLibre] Error {query}: {e}")
     print(f"[Mercado Libre] {len(ofertas)} ofertas")
     return ofertas
-
-# ─── AMAZON ───────────────────────────────────────────────────────────────────
 
 def scrape_amazon():
     ofertas = []
@@ -139,11 +137,9 @@ def scrape_amazon():
     print(f"[Amazon MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── NIKE via RSS/JSON público ────────────────────────────────────────────────
-
 def scrape_nike():
     ofertas = []
-    productos_nike = [
+    productos = [
         ("Nike Air Max 270", 2499, "tenis, running, nike"),
         ("Nike Revolution 6", 1299, "tenis, running, nike"),
         ("Nike Dri-FIT Camiseta", 699, "ropa deportiva, nike"),
@@ -153,31 +149,25 @@ def scrape_nike():
         ("Nike Pro Shorts", 599, "ropa deportiva, nike, gym"),
         ("Nike Brasilia Mochila", 899, "accesorios, nike"),
     ]
-    for nombre, precio, keywords in productos_nike:
-        try:
-            query = nombre.lower().replace(" ", "+")
-            ofertas.append({
-                "fuente": "Nike MX",
-                "tipo": "moda",
-                "destino": nombre,
-                "precio": precio,
-                "precio_fmt": f"${precio:,.0f} MXN",
-                "url": f"https://www.nike.com/mx/w/sale-3yaep",
-                "tipo_promo": "Sale Nike MX",
-                "palabras_clave": keywords,
-                "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                "activa": True
-            })
-        except Exception as e:
-            print(f"[Nike] Error: {e}")
+    for nombre, precio, keywords in productos:
+        ofertas.append({
+            "fuente": "Nike MX",
+            "tipo": "moda",
+            "destino": nombre,
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN",
+            "url": "https://www.nike.com/mx/w/sale-3yaep",
+            "tipo_promo": "Sale Nike MX",
+            "palabras_clave": keywords,
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
     print(f"[Nike MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── ADIDAS ───────────────────────────────────────────────────────────────────
-
 def scrape_adidas():
     ofertas = []
-    productos_adidas = [
+    productos = [
         ("Adidas Ultraboost 22", 3299, "tenis, running, adidas"),
         ("Adidas Stan Smith", 1799, "tenis, casual, adidas"),
         ("Adidas Superstar", 1599, "tenis, casual, adidas"),
@@ -187,37 +177,32 @@ def scrape_adidas():
         ("Adidas Essentials Hoodie", 999, "ropa, adidas, casual"),
         ("Adidas Predator Accuracy", 2499, "tenis futbol, adidas"),
     ]
-    for nombre, precio, keywords in productos_adidas:
-        try:
-            ofertas.append({
-                "fuente": "Adidas MX",
-                "tipo": "moda",
-                "destino": nombre,
-                "precio": precio,
-                "precio_fmt": f"${precio:,.0f} MXN",
-                "url": "https://www.adidas.mx/sale",
-                "tipo_promo": "Sale Adidas MX",
-                "palabras_clave": keywords,
-                "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                "activa": True
-            })
-        except Exception as e:
-            print(f"[Adidas] Error: {e}")
+    for nombre, precio, keywords in productos:
+        ofertas.append({
+            "fuente": "Adidas MX",
+            "tipo": "moda",
+            "destino": nombre,
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN",
+            "url": "https://www.adidas.mx/sale",
+            "tipo_promo": "Sale Adidas MX",
+            "palabras_clave": keywords,
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
     print(f"[Adidas MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── PUMA ─────────────────────────────────────────────────────────────────────
-
 def scrape_puma():
     ofertas = []
-    productos_puma = [
+    productos = [
         ("Puma Suede Classic XXI", 1299, "tenis, casual, puma"),
         ("Puma RS-X", 1599, "tenis, casual, puma"),
         ("Puma Camiseta Teamliga", 449, "ropa, futbol, puma"),
         ("Puma Softride Enzo", 1199, "tenis, running, puma"),
         ("Puma Essentials Hoodie", 799, "ropa, casual, puma"),
     ]
-    for nombre, precio, keywords in productos_puma:
+    for nombre, precio, keywords in productos:
         ofertas.append({
             "fuente": "Puma MX",
             "tipo": "moda",
@@ -233,11 +218,9 @@ def scrape_puma():
     print(f"[Puma MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── ZARA ─────────────────────────────────────────────────────────────────────
-
 def scrape_zara():
     ofertas = []
-    productos_zara = [
+    productos = [
         ("Zara Blazer Oversized", 1299, "ropa, moda, zara, mujer"),
         ("Zara Jeans Slim", 799, "pantalon, moda, zara"),
         ("Zara Vestido Midi", 999, "vestido, moda, zara, mujer"),
@@ -245,7 +228,7 @@ def scrape_zara():
         ("Zara Zapatillas Piel", 1499, "zapatos, moda, zara, mujer"),
         ("Zara Bolso Tote", 899, "bolsa, accesorios, zara"),
     ]
-    for nombre, precio, keywords in productos_zara:
+    for nombre, precio, keywords in productos:
         ofertas.append({
             "fuente": "Zara MX",
             "tipo": "moda",
@@ -261,18 +244,16 @@ def scrape_zara():
     print(f"[Zara MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── H&M ──────────────────────────────────────────────────────────────────────
-
 def scrape_hm():
     ofertas = []
-    productos_hm = [
+    productos = [
         ("H&M Vestido Floral", 499, "vestido, moda, hm, mujer"),
         ("H&M Jeans Skinny", 599, "pantalon, moda, hm"),
-        ("H&M Camiseta Basica", 199, "camiseta, moda, hm, basico"),
+        ("H&M Camiseta Basica", 199, "camiseta, moda, hm"),
         ("H&M Sudadera Logo", 699, "ropa, casual, hm"),
         ("H&M Chaqueta Denim", 899, "ropa, casual, hm"),
     ]
-    for nombre, precio, keywords in productos_hm:
+    for nombre, precio, keywords in productos:
         ofertas.append({
             "fuente": "H&M MX",
             "tipo": "moda",
@@ -288,8 +269,6 @@ def scrape_hm():
     print(f"[H&M MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── LIVERPOOL via búsqueda ───────────────────────────────────────────────────
-
 def scrape_liverpool():
     ofertas = []
     busquedas = [
@@ -303,7 +282,6 @@ def scrape_liverpool():
     ]
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "application/json",
         "Accept-Language": "es-MX",
     }
     for query, tipo in busquedas:
@@ -314,7 +292,7 @@ def scrape_liverpool():
             titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
             if not titulos:
                 titulos = re.findall(r'<h[23][^>]*>([^<]{10,80})</h[23]>', r.text)
-            for i, (p, t) in enumerate(zip(precios[:3], titulos[:3])):
+            for p, t in zip(precios[:3], titulos[:3]):
                 try:
                     precio = float(p.replace(",", "").replace("$", ""))
                     if 300 <= precio <= PRECIO_MAX_MXN:
@@ -337,11 +315,8 @@ def scrape_liverpool():
     print(f"[Liverpool] {len(ofertas)} ofertas")
     return ofertas
 
-# ─── AWIN — VIAJES ────────────────────────────────────────────────────────────
-
 def scrape_awin_viajes():
     ofertas = []
-
     destinos_trivago = [
         ("Cancún, México", 1200),
         ("Ciudad de México", 800),
@@ -365,7 +340,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     vuelos_kiwi = [
         ("CDMX → Cancún", 1800),
         ("CDMX → Los Cabos", 2100),
@@ -389,7 +363,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     sirenis = [
         ("Sirenis Punta Cana Resort — Todo Incluido", 3200),
         ("Sirenis Riviera Maya — Todo Incluido", 2800),
@@ -408,11 +381,8 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     print(f"[Awin Viajes] {len(ofertas)} ofertas")
     return ofertas
-
-# ─── SUPABASE ─────────────────────────────────────────────────────────────────
 
 def marcar_inactivas_viejas():
     headers = {
@@ -422,8 +392,7 @@ def marcar_inactivas_viejas():
     }
     TIENDAS_SCRAPER = [
         "Amazon MX","Mercado Libre","Walmart MX","Nike MX","Adidas MX",
-        "Puma MX","Zara MX","H&M MX","Liverpool","Shein MX","AliExpress",
-        "Trivago","Kiwi","Sirenis Hotels"
+        "Puma MX","Zara MX","H&M MX","Liverpool","Trivago","Kiwi","Sirenis Hotels"
     ]
     try:
         for tienda in TIENDAS_SCRAPER:
@@ -459,7 +428,8 @@ def guardar_en_supabase(ofertas):
     nuevas = 0
     for oferta in ofertas:
         try:
-            if not oferta_ya_existe(oferta["destino"], oferta["precio"], oferta["fuente"]):
+            es_fija = oferta["fuente"] in TIENDAS_FIJAS
+            if es_fija or not oferta_ya_existe(oferta["destino"], oferta["precio"], oferta["fuente"]):
                 r = requests.post(
                     f"{SUPABASE_URL}/rest/v1/ofertas",
                     headers=headers,
@@ -471,8 +441,6 @@ def guardar_en_supabase(ofertas):
         except Exception as e:
             print(f"[Supabase] Error: {e}")
     print(f"[Supabase] {nuevas} ofertas nuevas guardadas (de {len(ofertas)} encontradas)")
-
-# ─── ALERTAS ──────────────────────────────────────────────────────────────────
 
 def revisar_alertas(ofertas):
     if not RESEND_API_KEY:
@@ -539,8 +507,6 @@ def enviar_alerta_email(alerta, oferta):
     except Exception as e:
         print(f"[Email] Error: {e}")
 
-# ─── MONITOR ──────────────────────────────────────────────────────────────────
-
 def monitorear():
     print("=" * 55)
     print(f"DEAL TRAVEL - {datetime.now().strftime('%d/%m/%Y %H:%M')}")
@@ -562,7 +528,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v4 — Multi-tienda")
+    print("Deal Travel Scraper v4")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
