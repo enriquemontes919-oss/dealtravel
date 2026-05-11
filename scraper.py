@@ -9,6 +9,7 @@ SUPABASE_URL   = "https://zutcsoloxabwtrvfzmlm.supabase.co"
 SUPABASE_KEY   = "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT"
 PRECIO_MAX_MXN = 50000
 AWIN_ID        = "2876425"
+AMAZON_TAG     = "dealtravelmx-20"
 
 TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"]
 
@@ -124,7 +125,7 @@ def scrape_amazon():
                                 "destino": t[:80],
                                 "precio": precio,
                                 "precio_fmt": f"${precio:,.0f} MXN",
-                                "url": f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}",
+                                "url": f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}&tag={AMAZON_TAG}",
                                 "tipo_promo": "Oferta Amazon",
                                 "palabras_clave": query,
                                 "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
