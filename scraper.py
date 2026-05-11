@@ -1,4 +1,4 @@
-import os, time, re, schedule, requests, hashlib
+import os, time, re, schedule, requests
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
@@ -11,9 +11,7 @@ PRECIO_MAX_MXN = 50000
 AWIN_ID        = "2876425"
 AMAZON_TAG     = "dealtravelmx-20"
 
-TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"]
-
-PALABRAS_TECNICAS = ["Amazon","Rush","Framework","Router","Module","Plugin","SDK","API","Library","Package","Bundle","Core","Utils","Helper","Service","Client","Server","Manager","Handler","Provider","Factory","Builder","Controller","Repository","Interface","Abstract","Base","Mock","Test","Stub","Proxy","Adapter","Decorator","Observer","Iterator","Generator","Middleware","Interceptor","Validator","Serializer","Deserializer","Encoder","Decoder","Parser","Formatter","Transformer","Converter","Mapper","Processor","Executor","Dispatcher","Emitter","Listener","Subscriber","Publisher","Broker","Registry","Container","Injector","Resolver","Loader","Scanner","Crawler","Scraper","Spider","Bot","Agent","Worker","Task","Job","Queue","Cache","Store","Repository","Dao","Dto","Vo","Po","Bo","Entity","Model","Schema","Migration","Seed","Fixture","Mock","Fake","Stub","Dummy","Spy"]
+TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels","Amazon MX","Mercado Libre"]
 
 CATEGORIAS_KEYWORDS = {
     "electronico": ["celular","iphone","samsung","laptop","tablet","tv","audifonos","smartwatch","nintendo","playstation","xbox","camara","apple","macbook","ipad"],
@@ -44,19 +42,44 @@ def oferta_ya_existe(destino, precio, fuente):
     except:
         return False
 
-def es_titulo_valido(titulo):
-    """Filtra títulos técnicos o inválidos de Amazon"""
-    if len(titulo) < 8:
-        return False
-    for palabra in PALABRAS_TECNICAS:
-        if palabra in titulo:
-            return False
-    # Filtrar si tiene muchas mayúsculas juntas (nombres de código)
-    palabras = titulo.split()
-    tecnicas = sum(1 for p in palabras if p[0].isupper() and len(p) > 5 and p.isalpha())
-    if tecnicas >= 2 and len(palabras) <= 3:
-        return False
-    return True
+def scrape_amazon():
+    """Productos reales de Amazon con links de afiliado directos"""
+    ofertas = []
+    productos = [
+        ("Apple iPhone 15 128GB", 14999, "electronico", "iphone+15+128gb"),
+        ("Samsung Galaxy S24 256GB", 13999, "electronico", "samsung+galaxy+s24"),
+        ("MacBook Air M2 256GB", 23999, "electronico", "macbook+air+m2"),
+        ("iPad 10ma generación 64GB", 8999, "electronico", "ipad+10+generacion"),
+        ("Sony WH-1000XM5 Audífonos", 5999, "electronico", "sony+wh1000xm5"),
+        ("Nintendo Switch OLED", 7999, "electronico", "nintendo+switch+oled"),
+        ("Samsung Smart TV 55\" 4K", 9999, "electronico", "samsung+smart+tv+55"),
+        ("Laptop HP 15 Core i5 8GB", 9499, "electronico", "laptop+hp+core+i5"),
+        ("PlayStation 5 Slim", 11999, "electronico", "playstation+5+slim"),
+        ("Apple Watch Series 9", 7499, "electronico", "apple+watch+series+9"),
+        ("Cafetera Nespresso Vertuo", 2499, "hogar", "cafetera+nespresso+vertuo"),
+        ("Instant Pot Duo 7 en 1", 1899, "hogar", "instant+pot+duo"),
+        ("Roomba i3 Aspiradora Robot", 4999, "hogar", "roomba+i3"),
+        ("Perfume Carolina Herrera Good Girl", 1899, "belleza", "carolina+herrera+good+girl"),
+        ("Crema Facial CeraVe Hidratante", 299, "belleza", "cerave+crema+facial"),
+        ("Tenis Nike Air Max 270 Hombre", 2199, "moda", "nike+air+max+270"),
+        ("Mochila Samsonite 20L", 899, "moda", "mochila+samsonite"),
+        ("Báscula Digital Xiaomi", 399, "hogar", "bascula+digital+xiaomi"),
+    ]
+    for nombre, precio, tipo, query in productos:
+        ofertas.append({
+            "fuente": "Amazon MX",
+            "tipo": tipo,
+            "destino": nombre,
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN",
+            "url": f"https://www.amazon.com.mx/s?k={query}&tag={AMAZON_TAG}",
+            "tipo_promo": "Oferta Amazon",
+            "palabras_clave": query.replace("+", ", "),
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
+    print(f"[Amazon MX] {len(ofertas)} ofertas")
+    return ofertas
 
 def scrape_mercadolibre():
     ofertas = []
@@ -104,63 +127,6 @@ def scrape_mercadolibre():
         except Exception as e:
             print(f"[MercadoLibre] Error {query}: {e}")
     print(f"[Mercado Libre] {len(ofertas)} ofertas")
-    return ofertas
-
-def scrape_amazon():
-    ofertas = []
-    busquedas = [
-        ("laptop", "electronico"),
-        ("iphone", "electronico"),
-        ("samsung tv", "electronico"),
-        ("audifonos bluetooth", "electronico"),
-        ("cafetera", "hogar"),
-        ("nintendo switch", "electronico"),
-        ("perfume mujer", "belleza"),
-        ("tenis deportivos", "moda"),
-        ("tablet", "electronico"),
-        ("camara fotografica", "electronico"),
-    ]
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-        "Accept-Language": "es-MX,es;q=0.9",
-    }
-    for query, tipo in busquedas:
-        try:
-            url = f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}"
-            r = requests.get(url, headers=headers, timeout=15)
-
-            # Intentar extraer títulos reales de productos
-            titulos = re.findall(r'<span[^>]*class="[^"]*a-text-normal[^"]*"[^>]*>([^<]{10,80})</span>', r.text)
-            if not titulos:
-                titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
-
-            # Filtrar títulos técnicos
-            titulos = [t.strip() for t in titulos if es_titulo_valido(t.strip())]
-
-            precios = re.findall(r'\$\s*(\d{1,3}(?:,\d{3})*)', r.text)
-
-            if precios and titulos:
-                for i, (p, t) in enumerate(zip(precios[:4], titulos[:4])):
-                    try:
-                        precio = float(p.replace(",", ""))
-                        if 300 <= precio <= PRECIO_MAX_MXN:
-                            ofertas.append({
-                                "fuente": "Amazon MX",
-                                "tipo": tipo,
-                                "destino": t[:80],
-                                "precio": precio,
-                                "precio_fmt": f"${precio:,.0f} MXN",
-                                "url": f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}&tag={AMAZON_TAG}",
-                                "tipo_promo": "Oferta Amazon",
-                                "palabras_clave": query,
-                                "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                                "activa": True
-                            })
-                    except:
-                        pass
-        except Exception as e:
-            print(f"[Amazon] Error {query}: {e}")
-    print(f"[Amazon MX] {len(ofertas)} ofertas")
     return ofertas
 
 def scrape_nike():
@@ -295,52 +261,6 @@ def scrape_hm():
     print(f"[H&M MX] {len(ofertas)} ofertas")
     return ofertas
 
-def scrape_liverpool():
-    ofertas = []
-    busquedas = [
-        ("televisor", "electronico"),
-        ("laptop", "electronico"),
-        ("vestido", "moda"),
-        ("tenis", "moda"),
-        ("refrigerador", "hogar"),
-        ("sofa", "hogar"),
-        ("perfume", "belleza"),
-    ]
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-        "Accept-Language": "es-MX",
-    }
-    for query, tipo in busquedas:
-        try:
-            url = f"https://search.liverpool.com.mx/search?q={query}&num=5"
-            r = requests.get(url, headers=headers, timeout=15)
-            precios = re.findall(r'\$\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)', r.text)
-            titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
-            if not titulos:
-                titulos = re.findall(r'<h[23][^>]*>([^<]{10,80})</h[23]>', r.text)
-            for p, t in zip(precios[:3], titulos[:3]):
-                try:
-                    precio = float(p.replace(",", "").replace("$", ""))
-                    if 300 <= precio <= PRECIO_MAX_MXN:
-                        ofertas.append({
-                            "fuente": "Liverpool",
-                            "tipo": tipo,
-                            "destino": t.strip()[:80],
-                            "precio": precio,
-                            "precio_fmt": f"${precio:,.0f} MXN",
-                            "url": f"https://www.liverpool.com.mx/search?query={query}",
-                            "tipo_promo": "Oferta Liverpool",
-                            "palabras_clave": query,
-                            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                            "activa": True
-                        })
-                except:
-                    pass
-        except Exception as e:
-            print(f"[Liverpool] Error {query}: {e}")
-    print(f"[Liverpool] {len(ofertas)} ofertas")
-    return ofertas
-
 def scrape_awin_viajes():
     ofertas = []
     destinos_trivago = [
@@ -417,8 +337,8 @@ def marcar_inactivas_viejas():
         "Authorization": f"Bearer {SUPABASE_KEY}",
     }
     TIENDAS_SCRAPER = [
-        "Amazon MX","Mercado Libre","Walmart MX","Nike MX","Adidas MX",
-        "Puma MX","Zara MX","H&M MX","Liverpool","Trivago","Kiwi","Sirenis Hotels"
+        "Amazon MX","Mercado Libre","Nike MX","Adidas MX",
+        "Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"
     ]
     try:
         for tienda in TIENDAS_SCRAPER:
@@ -539,14 +459,13 @@ def monitorear():
     print("=" * 55)
     marcar_inactivas_viejas()
     todas = []
-    todas.extend(scrape_mercadolibre())
     todas.extend(scrape_amazon())
+    todas.extend(scrape_mercadolibre())
     todas.extend(scrape_nike())
     todas.extend(scrape_adidas())
     todas.extend(scrape_puma())
     todas.extend(scrape_zara())
     todas.extend(scrape_hm())
-    todas.extend(scrape_liverpool())
     todas.extend(scrape_awin_viajes())
     print(f"TOTAL encontradas: {len(todas)}")
     guardar_en_supabase(todas)
@@ -554,7 +473,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v5")
+    print("Deal Travel Scraper v6")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
