@@ -8,9 +8,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f7;color:#1d1d1f;overflow-x:hidden;}
-nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:64px;position:fixed;top:0;width:100%;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);}
-.logo{font-size:1.3rem;font-weight:700;color:#1d1d1f;letter-spacing:-0.5px;}
-.logo span{color:#0071e3;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:64px;position:fixed;top:0;width:100%;z-index:100;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,0.08);}
+.logo img{height:36px;width:auto;}
 .nav-links{display:flex;gap:2rem;list-style:none;}
 .nav-links a{color:#1d1d1f;text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.2s;}
 .nav-links a:hover{color:#0071e3;}
@@ -18,6 +17,8 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .nav-cta:hover{background:#0077ed;}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 5% 4rem;background:linear-gradient(180deg,#fff 0%,#f5f5f7 100%);position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,113,227,0.08) 0%,transparent 70%);pointer-events:none;}
+.hero-logo{margin-bottom:2rem;}
+.hero-logo img{height:80px;width:auto;}
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:#f0f8ff;border:1px solid #cce5ff;color:#0071e3;padding:0.4rem 1rem;border-radius:980px;font-size:0.78rem;font-weight:500;margin-bottom:1.5rem;}
 .hero-badge::before{content:'';width:6px;height:6px;background:#0071e3;border-radius:50%;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
@@ -46,14 +47,14 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 section{padding:5rem 5%;}
 .section-label{font-size:0.72rem;font-weight:600;color:#0071e3;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.5rem;}
 .section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-1px;margin-bottom:0.8rem;color:#1d1d1f;}
-.section-sub{color:#6e6e73;font-size:1rem;max-width:500px;line-height:1.6;}
+
+/* TIENDAS — lista simple */
 .tiendas{background:#fff;}
 .tiendas-inner{max-width:1100px;margin:0 auto;}
-.tiendas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;margin-top:2rem;}
-.tienda-card{background:#f5f5f7;border-radius:14px;padding:1.2rem 0.8rem;text-align:center;transition:all 0.2s;cursor:pointer;border:1.5px solid transparent;}
-.tienda-card:hover{background:#fff;border-color:#0071e3;transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,113,227,0.1);}
-.tienda-icon{font-size:1.8rem;margin-bottom:0.5rem;}
-.tienda-name{font-size:0.8rem;font-weight:600;color:#1d1d1f;}
+.tiendas-lista{display:flex;flex-wrap:wrap;gap:0.5rem 2rem;margin-top:1.5rem;list-style:none;}
+.tiendas-lista li{font-size:0.9rem;color:#3a3a3c;padding:0.3rem 0;border-bottom:1px solid #f0f0f0;}
+
+/* CATEGORIAS */
 .categorias{background:#f5f5f7;}
 .categorias-inner{max-width:1100px;margin:0 auto;}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
@@ -62,6 +63,8 @@ section{padding:5rem 5%;}
 .cat-icon{font-size:2.2rem;margin-bottom:0.8rem;}
 .cat-card h3{font-size:0.9rem;font-weight:600;color:#1d1d1f;margin-bottom:0.3rem;}
 .cat-card p{font-size:0.72rem;color:#6e6e73;}
+
+/* DEALS */
 .deals{background:#fff;padding:5rem 5%;}
 .content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2rem;max-width:1100px;margin:0 auto;}
 .deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
@@ -69,6 +72,19 @@ section{padding:5rem 5%;}
 .filter-btn{background:#f5f5f7;border:none;color:#6e6e73;padding:0.4rem 1rem;border-radius:980px;font-size:0.8rem;cursor:pointer;font-family:inherit;transition:all 0.2s;white-space:nowrap;font-weight:500;}
 .filter-btn:hover,.filter-btn.active{background:#0071e3;color:#fff;}
 .deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;}
+
+/* HOT DEALS */
+.hot-deals{margin-bottom:2rem;}
+.hot-deals-title{font-size:0.8rem;font-weight:700;color:#ff3b30;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.hot-deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+.hot-card{background:linear-gradient(135deg,#fff5f5 0%,#fff 100%);border:1.5px solid #ffcdd2;border-radius:16px;padding:1rem;transition:all 0.2s;cursor:pointer;}
+.hot-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(255,59,48,0.15);border-color:#ff3b30;}
+.hot-card-store{font-size:0.65rem;font-weight:600;color:#ff3b30;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.hot-card-title{font-size:0.9rem;font-weight:600;color:#1d1d1f;margin-bottom:8px;line-height:1.3;}
+.hot-card-price{font-size:1.3rem;font-weight:700;color:#1d1d1f;}
+.hot-card-promo{font-size:0.7rem;color:#ff3b30;font-weight:600;margin-top:2px;}
+
+/* DEAL CARD */
 .deal-card{background:#fff;border:1px solid #f0f0f0;border-radius:18px;overflow:hidden;transition:all 0.25s;cursor:pointer;}
 .deal-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);border-color:transparent;}
 .deal-img-wrap{position:relative;background:#f5f5f7;height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -131,8 +147,7 @@ section{padding:5rem 5%;}
 footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
 .footer-inner{max-width:1100px;margin:0 auto;}
 .footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:2rem;margin-bottom:2rem;}
-.footer-logo{font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;}
-.footer-logo span{color:#0071e3;}
+.footer-logo img{height:32px;width:auto;margin-bottom:0.5rem;filter:brightness(0) invert(1);}
 .footer-brand p{color:rgba(255,255,255,0.5);font-size:0.82rem;max-width:220px;line-height:1.6;}
 .footer-links h4{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.8rem;}
 .footer-links ul{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
@@ -146,7 +161,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
 <body>
 
 <nav>
-  <div class="logo">Deal<span>Travel</span></div>
+  <div class="logo"><img src="logo-dealtravel.png" alt="Deal Travel"></div>
   <ul class="nav-links">
     <li><a href="#buscador">Buscar</a></li>
     <li><a href="#ofertas">Ofertas</a></li>
@@ -164,10 +179,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
 
 <section class="hero">
   <div style="position:relative;z-index:1;width:100%;">
-    <div style="margin-bottom:1.5rem;">
-      <div style="font-size:clamp(2.5rem,8vw,5.5rem);font-weight:800;letter-spacing:-3px;color:#1d1d1f;line-height:1;">Deal<span style="color:#0071e3;">Travel</span></div>
-      <div style="font-size:clamp(1rem,2.5vw,1.4rem);color:#6e6e73;font-weight:400;margin-top:0.5rem;">Deals que viajan. Alertas que llegan.</div>
-    </div>
+    <div class="hero-logo"><img src="logo-dealtravel.png" alt="Deal Travel"></div>
     <div class="hero-badge">Monitoreo en tiempo real · múltiples tiendas</div>
     <h1>Compra más,<br>paga <em>menos.</em></h1>
     <p>Te avisamos cuando bajen los precios en Amazon, Liverpool, Walmart, Mercado Libre, Nike y más tiendas.</p>
@@ -222,27 +234,29 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
   </div>
 </div>
 
+<!-- TIENDAS — lista simple -->
 <section class="tiendas">
   <div class="tiendas-inner">
     <p class="section-label">Donde buscamos</p>
     <h2 class="section-title">Tiendas monitoreadas</h2>
-    <div class="tiendas-grid">
-      <div class="tienda-card"><div class="tienda-icon">📦</div><div class="tienda-name">Amazon MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🛍️</div><div class="tienda-name">Liverpool</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🏪</div><div class="tienda-name">Walmart MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🛒</div><div class="tienda-name">Mercado Libre</div></div>
-      <div class="tienda-card"><div class="tienda-icon">👟</div><div class="tienda-name">Nike MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🏃</div><div class="tienda-name">Adidas MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">✈️</div><div class="tienda-name">Kiwi Vuelos</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🏨</div><div class="tienda-name">Trivago</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🌴</div><div class="tienda-name">Sirenis Hotels</div></div>
-      <div class="tienda-card"><div class="tienda-icon">👗</div><div class="tienda-name">Zara MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🛋️</div><div class="tienda-name">Puma MX</div></div>
-      <div class="tienda-card"><div class="tienda-icon">🏬</div><div class="tienda-name">H&M MX</div></div>
-    </div>
+    <ul class="tiendas-lista">
+      <li>Amazon MX</li>
+      <li>Mercado Libre</li>
+      <li>Walmart MX</li>
+      <li>Liverpool</li>
+      <li>Nike MX</li>
+      <li>Adidas MX</li>
+      <li>Puma MX</li>
+      <li>Zara MX</li>
+      <li>H&M MX</li>
+      <li>Trivago</li>
+      <li>Kiwi Vuelos</li>
+      <li>Sirenis Hotels</li>
+    </ul>
   </div>
 </section>
 
+<!-- CATEGORIAS -->
 <section class="categorias">
   <div class="categorias-inner">
     <p class="section-label">Categorías</p>
@@ -258,6 +272,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
   </div>
 </section>
 
+<!-- OFERTAS -->
 <section class="deals" id="ofertas">
   <div class="content-with-sidebar">
     <div>
@@ -268,6 +283,15 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
         </div>
         <div id="total-ofertas" style="font-size:0.8rem;color:#6e6e73;"></div>
       </div>
+
+      <!-- HOT DEALS -->
+      <div class="hot-deals">
+        <div class="hot-deals-title">🔥 Las más hot ahora</div>
+        <div class="hot-deals-grid" id="hot-grid">
+          <div class="loading" style="font-size:0.8rem;">Cargando...</div>
+        </div>
+      </div>
+
       <div class="deals-filters">
         <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
         <button class="filter-btn" onclick="filtrar('electronico',this)">📱 Electrónicos</button>
@@ -288,6 +312,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
   </div>
 </section>
 
+<!-- ALERTA -->
 <section class="alert-section" id="alerta">
   <div class="alert-inner">
     <div class="alert-header">
@@ -382,7 +407,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="footer-logo">Deal<span>Travel</span></div>
+        <div class="footer-logo"><img src="logo-dealtravel.png" alt="Deal Travel"></div>
         <p>Alertas inteligentes de precios para que compres más pagando menos.</p>
       </div>
       <div class="footer-links"><h4>Tiendas</h4><ul><li><a href="#">Amazon MX</a></li><li><a href="#">Mercado Libre</a></li><li><a href="#">Walmart MX</a></li><li><a href="#">Nike MX</a></li></ul></div>
@@ -412,14 +437,31 @@ async function cargarOfertas() {
     if(ofertas && ofertas.length > 0) {
       todasLasOfertas = ofertas;
       document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
+      renderHotDeals(ofertas);
       renderOfertas(ofertas);
     } else {
-      document.getElementById('deals-grid').innerHTML = '<div class="no-results">No hay ofertas disponibles en este momento.</div>';
+      document.getElementById('deals-grid').innerHTML = '<div class="no-results">No hay ofertas disponibles.</div>';
+      document.getElementById('hot-grid').innerHTML = '';
     }
   } catch(e) {
-    console.log('Error cargando ofertas:', e);
-    document.getElementById('deals-grid').innerHTML = '<div class="no-results">Error cargando ofertas. Intenta de nuevo.</div>';
+    document.getElementById('deals-grid').innerHTML = '<div class="no-results">Error cargando ofertas.</div>';
   }
+}
+
+function renderHotDeals(ofertas) {
+  // Tomar las 4 primeras que no sean viajes para mostrar como hot deals
+  const hot = ofertas.filter(o => o.tipo !== 'viajes').slice(0, 4);
+  const grid = document.getElementById('hot-grid');
+  if(!hot.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = hot.map(o => `
+    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <div class="hot-card">
+        <div class="hot-card-store">${o.fuente}</div>
+        <div class="hot-card-title">${o.destino}</div>
+        <div class="hot-card-price">${o.precio_fmt}</div>
+        <div class="hot-card-promo">${o.tipo_promo}</div>
+      </div>
+    </a>`).join('');
 }
 
 function renderOfertas(ofertas) {
@@ -454,23 +496,16 @@ async function buscarOfertas() {
   const q = document.getElementById('search-producto').value.toLowerCase().trim();
   const cat = document.getElementById('search-categoria').value;
   const max = parseFloat(document.getElementById('search-precio').value) || Infinity;
-
   try {
     let url = `${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=200`;
     if(cat && cat !== 'todas') url += `&tipo=eq.${cat}`;
-
-    const res = await fetch(url, {
-      headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}
-    });
+    const res = await fetch(url, {headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}});
     let ofertas = await res.json();
-
     if(q) ofertas = ofertas.filter(o => (o.destino||'').toLowerCase().includes(q) || (o.palabras_clave||'').toLowerCase().includes(q) || (o.fuente||'').toLowerCase().includes(q));
     if(max < Infinity) ofertas = ofertas.filter(o => o.precio <= max);
-
     const grid = document.getElementById('search-grid');
     const count = document.getElementById('search-count');
     document.getElementById('search-results').classList.add('visible');
-
     if(ofertas.length === 0) {
       grid.innerHTML = '<div class="no-results">No encontramos ofertas. Intenta con otro término.</div>';
       count.textContent = 'Sin resultados';
@@ -497,14 +532,11 @@ async function buscarOfertas() {
         </div>`).join('');
       count.textContent = `${ofertas.length} oferta${ofertas.length>1?'s':''} encontrada${ofertas.length>1?'s':''}`;
     }
-
     if(q) {
       document.getElementById('alerta-producto-nombre').textContent = q;
       document.getElementById('alerta-rapida').style.display = 'block';
     }
-  } catch(e) {
-    console.log('Error buscando:', e);
-  }
+  } catch(e) { console.log('Error buscando:', e); }
 }
 
 document.getElementById('search-producto').addEventListener('keydown', e => { if(e.key==='Enter') buscarOfertas(); });
@@ -546,10 +578,7 @@ async function submitAlert() {
   const presupuesto = document.getElementById('presupuesto').value;
   const email = document.getElementById('email').value.trim();
   const telefono = document.getElementById('telefono').value.trim();
-  if(!producto || !presupuesto || !email) {
-    alert('Por favor completa: producto, precio máximo y email.');
-    return;
-  }
+  if(!producto || !presupuesto || !email) { alert('Por favor completa: producto, precio máximo y email.'); return; }
   const btn = document.querySelector('.form-submit');
   btn.disabled = true;
   btn.textContent = 'Guardando...';
