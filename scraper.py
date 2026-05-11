@@ -13,6 +13,8 @@ AMAZON_TAG     = "dealtravelmx-20"
 
 TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"]
 
+PALABRAS_TECNICAS = ["Amazon","Rush","Framework","Router","Module","Plugin","SDK","API","Library","Package","Bundle","Core","Utils","Helper","Service","Client","Server","Manager","Handler","Provider","Factory","Builder","Controller","Repository","Interface","Abstract","Base","Mock","Test","Stub","Proxy","Adapter","Decorator","Observer","Iterator","Generator","Middleware","Interceptor","Validator","Serializer","Deserializer","Encoder","Decoder","Parser","Formatter","Transformer","Converter","Mapper","Processor","Executor","Dispatcher","Emitter","Listener","Subscriber","Publisher","Broker","Registry","Container","Injector","Resolver","Loader","Scanner","Crawler","Scraper","Spider","Bot","Agent","Worker","Task","Job","Queue","Cache","Store","Repository","Dao","Dto","Vo","Po","Bo","Entity","Model","Schema","Migration","Seed","Fixture","Mock","Fake","Stub","Dummy","Spy"]
+
 CATEGORIAS_KEYWORDS = {
     "electronico": ["celular","iphone","samsung","laptop","tablet","tv","audifonos","smartwatch","nintendo","playstation","xbox","camara","apple","macbook","ipad"],
     "moda": ["ropa","zapatos","tenis","vestido","camisa","pantalon","bolsa","nike","adidas","zara","puma","shein","lacoste"],
@@ -41,6 +43,20 @@ def oferta_ya_existe(destino, precio, fuente):
         return len(r.json()) > 0
     except:
         return False
+
+def es_titulo_valido(titulo):
+    """Filtra títulos técnicos o inválidos de Amazon"""
+    if len(titulo) < 8:
+        return False
+    for palabra in PALABRAS_TECNICAS:
+        if palabra in titulo:
+            return False
+    # Filtrar si tiene muchas mayúsculas juntas (nombres de código)
+    palabras = titulo.split()
+    tecnicas = sum(1 for p in palabras if p[0].isupper() and len(p) > 5 and p.isalpha())
+    if tecnicas >= 2 and len(palabras) <= 3:
+        return False
+    return True
 
 def scrape_mercadolibre():
     ofertas = []
@@ -112,13 +128,22 @@ def scrape_amazon():
         try:
             url = f"https://www.amazon.com.mx/s?k={query.replace(' ','+')}"
             r = requests.get(url, headers=headers, timeout=15)
+
+            # Intentar extraer títulos reales de productos
+            titulos = re.findall(r'<span[^>]*class="[^"]*a-text-normal[^"]*"[^>]*>([^<]{10,80})</span>', r.text)
+            if not titulos:
+                titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
+
+            # Filtrar títulos técnicos
+            titulos = [t.strip() for t in titulos if es_titulo_valido(t.strip())]
+
             precios = re.findall(r'\$\s*(\d{1,3}(?:,\d{3})*)', r.text)
-            titulos = re.findall(r'"name"\s*:\s*"([^"]{10,80})"', r.text)
+
             if precios and titulos:
-                for i, (p, t) in enumerate(zip(precios[:3], titulos[:3])):
+                for i, (p, t) in enumerate(zip(precios[:4], titulos[:4])):
                     try:
                         precio = float(p.replace(",", ""))
-                        if 500 <= precio <= PRECIO_MAX_MXN:
+                        if 300 <= precio <= PRECIO_MAX_MXN:
                             ofertas.append({
                                 "fuente": "Amazon MX",
                                 "tipo": tipo,
@@ -529,7 +554,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v4")
+    print("Deal Travel Scraper v5")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
