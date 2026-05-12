@@ -10,8 +10,10 @@ SUPABASE_KEY   = "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT"
 PRECIO_MAX_MXN = 50000
 AWIN_ID        = "2876425"
 AMAZON_TAG     = "dealtravelmx-20"
+EXPEDIA_LINK   = "https://www.awin1.com/cread.php?awinmid=117689&awinaffid=2876425&ued=https%3A%2F%2Fwww.expedia.mx%2FHotels"
+HOTELES_LINK   = "https://www.awin1.com/cread.php?awinmid=117687&awinaffid=2876425&ued=https%3A%2F%2Fwww.hoteles.com"
 
-TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels","Amazon MX","Mercado Libre"]
+TIENDAS_FIJAS = ["Nike MX","Adidas MX","Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels","Amazon MX","Mercado Libre","Expedia MX","Hoteles.com MX"]
 
 CATEGORIAS_KEYWORDS = {
     "electronico": ["celular","iphone","samsung","laptop","tablet","tv","audifonos","smartwatch","nintendo","playstation","xbox","camara","apple","macbook","ipad"],
@@ -262,6 +264,8 @@ def scrape_hm():
 
 def scrape_awin_viajes():
     ofertas = []
+
+    # Trivago
     destinos_trivago = [
         ("Cancún, México", 1200),
         ("Ciudad de México", 800),
@@ -285,6 +289,8 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
+
+    # Kiwi
     vuelos_kiwi = [
         ("CDMX → Cancún", 1800),
         ("CDMX → Los Cabos", 2100),
@@ -308,6 +314,8 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
+
+    # Sirenis Hotels
     sirenis = [
         ("Sirenis Punta Cana Resort — Todo Incluido", 3200),
         ("Sirenis Riviera Maya — Todo Incluido", 2800),
@@ -326,6 +334,57 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
+
+    # Expedia MX
+    destinos_expedia = [
+        ("Cancún", 1350),
+        ("Los Cabos", 1800),
+        ("Puerto Vallarta", 1250),
+        ("Ciudad de México", 950),
+        ("Playa del Carmen", 1450),
+        ("Tulum", 1600),
+        ("Oaxaca", 1050),
+        ("Guadalajara", 980),
+    ]
+    for destino, precio in destinos_expedia:
+        ofertas.append({
+            "fuente": "Expedia MX",
+            "tipo": "viajes",
+            "destino": f"Hotel en {destino} — Expedia",
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "url": EXPEDIA_LINK,
+            "tipo_promo": "Precio por noche desde",
+            "palabras_clave": "hotel, viaje, hospedaje, expedia",
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
+
+    # Hoteles.com MX
+    destinos_hoteles = [
+        ("Cancún", 1300),
+        ("Los Cabos", 1750),
+        ("Puerto Vallarta", 1200),
+        ("Ciudad de México", 900),
+        ("Playa del Carmen", 1400),
+        ("Tulum", 1550),
+        ("Oaxaca", 1000),
+        ("Monterrey", 950),
+    ]
+    for destino, precio in destinos_hoteles:
+        ofertas.append({
+            "fuente": "Hoteles.com MX",
+            "tipo": "viajes",
+            "destino": f"Hotel en {destino} — Hoteles.com",
+            "precio": precio,
+            "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "url": HOTELES_LINK,
+            "tipo_promo": "Precio por noche desde",
+            "palabras_clave": "hotel, viaje, hospedaje, hoteles.com",
+            "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+            "activa": True
+        })
+
     print(f"[Awin Viajes] {len(ofertas)} ofertas")
     return ofertas
 
@@ -337,7 +396,8 @@ def marcar_inactivas_viejas():
     }
     TIENDAS_SCRAPER = [
         "Amazon MX","Mercado Libre","Nike MX","Adidas MX",
-        "Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels"
+        "Puma MX","Zara MX","H&M MX","Trivago","Kiwi","Sirenis Hotels",
+        "Expedia MX","Hoteles.com MX"
     ]
     try:
         for tienda in TIENDAS_SCRAPER:
@@ -432,7 +492,7 @@ def revisar_alertas(todas_ofertas):
                 matches_nuevos = []
                 for oferta in ofertas_supabase:
                     if oferta["id"] in ya_notificados:
-                        continue  # Ya fue notificada antes, skip
+                        continue
                     producto_oferta = oferta.get("destino", "").lower()
                     precio_ok = oferta["precio"] <= presupuesto
                     tienda_ok = not fuente_alerta or fuente_alerta == "Cualquier tienda" or fuente_alerta.lower() in oferta["fuente"].lower()
