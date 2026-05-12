@@ -603,11 +603,10 @@ document.getElementById('search-producto').addEventListener('keydown', e => { if
 function filtrar(tipo, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  if(tipo === 'todos') {
-    renderOfertas(todasLasOfertas);
-  } else {
-    renderOfertas(todasLasOfertas.filter(o => o.tipo === tipo));
-  }
+  ofertasFiltradas = tipo === 'todos' ? todasLasOfertas : todasLasOfertas.filter(o => o.tipo === tipo);
+  ofertasMostradas = OFERTAS_POR_PAGINA;
+  renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+  actualizarBotonCargarMas();
 }
 
 function filtrarCategoria(tipo) {
