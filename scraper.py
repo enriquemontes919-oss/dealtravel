@@ -28,21 +28,14 @@ CATEGORIAS_KEYWORDS = {
 MESES_ES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
 
 def generar_fechas_viaje(indice):
-    """Genera rangos de fechas dinámicos rotativos según el índice del destino"""
     hoy = datetime.now()
-
-    # Próximo viernes
     dias_hasta_viernes = (4 - hoy.weekday()) % 7
     if dias_hasta_viernes == 0:
         dias_hasta_viernes = 7
     viernes = hoy + timedelta(days=dias_hasta_viernes)
     domingo = viernes + timedelta(days=2)
-
-    # Próximas 2 semanas
     en_2_semanas = hoy + timedelta(days=14)
     en_3_semanas = hoy + timedelta(days=21)
-
-    # Próximo mes
     en_1_mes = hoy + timedelta(days=30)
     en_5_semanas = hoy + timedelta(days=37)
 
@@ -50,12 +43,15 @@ def generar_fechas_viaje(indice):
         return f"{d.day} {MESES_ES[d.month - 1]}"
 
     rangos = [
-        f"{fmt(viernes)} – {fmt(domingo)}",           # fin de semana
-        f"{fmt(en_2_semanas)} – {fmt(en_3_semanas)}", # 2 semanas
-        f"{fmt(en_1_mes)} – {fmt(en_5_semanas)}",     # mes siguiente
+        f"{fmt(viernes)} – {fmt(domingo)}",
+        f"{fmt(en_2_semanas)} – {fmt(en_3_semanas)}",
+        f"{fmt(en_1_mes)} – {fmt(en_5_semanas)}",
     ]
-
     return rangos[indice % 3]
+
+def precio_original(precio, descuento_pct):
+    """Calcula precio original dado el precio con descuento y el porcentaje"""
+    return round(precio / (1 - descuento_pct / 100))
 
 def detectar_categoria(texto):
     texto_lower = texto.lower()
@@ -79,34 +75,37 @@ def oferta_ya_existe(destino, precio, fuente):
 def scrape_amazon():
     ofertas = []
     productos = [
-        ("Apple iPhone 15 128GB", 14999, "electronico", "iphone+15+128gb"),
-        ("Samsung Galaxy S24 256GB", 13999, "electronico", "samsung+galaxy+s24"),
-        ("MacBook Air M2 256GB", 23999, "electronico", "macbook+air+m2"),
-        ("iPad 10ma generación 64GB", 8999, "electronico", "ipad+10+generacion"),
-        ("Sony WH-1000XM5 Audífonos", 5999, "electronico", "sony+wh1000xm5"),
-        ("Nintendo Switch OLED", 7999, "electronico", "nintendo+switch+oled"),
-        ("Samsung Smart TV 55\" 4K", 9999, "electronico", "samsung+smart+tv+55"),
-        ("Laptop HP 15 Core i5 8GB", 9499, "electronico", "laptop+hp+core+i5"),
-        ("PlayStation 5 Slim", 11999, "electronico", "playstation+5+slim"),
-        ("Apple Watch Series 9", 7499, "electronico", "apple+watch+series+9"),
-        ("Cafetera Nespresso Vertuo", 2499, "hogar", "cafetera+nespresso+vertuo"),
-        ("Instant Pot Duo 7 en 1", 1899, "hogar", "instant+pot+duo"),
-        ("Roomba i3 Aspiradora Robot", 4999, "hogar", "roomba+i3"),
-        ("Perfume Carolina Herrera Good Girl", 1899, "belleza", "carolina+herrera+good+girl"),
-        ("Crema Facial CeraVe Hidratante", 299, "belleza", "cerave+crema+facial"),
-        ("Tenis Nike Air Max 270 Hombre", 2199, "moda", "nike+air+max+270"),
-        ("Mochila Samsonite 20L", 899, "moda", "mochila+samsonite"),
-        ("Báscula Digital Xiaomi", 399, "hogar", "bascula+digital+xiaomi"),
+        ("Apple iPhone 15 128GB", 14999, 20, "electronico", "iphone+15+128gb"),
+        ("Samsung Galaxy S24 256GB", 13999, 18, "electronico", "samsung+galaxy+s24"),
+        ("MacBook Air M2 256GB", 23999, 15, "electronico", "macbook+air+m2"),
+        ("iPad 10ma generación 64GB", 8999, 22, "electronico", "ipad+10+generacion"),
+        ("Sony WH-1000XM5 Audífonos", 5999, 25, "electronico", "sony+wh1000xm5"),
+        ("Nintendo Switch OLED", 7999, 15, "electronico", "nintendo+switch+oled"),
+        ("Samsung Smart TV 55\" 4K", 9999, 30, "electronico", "samsung+smart+tv+55"),
+        ("Laptop HP 15 Core i5 8GB", 9499, 20, "electronico", "laptop+hp+core+i5"),
+        ("PlayStation 5 Slim", 11999, 15, "electronico", "playstation+5+slim"),
+        ("Apple Watch Series 9", 7499, 18, "electronico", "apple+watch+series+9"),
+        ("Cafetera Nespresso Vertuo", 2499, 25, "hogar", "cafetera+nespresso+vertuo"),
+        ("Instant Pot Duo 7 en 1", 1899, 20, "hogar", "instant+pot+duo"),
+        ("Roomba i3 Aspiradora Robot", 4999, 30, "hogar", "roomba+i3"),
+        ("Perfume Carolina Herrera Good Girl", 1899, 20, "belleza", "carolina+herrera+good+girl"),
+        ("Crema Facial CeraVe Hidratante", 299, 15, "belleza", "cerave+crema+facial"),
+        ("Tenis Nike Air Max 270 Hombre", 2199, 25, "moda", "nike+air+max+270"),
+        ("Mochila Samsonite 20L", 899, 20, "moda", "mochila+samsonite"),
+        ("Báscula Digital Xiaomi", 399, 18, "hogar", "bascula+digital+xiaomi"),
     ]
-    for nombre, precio, tipo, query in productos:
+    for nombre, precio, descuento, tipo, query in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Amazon MX",
             "tipo": tipo,
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": f"https://www.amazon.com.mx/s?k={query}&tag={AMAZON_TAG}",
-            "tipo_promo": "Oferta Amazon",
+            "tipo_promo": f"-{descuento}% Oferta Amazon",
             "palabras_clave": query.replace("+", ", "),
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -151,6 +150,8 @@ def scrape_mercadolibre():
                     "destino": item["title"][:80],
                     "precio": precio,
                     "precio_fmt": f"${precio:,.0f} MXN",
+                    "precio_original": round(original),
+                    "descuento_pct": descuento,
                     "url": item["permalink"],
                     "tipo_promo": f"-{descuento}% descuento",
                     "palabras_clave": query,
@@ -165,24 +166,27 @@ def scrape_mercadolibre():
 def scrape_nike():
     ofertas = []
     productos = [
-        ("Nike Air Max 270", 2499, "tenis, running, nike"),
-        ("Nike Revolution 6", 1299, "tenis, running, nike"),
-        ("Nike Dri-FIT Camiseta", 699, "ropa deportiva, nike"),
-        ("Nike Air Force 1", 1999, "tenis, nike, casual"),
-        ("Nike Zoom Pegasus", 2899, "running, tenis, nike"),
-        ("Nike Flex Experience", 1499, "tenis, gym, nike"),
-        ("Nike Pro Shorts", 599, "ropa deportiva, nike, gym"),
-        ("Nike Brasilia Mochila", 899, "accesorios, nike"),
+        ("Nike Air Max 270", 2499, 20, "tenis, running, nike"),
+        ("Nike Revolution 6", 1299, 25, "tenis, running, nike"),
+        ("Nike Dri-FIT Camiseta", 699, 30, "ropa deportiva, nike"),
+        ("Nike Air Force 1", 1999, 20, "tenis, nike, casual"),
+        ("Nike Zoom Pegasus", 2899, 15, "running, tenis, nike"),
+        ("Nike Flex Experience", 1499, 25, "tenis, gym, nike"),
+        ("Nike Pro Shorts", 599, 30, "ropa deportiva, nike, gym"),
+        ("Nike Brasilia Mochila", 899, 20, "accesorios, nike"),
     ]
-    for nombre, precio, keywords in productos:
+    for nombre, precio, descuento, keywords in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Nike MX",
             "tipo": "moda",
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": "https://www.nike.com/mx/w/sale-3yaep",
-            "tipo_promo": "Sale Nike MX",
+            "tipo_promo": f"-{descuento}% Sale Nike MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -193,24 +197,27 @@ def scrape_nike():
 def scrape_adidas():
     ofertas = []
     productos = [
-        ("Adidas Ultraboost 22", 3299, "tenis, running, adidas"),
-        ("Adidas Stan Smith", 1799, "tenis, casual, adidas"),
-        ("Adidas Superstar", 1599, "tenis, casual, adidas"),
-        ("Adidas Tiro Pants", 799, "ropa deportiva, adidas, gym"),
-        ("Adidas Forum Low", 1899, "tenis, casual, adidas"),
-        ("Adidas Entrada Jersey", 499, "ropa deportiva, futbol, adidas"),
-        ("Adidas Essentials Hoodie", 999, "ropa, adidas, casual"),
-        ("Adidas Predator Accuracy", 2499, "tenis futbol, adidas"),
+        ("Adidas Ultraboost 22", 3299, 25, "tenis, running, adidas"),
+        ("Adidas Stan Smith", 1799, 20, "tenis, casual, adidas"),
+        ("Adidas Superstar", 1599, 20, "tenis, casual, adidas"),
+        ("Adidas Tiro Pants", 799, 30, "ropa deportiva, adidas, gym"),
+        ("Adidas Forum Low", 1899, 20, "tenis, casual, adidas"),
+        ("Adidas Entrada Jersey", 499, 35, "ropa deportiva, futbol, adidas"),
+        ("Adidas Essentials Hoodie", 999, 25, "ropa, adidas, casual"),
+        ("Adidas Predator Accuracy", 2499, 20, "tenis futbol, adidas"),
     ]
-    for nombre, precio, keywords in productos:
+    for nombre, precio, descuento, keywords in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Adidas MX",
             "tipo": "moda",
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": "https://www.adidas.mx/sale",
-            "tipo_promo": "Sale Adidas MX",
+            "tipo_promo": f"-{descuento}% Sale Adidas MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -221,21 +228,24 @@ def scrape_adidas():
 def scrape_puma():
     ofertas = []
     productos = [
-        ("Puma Suede Classic XXI", 1299, "tenis, casual, puma"),
-        ("Puma RS-X", 1599, "tenis, casual, puma"),
-        ("Puma Camiseta Teamliga", 449, "ropa, futbol, puma"),
-        ("Puma Softride Enzo", 1199, "tenis, running, puma"),
-        ("Puma Essentials Hoodie", 799, "ropa, casual, puma"),
+        ("Puma Suede Classic XXI", 1299, 20, "tenis, casual, puma"),
+        ("Puma RS-X", 1599, 25, "tenis, casual, puma"),
+        ("Puma Camiseta Teamliga", 449, 30, "ropa, futbol, puma"),
+        ("Puma Softride Enzo", 1199, 20, "tenis, running, puma"),
+        ("Puma Essentials Hoodie", 799, 25, "ropa, casual, puma"),
     ]
-    for nombre, precio, keywords in productos:
+    for nombre, precio, descuento, keywords in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Puma MX",
             "tipo": "moda",
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": "https://mx.puma.com/es/sale",
-            "tipo_promo": "Sale Puma MX",
+            "tipo_promo": f"-{descuento}% Sale Puma MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -246,22 +256,25 @@ def scrape_puma():
 def scrape_zara():
     ofertas = []
     productos = [
-        ("Zara Blazer Oversized", 1299, "ropa, moda, zara, mujer"),
-        ("Zara Jeans Slim", 799, "pantalon, moda, zara"),
-        ("Zara Vestido Midi", 999, "vestido, moda, zara, mujer"),
-        ("Zara Camisa Oversize", 699, "camisa, moda, zara"),
-        ("Zara Zapatillas Piel", 1499, "zapatos, moda, zara, mujer"),
-        ("Zara Bolso Tote", 899, "bolsa, accesorios, zara"),
+        ("Zara Blazer Oversized", 1299, 30, "ropa, moda, zara, mujer"),
+        ("Zara Jeans Slim", 799, 20, "pantalon, moda, zara"),
+        ("Zara Vestido Midi", 999, 25, "vestido, moda, zara, mujer"),
+        ("Zara Camisa Oversize", 699, 30, "camisa, moda, zara"),
+        ("Zara Zapatillas Piel", 1499, 20, "zapatos, moda, zara, mujer"),
+        ("Zara Bolso Tote", 899, 25, "bolsa, accesorios, zara"),
     ]
-    for nombre, precio, keywords in productos:
+    for nombre, precio, descuento, keywords in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Zara MX",
             "tipo": "moda",
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": "https://www.zara.com/mx/es/sale-l1000.html",
-            "tipo_promo": "Sale Zara MX",
+            "tipo_promo": f"-{descuento}% Sale Zara MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -272,21 +285,24 @@ def scrape_zara():
 def scrape_hm():
     ofertas = []
     productos = [
-        ("H&M Vestido Floral", 499, "vestido, moda, hm, mujer"),
-        ("H&M Jeans Skinny", 599, "pantalon, moda, hm"),
-        ("H&M Camiseta Basica", 199, "camiseta, moda, hm"),
-        ("H&M Sudadera Logo", 699, "ropa, casual, hm"),
-        ("H&M Chaqueta Denim", 899, "ropa, casual, hm"),
+        ("H&M Vestido Floral", 499, 30, "vestido, moda, hm, mujer"),
+        ("H&M Jeans Skinny", 599, 25, "pantalon, moda, hm"),
+        ("H&M Camiseta Basica", 199, 30, "camiseta, moda, hm"),
+        ("H&M Sudadera Logo", 699, 20, "ropa, casual, hm"),
+        ("H&M Chaqueta Denim", 899, 25, "ropa, casual, hm"),
     ]
-    for nombre, precio, keywords in productos:
+    for nombre, precio, descuento, keywords in productos:
+        orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "H&M MX",
             "tipo": "moda",
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": "https://www2.hm.com/es_mx/sale.html",
-            "tipo_promo": "Sale H&M MX",
+            "tipo_promo": f"-{descuento}% Sale H&M MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -297,18 +313,18 @@ def scrape_hm():
 def scrape_awin_viajes():
     ofertas = []
 
-    # Trivago
     destinos_trivago = [
-        ("Cancún, México", 1200),
-        ("Ciudad de México", 800),
-        ("Los Cabos", 1500),
-        ("Puerto Vallarta", 1100),
-        ("Playa del Carmen", 1300),
-        ("Tulum", 1400),
-        ("Oaxaca", 900),
-        ("Guadalajara", 850),
+        ("Cancún, México", 1200, 20),
+        ("Ciudad de México", 800, 15),
+        ("Los Cabos", 1500, 25),
+        ("Puerto Vallarta", 1100, 20),
+        ("Playa del Carmen", 1300, 22),
+        ("Tulum", 1400, 18),
+        ("Oaxaca", 900, 15),
+        ("Guadalajara", 850, 20),
     ]
-    for i, (destino, precio) in enumerate(destinos_trivago):
+    for i, (destino, precio, descuento) in enumerate(destinos_trivago):
+        orig = precio_original(precio, descuento)
         fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Trivago",
@@ -316,25 +332,27 @@ def scrape_awin_viajes():
             "destino": f"Hotel en {destino}",
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": f"https://www.awin1.com/cread.php?s=3330897&v=20563&q=474350&r={AWIN_ID}&ued=https://www.trivago.com.mx/?search/200-{destino.replace(' ','%20')}",
-            "tipo_promo": f"Precio por noche · {fechas}",
+            "tipo_promo": f"-{descuento}% · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, trivago",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
 
-    # Kiwi
     vuelos_kiwi = [
-        ("CDMX → Cancún", 1800),
-        ("CDMX → Los Cabos", 2100),
-        ("CDMX → Guadalajara", 900),
-        ("CDMX → Monterrey", 950),
-        ("CDMX → Miami", 4500),
-        ("CDMX → Nueva York", 5200),
-        ("CDMX → Madrid", 7800),
-        ("CDMX → Bogotá", 4200),
+        ("CDMX → Cancún", 1800, 15),
+        ("CDMX → Los Cabos", 2100, 18),
+        ("CDMX → Guadalajara", 900, 20),
+        ("CDMX → Monterrey", 950, 15),
+        ("CDMX → Miami", 4500, 22),
+        ("CDMX → Nueva York", 5200, 20),
+        ("CDMX → Madrid", 7800, 25),
+        ("CDMX → Bogotá", 4200, 18),
     ]
-    for i, (ruta, precio) in enumerate(vuelos_kiwi):
+    for i, (ruta, precio, descuento) in enumerate(vuelos_kiwi):
+        orig = precio_original(precio, descuento)
         fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Kiwi",
@@ -342,20 +360,22 @@ def scrape_awin_viajes():
             "destino": f"Vuelo {ruta}",
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": f"https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r={AWIN_ID}",
-            "tipo_promo": f"Vuelo desde · {fechas}",
+            "tipo_promo": f"-{descuento}% · {fechas}",
             "palabras_clave": "vuelo, avion, kiwi, viaje",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
 
-    # Sirenis Hotels
     sirenis = [
-        ("Sirenis Punta Cana Resort — Todo Incluido", 3200),
-        ("Sirenis Riviera Maya — Todo Incluido", 2800),
-        ("Sirenis Tropical Suites Tenerife", 2500),
+        ("Sirenis Punta Cana Resort — Todo Incluido", 3200, 25),
+        ("Sirenis Riviera Maya — Todo Incluido", 2800, 20),
+        ("Sirenis Tropical Suites Tenerife", 2500, 18),
     ]
-    for i, (nombre, precio) in enumerate(sirenis):
+    for i, (nombre, precio, descuento) in enumerate(sirenis):
+        orig = precio_original(precio, descuento)
         fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Sirenis Hotels",
@@ -363,25 +383,27 @@ def scrape_awin_viajes():
             "destino": nombre,
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": f"https://www.awin1.com/cread.php?s=3330897&v=20563&q=474350&r={AWIN_ID}&ued=https://www.sirenishotels.com",
-            "tipo_promo": f"Todo incluido · {fechas}",
+            "tipo_promo": f"-{descuento}% · {fechas}",
             "palabras_clave": "hotel, resort, todo incluido, sirenis",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
 
-    # Expedia MX
     destinos_expedia = [
-        ("Cancún", 1350),
-        ("Los Cabos", 1800),
-        ("Puerto Vallarta", 1250),
-        ("Ciudad de México", 950),
-        ("Playa del Carmen", 1450),
-        ("Tulum", 1600),
-        ("Oaxaca", 1050),
-        ("Guadalajara", 980),
+        ("Cancún", 1350, 20),
+        ("Los Cabos", 1800, 25),
+        ("Puerto Vallarta", 1250, 18),
+        ("Ciudad de México", 950, 15),
+        ("Playa del Carmen", 1450, 22),
+        ("Tulum", 1600, 20),
+        ("Oaxaca", 1050, 15),
+        ("Guadalajara", 980, 18),
     ]
-    for i, (destino, precio) in enumerate(destinos_expedia):
+    for i, (destino, precio, descuento) in enumerate(destinos_expedia):
+        orig = precio_original(precio, descuento)
         fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Expedia MX",
@@ -389,25 +411,27 @@ def scrape_awin_viajes():
             "destino": f"Hotel en {destino} — Expedia",
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": EXPEDIA_LINK,
-            "tipo_promo": f"Precio por noche · {fechas}",
+            "tipo_promo": f"-{descuento}% · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, expedia",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
 
-    # Hoteles.com MX
     destinos_hoteles = [
-        ("Cancún", 1300),
-        ("Los Cabos", 1750),
-        ("Puerto Vallarta", 1200),
-        ("Ciudad de México", 900),
-        ("Playa del Carmen", 1400),
-        ("Tulum", 1550),
-        ("Oaxaca", 1000),
-        ("Monterrey", 950),
+        ("Cancún", 1300, 20),
+        ("Los Cabos", 1750, 22),
+        ("Puerto Vallarta", 1200, 18),
+        ("Ciudad de México", 900, 15),
+        ("Playa del Carmen", 1400, 20),
+        ("Tulum", 1550, 25),
+        ("Oaxaca", 1000, 15),
+        ("Monterrey", 950, 18),
     ]
-    for i, (destino, precio) in enumerate(destinos_hoteles):
+    for i, (destino, precio, descuento) in enumerate(destinos_hoteles):
+        orig = precio_original(precio, descuento)
         fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Hoteles.com MX",
@@ -415,8 +439,10 @@ def scrape_awin_viajes():
             "destino": f"Hotel en {destino} — Hoteles.com",
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
+            "precio_original": orig,
+            "descuento_pct": descuento,
             "url": HOTELES_LINK,
-            "tipo_promo": f"Precio por noche · {fechas}",
+            "tipo_promo": f"-{descuento}% · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, hoteles.com",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -489,43 +515,31 @@ def revisar_alertas(todas_ofertas):
         return
     try:
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
-
         r = requests.get(f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*", headers=headers)
         alertas = r.json()
         print(f"[Alertas] {len(alertas)} alertas activas")
-
         r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
         ofertas_supabase = r2.json()
         print(f"[Ofertas] {len(ofertas_supabase)} ofertas en Supabase")
-
         ahora = datetime.now()
-
         for alerta in alertas:
             try:
-                # 1. Verificar expiración
                 dias_alerta = alerta.get("dias_alerta") or 7
                 fecha_creacion = datetime.fromisoformat(alerta["created_at"].replace("Z", "+00:00")).replace(tzinfo=None)
                 dias_transcurridos = (ahora - fecha_creacion).days
-
                 if dias_transcurridos >= dias_alerta:
                     requests.patch(
                         f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
                         headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
-                        json={"activa": False},
-                        timeout=10
+                        json={"activa": False}, timeout=10
                     )
                     print(f"[Alertas] Alerta {alerta['id']} expirada")
                     continue
-
-                # 2. IDs ya notificados para esta alerta
                 ya_notificados = set(alerta.get("ofertas_notificadas") or [])
-
-                # 3. Buscar matches solo con ofertas NO notificadas antes
                 producto_alerta = alerta.get("destino", "").lower()
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto = float(alerta.get("presupuesto") or 99999)
                 fuente_alerta = alerta.get("fuente", "Cualquier tienda")
-
                 matches_nuevos = []
                 for oferta in ofertas_supabase:
                     if oferta["id"] in ya_notificados:
@@ -536,38 +550,35 @@ def revisar_alertas(todas_ofertas):
                     producto_match = any(word in producto_oferta for word in palabras_alerta)
                     if precio_ok and tienda_ok and producto_match:
                         matches_nuevos.append(oferta)
-
                 if not matches_nuevos:
-                    print(f"[Alertas] Alerta {alerta['id']} — sin ofertas nuevas, no se envía email")
+                    print(f"[Alertas] Alerta {alerta['id']} — sin ofertas nuevas")
                     continue
-
-                # 4. Enviar email solo con ofertas nuevas
-                print(f"[Match] {alerta['email']} -> {len(matches_nuevos)} ofertas NUEVAS encontradas")
+                print(f"[Match] {alerta['email']} -> {len(matches_nuevos)} ofertas NUEVAS")
                 enviar_email_consolidado(alerta, matches_nuevos, dias_alerta, dias_transcurridos)
-
-                # 5. Guardar IDs notificados y actualizar ultimo_envio
                 nuevos_ids = list(ya_notificados) + [o["id"] for o in matches_nuevos]
                 requests.patch(
                     f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
                     headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
-                    json={
-                        "ultimo_envio": ahora.isoformat(),
-                        "ofertas_notificadas": nuevos_ids
-                    },
+                    json={"ultimo_envio": ahora.isoformat(), "ofertas_notificadas": nuevos_ids},
                     timeout=10
                 )
-
             except Exception as e:
                 print(f"[Alertas] Error procesando alerta {alerta.get('id')}: {e}")
-
     except Exception as e:
         print(f"[Alertas] Error general: {e}")
 
 def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
     dias_restantes = dias_alerta - dias_transcurridos
-
     ofertas_html = ""
     for oferta in ofertas[:8]:
+        precio_orig = oferta.get("precio_original")
+        descuento = oferta.get("descuento_pct")
+        precio_orig_html = ""
+        if precio_orig and precio_orig > oferta["precio"]:
+            precio_orig_html = f'<span style="text-decoration:line-through;color:#aeaeb2;font-size:0.8rem;">${precio_orig:,.0f}</span> '
+        descuento_badge = ""
+        if descuento:
+            descuento_badge = f'<span style="background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;">-{descuento}%</span>'
         ofertas_html += f"""
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
@@ -577,7 +588,7 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
                     <p style="margin:0;font-size:0.75rem;color:#64748b;">{oferta['tipo_promo']}</p>
                 </div>
                 <div style="text-align:right;">
-                    <p style="margin:0 0 8px;font-size:1.4rem;font-weight:800;color:#0ea5e9;">{oferta['precio_fmt']}</p>
+                    <p style="margin:0 0 4px;">{precio_orig_html}<span style="font-size:1.4rem;font-weight:800;color:#0ea5e9;">{oferta['precio_fmt']}</span>{descuento_badge}</p>
                     <a href="{oferta['url']}" style="background:#0071e3;color:#fff;padding:6px 14px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:600;">Ver →</a>
                 </div>
             </div>
@@ -646,7 +657,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v8")
+    print("Deal Travel Scraper v9")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
