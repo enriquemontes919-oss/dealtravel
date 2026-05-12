@@ -297,9 +297,13 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
         <button class="filter-btn" onclick="filtrar('belleza',this)">💄 Belleza</button>
         <button class="filter-btn" onclick="filtrar('viajes',this)">✈️ Viajes</button>
       </div>
-      <div class="deals-grid" id="deals-grid">
-        <div class="loading">Cargando ofertas...</div>
-      </div>
+     <div class="deals-grid" id="deals-grid">
+  <div class="loading">Cargando ofertas...</div>
+</div>
+<div style="text-align:center;margin-top:2rem;">
+  <p id="info-ofertas" style="font-size:0.8rem;color:#6e6e73;margin-bottom:1rem;"></p>
+  <button id="btn-cargar-mas" onclick="cargarMasOfertas()" style="display:none;background:#fff;color:#0071e3;border:1.5px solid #0071e3;border-radius:980px;padding:0.8rem 2rem;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;">Ver 20 ofertas más</button>
+</div>
     </div>
     <div class="sidebar-ad-stack">
       <div class="ad-slot ad-300x250">
