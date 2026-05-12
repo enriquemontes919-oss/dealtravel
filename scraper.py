@@ -25,6 +25,38 @@ CATEGORIAS_KEYWORDS = {
     "viajes": ["hotel","vuelo","viaje","hospedaje","resort","vacaciones"],
 }
 
+MESES_ES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
+
+def generar_fechas_viaje(indice):
+    """Genera rangos de fechas dinámicos rotativos según el índice del destino"""
+    hoy = datetime.now()
+
+    # Próximo viernes
+    dias_hasta_viernes = (4 - hoy.weekday()) % 7
+    if dias_hasta_viernes == 0:
+        dias_hasta_viernes = 7
+    viernes = hoy + timedelta(days=dias_hasta_viernes)
+    domingo = viernes + timedelta(days=2)
+
+    # Próximas 2 semanas
+    en_2_semanas = hoy + timedelta(days=14)
+    en_3_semanas = hoy + timedelta(days=21)
+
+    # Próximo mes
+    en_1_mes = hoy + timedelta(days=30)
+    en_5_semanas = hoy + timedelta(days=37)
+
+    def fmt(d):
+        return f"{d.day} {MESES_ES[d.month - 1]}"
+
+    rangos = [
+        f"{fmt(viernes)} – {fmt(domingo)}",           # fin de semana
+        f"{fmt(en_2_semanas)} – {fmt(en_3_semanas)}", # 2 semanas
+        f"{fmt(en_1_mes)} – {fmt(en_5_semanas)}",     # mes siguiente
+    ]
+
+    return rangos[indice % 3]
+
 def detectar_categoria(texto):
     texto_lower = texto.lower()
     for cat, keywords in CATEGORIAS_KEYWORDS.items():
@@ -276,7 +308,8 @@ def scrape_awin_viajes():
         ("Oaxaca", 900),
         ("Guadalajara", 850),
     ]
-    for destino, precio in destinos_trivago:
+    for i, (destino, precio) in enumerate(destinos_trivago):
+        fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Trivago",
             "tipo": "viajes",
@@ -284,7 +317,7 @@ def scrape_awin_viajes():
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
             "url": f"https://www.awin1.com/cread.php?s=3330897&v=20563&q=474350&r={AWIN_ID}&ued=https://www.trivago.com.mx/?search/200-{destino.replace(' ','%20')}",
-            "tipo_promo": "Precio por noche desde",
+            "tipo_promo": f"Precio por noche · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, trivago",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -301,7 +334,8 @@ def scrape_awin_viajes():
         ("CDMX → Madrid", 7800),
         ("CDMX → Bogotá", 4200),
     ]
-    for ruta, precio in vuelos_kiwi:
+    for i, (ruta, precio) in enumerate(vuelos_kiwi):
+        fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Kiwi",
             "tipo": "viajes",
@@ -309,7 +343,7 @@ def scrape_awin_viajes():
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN",
             "url": f"https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r={AWIN_ID}",
-            "tipo_promo": "Vuelo desde",
+            "tipo_promo": f"Vuelo desde · {fechas}",
             "palabras_clave": "vuelo, avion, kiwi, viaje",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -321,7 +355,8 @@ def scrape_awin_viajes():
         ("Sirenis Riviera Maya — Todo Incluido", 2800),
         ("Sirenis Tropical Suites Tenerife", 2500),
     ]
-    for nombre, precio in sirenis:
+    for i, (nombre, precio) in enumerate(sirenis):
+        fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Sirenis Hotels",
             "tipo": "viajes",
@@ -329,7 +364,7 @@ def scrape_awin_viajes():
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
             "url": f"https://www.awin1.com/cread.php?s=3330897&v=20563&q=474350&r={AWIN_ID}&ued=https://www.sirenishotels.com",
-            "tipo_promo": "Todo incluido desde",
+            "tipo_promo": f"Todo incluido · {fechas}",
             "palabras_clave": "hotel, resort, todo incluido, sirenis",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -346,7 +381,8 @@ def scrape_awin_viajes():
         ("Oaxaca", 1050),
         ("Guadalajara", 980),
     ]
-    for destino, precio in destinos_expedia:
+    for i, (destino, precio) in enumerate(destinos_expedia):
+        fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Expedia MX",
             "tipo": "viajes",
@@ -354,7 +390,7 @@ def scrape_awin_viajes():
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
             "url": EXPEDIA_LINK,
-            "tipo_promo": "Precio por noche desde",
+            "tipo_promo": f"Precio por noche · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, expedia",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
@@ -371,7 +407,8 @@ def scrape_awin_viajes():
         ("Oaxaca", 1000),
         ("Monterrey", 950),
     ]
-    for destino, precio in destinos_hoteles:
+    for i, (destino, precio) in enumerate(destinos_hoteles):
+        fechas = generar_fechas_viaje(i)
         ofertas.append({
             "fuente": "Hoteles.com MX",
             "tipo": "viajes",
@@ -379,7 +416,7 @@ def scrape_awin_viajes():
             "precio": precio,
             "precio_fmt": f"${precio:,.0f} MXN/noche",
             "url": HOTELES_LINK,
-            "tipo_promo": "Precio por noche desde",
+            "tipo_promo": f"Precio por noche · {fechas}",
             "palabras_clave": "hotel, viaje, hospedaje, hoteles.com",
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
