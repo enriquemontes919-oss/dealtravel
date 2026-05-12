@@ -108,6 +108,14 @@ section{padding:5rem 5%;}
 .form-group input,.form-group select{background:#f5f5f7;border:1.5px solid transparent;border-radius:10px;padding:0.7rem 0.9rem;color:#1d1d1f;font-size:0.88rem;outline:none;transition:all 0.2s;font-family:inherit;}
 .form-group input:focus,.form-group select:focus{border-color:#0071e3;background:#fff;box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
 .form-group input::placeholder{color:#aeaeb2;}
+/* Selector de días */
+.dias-selector{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1rem;}
+.dia-opt{flex:1;min-width:70px;text-align:center;background:#f5f5f7;border:1.5px solid transparent;border-radius:12px;padding:0.7rem 0.5rem;cursor:pointer;transition:all 0.2s;}
+.dia-opt:hover,.dia-opt.selected{border-color:#0071e3;background:#f0f8ff;}
+.dia-opt input[type=radio]{display:none;}
+.dia-opt-num{font-size:1.1rem;font-weight:700;color:#1d1d1f;display:block;}
+.dia-opt-label{font-size:0.65rem;color:#6e6e73;display:block;margin-top:2px;}
+.dia-opt.selected .dia-opt-num{color:#0071e3;}
 .notify-opts{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1rem;}
 .notify-opt{display:flex;align-items:center;gap:8px;background:#f5f5f7;border:1.5px solid transparent;border-radius:12px;padding:0.7rem 1rem;cursor:pointer;flex:1;min-width:130px;transition:all 0.2s;}
 .notify-opt:hover,.notify-opt.selected{border-color:#0071e3;background:#f0f8ff;}
@@ -347,6 +355,32 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
         <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
         <div class="form-group"><label>Celular <span style="color:#aeaeb2;font-size:0.7rem;">opcional</span></label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
       </div>
+
+      <!-- SELECTOR DE DÍAS -->
+      <p style="font-size:0.72rem;color:#6e6e73;margin-bottom:0.7rem;font-weight:500;">¿Por cuántos días quieres recibir alertas?</p>
+      <div class="dias-selector">
+        <label class="dia-opt" id="opt-1d" onclick="seleccionarDias(1)">
+          <input type="radio" name="dias" value="1">
+          <span class="dia-opt-num">1</span>
+          <span class="dia-opt-label">día</span>
+        </label>
+        <label class="dia-opt selected" id="opt-7d" onclick="seleccionarDias(7)">
+          <input type="radio" name="dias" value="7" checked>
+          <span class="dia-opt-num">7</span>
+          <span class="dia-opt-label">días</span>
+        </label>
+        <label class="dia-opt" id="opt-15d" onclick="seleccionarDias(15)">
+          <input type="radio" name="dias" value="15">
+          <span class="dia-opt-num">15</span>
+          <span class="dia-opt-label">días</span>
+        </label>
+        <label class="dia-opt" id="opt-30d" onclick="seleccionarDias(30)">
+          <input type="radio" name="dias" value="30">
+          <span class="dia-opt-num">30</span>
+          <span class="dia-opt-label">días</span>
+        </label>
+      </div>
+
       <p style="font-size:0.72rem;color:#6e6e73;margin-bottom:0.7rem;font-weight:500;">¿Cómo quieres recibir tu alerta?</p>
       <div class="notify-opts">
         <label class="notify-opt selected" id="opt-email">
@@ -418,6 +452,13 @@ const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
 const ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸','viajes':'✈️','general':'🛍️'};
 let todasLasOfertas = [];
+let diasSeleccionados = 7;
+
+function seleccionarDias(dias) {
+  diasSeleccionados = dias;
+  document.querySelectorAll('.dia-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById(`opt-${dias}d`).classList.add('selected');
+}
 
 async function cargarOfertas() {
   try {
@@ -576,7 +617,18 @@ async function submitAlert() {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/alertas`, {
       method: 'POST',
       headers: {'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
-      body: JSON.stringify({origen:'dealtravel.mx',destino:producto,tipo:categoria||'General',presupuesto:parseFloat(presupuesto),fecha_salida:'',email,telefono,fuente:tienda||'Cualquier tienda',activa:true})
+      body: JSON.stringify({
+        origen: 'dealtravel.mx',
+        destino: producto,
+        tipo: categoria || 'General',
+        presupuesto: parseFloat(presupuesto),
+        fecha_salida: '',
+        email,
+        telefono,
+        fuente: tienda || 'Cualquier tienda',
+        activa: true,
+        dias_alerta: diasSeleccionados
+      })
     });
     if(res.ok || res.status===201) {
       document.getElementById('success-producto').textContent = producto;
