@@ -38,10 +38,8 @@ def generar_fechas_viaje(indice):
     en_3_semanas = hoy + timedelta(days=21)
     en_1_mes = hoy + timedelta(days=30)
     en_5_semanas = hoy + timedelta(days=37)
-
     def fmt(d):
         return f"{d.day} {MESES_ES[d.month - 1]}"
-
     rangos = [
         f"{fmt(viernes)} – {fmt(domingo)}",
         f"{fmt(en_2_semanas)} – {fmt(en_3_semanas)}",
@@ -50,8 +48,10 @@ def generar_fechas_viaje(indice):
     return rangos[indice % 3]
 
 def precio_original(precio, descuento_pct):
-    """Calcula precio original dado el precio con descuento y el porcentaje"""
     return round(precio / (1 - descuento_pct / 100))
+
+def amazon_url(asin):
+    return f"https://www.amazon.com.mx/dp/{asin}?tag={AMAZON_TAG}"
 
 def detectar_categoria(texto):
     texto_lower = texto.lower()
@@ -74,27 +74,28 @@ def oferta_ya_existe(destino, precio, fuente):
 
 def scrape_amazon():
     ofertas = []
+    # (nombre, precio, descuento%, tipo, ASIN)
     productos = [
-        ("Apple iPhone 15 128GB", 14999, 20, "electronico", "iphone+15+128gb"),
-        ("Samsung Galaxy S24 256GB", 13999, 18, "electronico", "samsung+galaxy+s24"),
-        ("MacBook Air M2 256GB", 23999, 15, "electronico", "macbook+air+m2"),
-        ("iPad 10ma generación 64GB", 8999, 22, "electronico", "ipad+10+generacion"),
-        ("Sony WH-1000XM5 Audífonos", 5999, 25, "electronico", "sony+wh1000xm5"),
-        ("Nintendo Switch OLED", 7999, 15, "electronico", "nintendo+switch+oled"),
-        ("Samsung Smart TV 55\" 4K", 9999, 30, "electronico", "samsung+smart+tv+55"),
-        ("Laptop HP 15 Core i5 8GB", 9499, 20, "electronico", "laptop+hp+core+i5"),
-        ("PlayStation 5 Slim", 11999, 15, "electronico", "playstation+5+slim"),
-        ("Apple Watch Series 9", 7499, 18, "electronico", "apple+watch+series+9"),
-        ("Cafetera Nespresso Vertuo", 2499, 25, "hogar", "cafetera+nespresso+vertuo"),
-        ("Instant Pot Duo 7 en 1", 1899, 20, "hogar", "instant+pot+duo"),
-        ("Roomba i3 Aspiradora Robot", 4999, 30, "hogar", "roomba+i3"),
-        ("Perfume Carolina Herrera Good Girl", 1899, 20, "belleza", "carolina+herrera+good+girl"),
-        ("Crema Facial CeraVe Hidratante", 299, 15, "belleza", "cerave+crema+facial"),
-        ("Tenis Nike Air Max 270 Hombre", 2199, 25, "moda", "nike+air+max+270"),
-        ("Mochila Samsonite 20L", 899, 20, "moda", "mochila+samsonite"),
-        ("Báscula Digital Xiaomi", 399, 18, "hogar", "bascula+digital+xiaomi"),
+        ("Apple iPhone 15 128GB",           14999, 20, "electronico", "B0CHX8VZ2N"),
+        ("Samsung Galaxy S24 256GB",         13999, 18, "electronico", "B0CQ7R738Y"),
+        ("MacBook Air M2 256GB",             23999, 15, "electronico", "B0B3C1N9FY"),
+        ("iPad 10ma generación 64GB",         8999, 22, "electronico", "B0BJLF2BRM"),
+        ("Sony WH-1000XM5 Audífonos",         5999, 25, "electronico", "B09XS7JWHH"),
+        ("Nintendo Switch OLED",              7999, 15, "electronico", "B098RKWHHZ"),
+        ("Samsung Smart TV 55\" 4K",          9999, 30, "electronico", "B0BN7FYKQM"),
+        ("Laptop HP 15 Core i5 8GB",          9499, 20, "electronico", "B0BX5CPGX5"),
+        ("PlayStation 5 Slim",               11999, 15, "electronico", "B0CL61F39H"),
+        ("Apple Watch Series 9",              7499, 18, "electronico", "B0CHX8H5LQ"),
+        ("Cafetera Nespresso Vertuo",          2499, 25, "hogar",       "B07THHQMHM"),
+        ("Instant Pot Duo 7 en 1",            1899, 20, "hogar",       "B00FLYWNYQ"),
+        ("Roomba i3 Aspiradora Robot",         4999, 30, "hogar",       "B08H6NJBJ7"),
+        ("Perfume Carolina Herrera Good Girl", 1899, 20, "belleza",     "B01N1WJUQ6"),
+        ("Crema Facial CeraVe Hidratante",      299, 15, "belleza",     "B000YJ2SKS"),
+        ("Tenis Nike Air Max 270 Hombre",      2199, 25, "moda",        "B07D26TJ58"),
+        ("Mochila Samsonite 20L",               899, 20, "moda",        "B082NKS553"),
+        ("Báscula Digital Xiaomi",              399, 18, "hogar",       "B07H243WM8"),
     ]
-    for nombre, precio, descuento, tipo, query in productos:
+    for nombre, precio, descuento, tipo, asin in productos:
         orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Amazon MX",
@@ -104,9 +105,9 @@ def scrape_amazon():
             "precio_fmt": f"${precio:,.0f} MXN",
             "precio_original": orig,
             "descuento_pct": descuento,
-            "url": f"https://www.amazon.com.mx/s?k={query}&tag={AMAZON_TAG}",
+            "url": amazon_url(asin),
             "tipo_promo": f"-{descuento}% Oferta Amazon",
-            "palabras_clave": query.replace("+", ", "),
+            "palabras_clave": nombre.lower(),
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
@@ -312,7 +313,6 @@ def scrape_hm():
 
 def scrape_awin_viajes():
     ofertas = []
-
     destinos_trivago = [
         ("Cancún, México", 1200, 20),
         ("Ciudad de México", 800, 15),
@@ -340,7 +340,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     vuelos_kiwi = [
         ("CDMX → Cancún", 1800, 15),
         ("CDMX → Los Cabos", 2100, 18),
@@ -368,7 +367,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     sirenis = [
         ("Sirenis Punta Cana Resort — Todo Incluido", 3200, 25),
         ("Sirenis Riviera Maya — Todo Incluido", 2800, 20),
@@ -391,7 +389,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     destinos_expedia = [
         ("Cancún", 1350, 20),
         ("Los Cabos", 1800, 25),
@@ -419,7 +416,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     destinos_hoteles = [
         ("Cancún", 1300, 20),
         ("Los Cabos", 1750, 22),
@@ -447,7 +443,6 @@ def scrape_awin_viajes():
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
             "activa": True
         })
-
     print(f"[Awin Viajes] {len(ofertas)} ofertas")
     return ofertas
 
@@ -593,7 +588,6 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
                 </div>
             </div>
         </div>"""
-
     html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;">
         <div style="background:#0a1628;padding:24px;border-radius:12px 12px 0 0;text-align:center;">
             <h1 style="color:#38bdf8;margin:0 0 4px;font-size:1.8rem;">Deal<span style="color:#fff;">Travel</span></h1>
@@ -618,7 +612,6 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             </p>
         </div>
     </div>"""
-
     try:
         r = requests.post(
             "https://api.resend.com/emails",
