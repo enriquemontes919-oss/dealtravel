@@ -264,14 +264,14 @@ def scrape_puma():
 def scrape_zara():
     ofertas = []
     productos = [
-        ("Zara Blazer Oversized", 1299, 30, "ropa, moda, zara, mujer"),
-        ("Zara Jeans Slim", 799, 20, "pantalon, moda, zara"),
-        ("Zara Vestido Midi", 999, 25, "vestido, moda, zara, mujer"),
-        ("Zara Camisa Oversize", 699, 30, "camisa, moda, zara"),
-        ("Zara Zapatillas Piel", 1499, 20, "zapatos, moda, zara, mujer"),
-        ("Zara Bolso Tote", 899, 25, "bolsa, accesorios, zara"),
+        ("Zara Blazer Oversized", 1299, 30, "ropa, moda, zara, mujer", "https://www.zara.com/mx/es/mujer-blazers-oversize-l4189.html"),
+        ("Zara Jeans Slim", 799, 20, "pantalon, moda, zara", "https://www.zara.com/mx/es/mujer-jeans-slim-l1280.html"),
+        ("Zara Vestido Midi", 999, 25, "vestido, moda, zara, mujer", "https://www.zara.com/mx/es/mujer-vestidos-midi-l1303.html"),
+        ("Zara Camisa Oversize", 699, 30, "camisa, moda, zara", "https://www.zara.com/mx/es/mujer-camisas-l1217.html"),
+        ("Zara Zapatillas Piel", 1499, 20, "zapatos, moda, zara, mujer", "https://www.zara.com/mx/es/mujer-zapatos-l1251.html"),
+        ("Zara Bolso Tote", 899, 25, "bolsa, accesorios, zara", "https://www.zara.com/mx/es/mujer-bolsos-tote-l1025.html"),
     ]
-    for nombre, precio, descuento, keywords in productos:
+    for nombre, precio, descuento, keywords, url in productos:
         orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "Zara MX",
@@ -281,7 +281,7 @@ def scrape_zara():
             "precio_fmt": f"${precio:,.0f} MXN",
             "precio_original": orig,
             "descuento_pct": descuento,
-            "url": "https://www.zara.com/mx/es/sale-l1000.html",
+            "url": url,
             "tipo_promo": f"-{descuento}% Sale Zara MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
@@ -293,13 +293,13 @@ def scrape_zara():
 def scrape_hm():
     ofertas = []
     productos = [
-        ("H&M Vestido Floral", 499, 30, "vestido, moda, hm, mujer"),
-        ("H&M Jeans Skinny", 599, 25, "pantalon, moda, hm"),
-        ("H&M Camiseta Basica", 199, 30, "camiseta, moda, hm"),
-        ("H&M Sudadera Logo", 699, 20, "ropa, casual, hm"),
-        ("H&M Chaqueta Denim", 899, 25, "ropa, casual, hm"),
+        ("H&M Vestido Floral", 499, 30, "vestido, moda, hm, mujer", "https://www2.hm.com/es_mx/mujer/productos/vestidos/vestidos-floral.html"),
+        ("H&M Jeans Skinny", 599, 25, "pantalon, moda, hm", "https://www2.hm.com/es_mx/mujer/productos/jeans/jeans-skinny.html"),
+        ("H&M Camiseta Basica", 199, 30, "camiseta, moda, hm", "https://www2.hm.com/es_mx/mujer/productos/camisetas-y-tops/camisetas.html"),
+        ("H&M Sudadera Logo", 699, 20, "ropa, casual, hm", "https://www2.hm.com/es_mx/mujer/productos/sudaderas-y-hoodies.html"),
+        ("H&M Chaqueta Denim", 899, 25, "ropa, casual, hm", "https://www2.hm.com/es_mx/mujer/productos/chaquetas-y-abrigos/chaquetas-denim.html"),
     ]
-    for nombre, precio, descuento, keywords in productos:
+    for nombre, precio, descuento, keywords, url in productos:
         orig = precio_original(precio, descuento)
         ofertas.append({
             "fuente": "H&M MX",
@@ -309,7 +309,7 @@ def scrape_hm():
             "precio_fmt": f"${precio:,.0f} MXN",
             "precio_original": orig,
             "descuento_pct": descuento,
-            "url": "https://www2.hm.com/es_mx/sale.html",
+            "url": url,
             "tipo_promo": f"-{descuento}% Sale H&M MX",
             "palabras_clave": keywords,
             "fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
