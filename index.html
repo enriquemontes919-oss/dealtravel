@@ -482,36 +482,13 @@ async function cargarOfertas() {
   }
 }
 
-function renderHotDeals(ofertas) {
-  const hot = ofertas.filter(o => o.tipo !== 'viajes').slice(0, 4);
-  const grid = document.getElementById('hot-grid');
-  if(!hot.length) { grid.innerHTML = ''; return; }
-  grid.innerHTML = hot.map(o => `
-    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
-      <div class="hot-card">
-        <div class="hot-card-store">${o.fuente}</div>
-        <div class="hot-card-title">${o.destino}</div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-          ${o.precio_original ? `<span style="text-decoration:line-through;color:#aeaeb2;font-size:0.8rem;">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
-          <span class="hot-card-price">${o.precio_fmt}</span>
-          ${o.descuento_pct ? `<span style="background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:6px;">-${o.descuento_pct}%</span>` : ''}
-        </div>
-        <div class="hot-card-promo">${o.tipo_promo}</div>
-      </div>
-    </a>`).join('');
-}
-
-function renderOfertas(ofertas) {
-  const grid = document.getElementById('deals-grid');
-  if(!ofertas || ofertas.length === 0) {
-    grid.innerHTML = '<div class="no-results">No hay ofertas en esta categoría.</div>';
-    return;
-  }
-  grid.innerHTML = ofertas.map(o => `
+function renderCard(o) {
+  const sinPrecio = o.precio_fmt === 'Ver precio';
+  return `
     <div class="deal-card" data-tipo="${o.tipo||'general'}">
       <div class="deal-img-wrap">
         <div class="deal-img-placeholder">${ICONS[o.tipo]||'🛍️'}</div>
-        <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : o.tipo_promo||'Oferta'}</span>
+        <span class="deal-discount">${!sinPrecio && o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
         <span class="deal-store">${o.fuente}</span>
       </div>
       <div class="deal-body">
@@ -520,13 +497,48 @@ function renderOfertas(ofertas) {
         <div class="deal-promo">${o.tipo_promo||''}</div>
         <div class="deal-footer">
           <div class="deal-prices">
-            ${o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
-            <div class="deal-price">${o.precio_fmt}</div>
+            ${!sinPrecio && o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
+            ${sinPrecio
+              ? `<div style="font-size:1rem;font-weight:700;color:#0071e3;">Ver precio →</div>`
+              : `<div class="deal-price">${o.precio_fmt}</div>`}
           </div>
           <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+}
+
+function renderHotDeals(ofertas) {
+  const hot = ofertas.filter(o => o.tipo !== 'viajes').slice(0, 4);
+  const grid = document.getElementById('hot-grid');
+  if(!hot.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = hot.map(o => {
+    const sinPrecio = o.precio_fmt === 'Ver precio';
+    return `
+    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <div class="hot-card">
+        <div class="hot-card-store">${o.fuente}</div>
+        <div class="hot-card-title">${o.destino}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          ${!sinPrecio && o.precio_original ? `<span style="text-decoration:line-through;color:#aeaeb2;font-size:0.8rem;">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
+          ${sinPrecio
+            ? `<span style="font-size:0.95rem;font-weight:700;color:#0071e3;">Ver precio →</span>`
+            : `<span class="hot-card-price">${o.precio_fmt}</span>`}
+          ${!sinPrecio && o.descuento_pct ? `<span style="background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:6px;">-${o.descuento_pct}%</span>` : ''}
+        </div>
+        <div class="hot-card-promo">${o.tipo_promo}</div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function renderOfertas(ofertas) {
+  const grid = document.getElementById('deals-grid');
+  if(!ofertas || ofertas.length === 0) {
+    grid.innerHTML = '<div class="no-results">No hay ofertas en esta categoría.</div>';
+    return;
+  }
+  grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
 }
 
 async function buscarOfertas() {
@@ -539,7 +551,7 @@ async function buscarOfertas() {
     const res = await fetch(url, {headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}});
     let ofertas = await res.json();
     if(q) ofertas = ofertas.filter(o => (o.destino||'').toLowerCase().includes(q) || (o.palabras_clave||'').toLowerCase().includes(q) || (o.fuente||'').toLowerCase().includes(q));
-    if(max < Infinity) ofertas = ofertas.filter(o => o.precio <= max);
+    if(max < Infinity) ofertas = ofertas.filter(o => o.precio === 0 || o.precio <= max);
     const grid = document.getElementById('search-grid');
     const count = document.getElementById('search-count');
     document.getElementById('search-results').classList.add('visible');
@@ -547,26 +559,7 @@ async function buscarOfertas() {
       grid.innerHTML = '<div class="no-results">No encontramos ofertas. Intenta con otro término.</div>';
       count.textContent = 'Sin resultados';
     } else {
-      grid.innerHTML = ofertas.map(o => `
-        <div class="deal-card">
-          <div class="deal-img-wrap">
-            <div class="deal-img-placeholder">${ICONS[o.tipo]||'🛍️'}</div>
-            <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : o.tipo_promo||'Oferta'}</span>
-            <span class="deal-store">${o.fuente}</span>
-          </div>
-          <div class="deal-body">
-            <div class="deal-category">${o.tipo||'General'}</div>
-            <div class="deal-title">${o.destino||'Producto en oferta'}</div>
-            <div class="deal-promo">${o.tipo_promo||''}</div>
-            <div class="deal-footer">
-              <div class="deal-prices">
-                ${o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
-                <div class="deal-price">${o.precio_fmt}</div>
-              </div>
-              <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
-            </div>
-          </div>
-        </div>`).join('');
+      grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
       count.textContent = `${ofertas.length} oferta${ofertas.length>1?'s':''} encontrada${ofertas.length>1?'s':''}`;
     }
     if(q) {
