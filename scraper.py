@@ -393,12 +393,10 @@ def revisar_alertas(todas_ofertas):
     try:
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
 
-        # Obtener alertas activas
         r = requests.get(f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*", headers=headers)
         alertas = r.json()
         print(f"[Alertas] {len(alertas)} alertas activas")
 
-        # Obtener todas las ofertas de Supabase
         r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
         ofertas_supabase = r2.json()
         print(f"[Ofertas] {len(ofertas_supabase)} ofertas en Supabase")
@@ -407,60 +405,58 @@ def revisar_alertas(todas_ofertas):
 
         for alerta in alertas:
             try:
-                # 1. Verificar si la alerta ya expiró
+                # 1. Verificar expiración
                 dias_alerta = alerta.get("dias_alerta") or 7
                 fecha_creacion = datetime.fromisoformat(alerta["created_at"].replace("Z", "+00:00")).replace(tzinfo=None)
                 dias_transcurridos = (ahora - fecha_creacion).days
 
                 if dias_transcurridos >= dias_alerta:
-                    # Marcar alerta como inactiva
                     requests.patch(
                         f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
                         headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
                         json={"activa": False},
                         timeout=10
                     )
-                    print(f"[Alertas] Alerta {alerta['id']} expirada — {dias_transcurridos} días")
+                    print(f"[Alertas] Alerta {alerta['id']} expirada")
                     continue
 
-                # 2. Verificar si ya se mandó email hoy
-                ultimo_envio = alerta.get("ultimo_envio")
-                if ultimo_envio:
-                    try:
-                        ultimo = datetime.fromisoformat(ultimo_envio.replace("Z", "+00:00")).replace(tzinfo=None)
-                        if (ahora - ultimo).total_seconds() < 86400:  # 24 horas
-                            print(f"[Alertas] Alerta {alerta['id']} — email ya enviado hoy, saltando")
-                            continue
-                    except:
-                        pass
+                # 2. IDs ya notificados para esta alerta
+                ya_notificados = set(alerta.get("ofertas_notificadas") or [])
 
-                # 3. Buscar ofertas que hagan match
+                # 3. Buscar matches solo con ofertas NO notificadas antes
                 producto_alerta = alerta.get("destino", "").lower()
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto = float(alerta.get("presupuesto") or 99999)
                 fuente_alerta = alerta.get("fuente", "Cualquier tienda")
 
-                matches = []
+                matches_nuevos = []
                 for oferta in ofertas_supabase:
+                    if oferta["id"] in ya_notificados:
+                        continue  # Ya fue notificada antes, skip
                     producto_oferta = oferta.get("destino", "").lower()
                     precio_ok = oferta["precio"] <= presupuesto
                     tienda_ok = not fuente_alerta or fuente_alerta == "Cualquier tienda" or fuente_alerta.lower() in oferta["fuente"].lower()
                     producto_match = any(word in producto_oferta for word in palabras_alerta)
                     if precio_ok and tienda_ok and producto_match:
-                        matches.append(oferta)
+                        matches_nuevos.append(oferta)
 
-                if not matches:
+                if not matches_nuevos:
+                    print(f"[Alertas] Alerta {alerta['id']} — sin ofertas nuevas, no se envía email")
                     continue
 
-                # 4. Enviar UN solo email consolidado con todos los matches
-                print(f"[Match] {alerta['email']} -> {len(matches)} ofertas encontradas")
-                enviar_email_consolidado(alerta, matches, dias_alerta, dias_transcurridos)
+                # 4. Enviar email solo con ofertas nuevas
+                print(f"[Match] {alerta['email']} -> {len(matches_nuevos)} ofertas NUEVAS encontradas")
+                enviar_email_consolidado(alerta, matches_nuevos, dias_alerta, dias_transcurridos)
 
-                # 5. Actualizar ultimo_envio
+                # 5. Guardar IDs notificados y actualizar ultimo_envio
+                nuevos_ids = list(ya_notificados) + [o["id"] for o in matches_nuevos]
                 requests.patch(
                     f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
                     headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
-                    json={"ultimo_envio": ahora.isoformat()},
+                    json={
+                        "ultimo_envio": ahora.isoformat(),
+                        "ofertas_notificadas": nuevos_ids
+                    },
                     timeout=10
                 )
 
@@ -471,12 +467,10 @@ def revisar_alertas(todas_ofertas):
         print(f"[Alertas] Error general: {e}")
 
 def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
-    """Envía un solo email con todas las ofertas que hacen match"""
     dias_restantes = dias_alerta - dias_transcurridos
 
-    # Construir cards de ofertas
     ofertas_html = ""
-    for oferta in ofertas[:8]:  # máximo 8 ofertas por email
+    for oferta in ofertas[:8]:
         ofertas_html += f"""
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
@@ -495,7 +489,7 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
     html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;">
         <div style="background:#0a1628;padding:24px;border-radius:12px 12px 0 0;text-align:center;">
             <h1 style="color:#38bdf8;margin:0 0 4px;font-size:1.8rem;">Deal<span style="color:#fff;">Travel</span></h1>
-            <p style="color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} para ti</p>
+            <p style="color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} nuevas para ti</p>
         </div>
         <div style="background:#fff;padding:24px;border-radius:0 0 12px 12px;">
             <div style="background:#f0f8ff;border:1px solid #cce5ff;border-radius:10px;padding:12px 16px;margin-bottom:20px;">
@@ -524,12 +518,12 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             json={
                 "from": "Deal Travel <alertas@dealtravel.mx>",
                 "to": [alerta["email"]],
-                "subject": f"🔥 {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} para '{alerta['destino']}' — dealtravel.mx",
+                "subject": f"🔥 {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} nueva{'s' if len(ofertas) > 1 else ''} para '{alerta['destino']}' — dealtravel.mx",
                 "html": html
             }
         )
         if r.status_code == 200:
-            print(f"[Email] Consolidado enviado a {alerta['email']} ({len(ofertas)} ofertas)")
+            print(f"[Email] Enviado a {alerta['email']} ({len(ofertas)} ofertas nuevas)")
         else:
             print(f"[Email] Error: {r.status_code} — {r.text[:100]}")
     except Exception as e:
@@ -555,7 +549,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v7")
+    print("Deal Travel Scraper v8")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
