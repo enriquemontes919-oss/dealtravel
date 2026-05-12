@@ -43,7 +43,6 @@ def oferta_ya_existe(destino, precio, fuente):
         return False
 
 def scrape_amazon():
-    """Productos reales de Amazon con links de afiliado directos"""
     ofertas = []
     productos = [
         ("Apple iPhone 15 128GB", 14999, "electronico", "iphone+15+128gb"),
@@ -388,53 +387,136 @@ def guardar_en_supabase(ofertas):
             print(f"[Supabase] Error: {e}")
     print(f"[Supabase] {nuevas} ofertas nuevas guardadas (de {len(ofertas)} encontradas)")
 
-def revisar_alertas(ofertas):
+def revisar_alertas(todas_ofertas):
     if not RESEND_API_KEY:
         return
     try:
         headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+
+        # Obtener alertas activas
         r = requests.get(f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*", headers=headers)
         alertas = r.json()
         print(f"[Alertas] {len(alertas)} alertas activas")
-        r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
-        todas_ofertas = r2.json()
-        print(f"[Ofertas] {len(todas_ofertas)} ofertas en Supabase")
-        for alerta in alertas:
-            producto_alerta = alerta.get("destino", "").lower()
-            palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
-            for oferta in todas_ofertas:
-                producto_oferta = oferta["destino"].lower()
-                precio_ok = oferta["precio"] <= float(alerta.get("presupuesto") or 99999)
-                tienda_ok = not alerta.get("fuente") or alerta.get("fuente","") == "Cualquier tienda" or alerta.get("fuente","").lower() in oferta["fuente"].lower()
-                producto_match = any(word in producto_oferta for word in palabras_alerta)
-                if precio_ok and tienda_ok and producto_match:
-                    print(f"[Match] {alerta['email']} -> {oferta['destino']}")
-                    enviar_alerta_email(alerta, oferta)
-                    break
-    except Exception as e:
-        print(f"[Alertas] Error: {e}")
 
-def enviar_alerta_email(alerta, oferta):
-    html = f"""<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
-        <div style="background:#0a1628;padding:20px;border-radius:8px 8px 0 0;">
-            <h1 style="color:#38bdf8;margin:0;">Deal<span style="color:#fff;">Travel</span></h1>
-            <p style="color:rgba(255,255,255,0.6);margin:5px 0 0;font-size:13px;">Encontramos una oferta para ti</p>
-        </div>
-        <div style="background:#f8fafc;padding:24px;border-radius:0 0 8px 8px;">
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:20px;">
-                <p style="margin:0 0 8px;color:#64748b;font-size:13px;">PRODUCTO</p>
-                <p style="margin:0 0 16px;font-weight:600;font-size:16px;">{oferta['destino']}</p>
-                <p style="margin:0 0 4px;color:#64748b;font-size:13px;">PRECIO</p>
-                <p style="margin:0 0 16px;font-size:28px;font-weight:800;color:#0ea5e9;">{oferta['precio_fmt']}</p>
-                <p style="margin:0 0 4px;color:#64748b;font-size:13px;">TIENDA</p>
-                <p style="margin:0 0 16px;font-weight:600;">{oferta['fuente']}</p>
-                <p style="margin:0 0 4px;color:#64748b;font-size:13px;">PROMOCIÓN</p>
-                <p style="margin:0;">{oferta['tipo_promo']}</p>
+        # Obtener todas las ofertas de Supabase
+        r2 = requests.get(f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*", headers=headers)
+        ofertas_supabase = r2.json()
+        print(f"[Ofertas] {len(ofertas_supabase)} ofertas en Supabase")
+
+        ahora = datetime.now()
+
+        for alerta in alertas:
+            try:
+                # 1. Verificar si la alerta ya expiró
+                dias_alerta = alerta.get("dias_alerta") or 7
+                fecha_creacion = datetime.fromisoformat(alerta["created_at"].replace("Z", "+00:00")).replace(tzinfo=None)
+                dias_transcurridos = (ahora - fecha_creacion).days
+
+                if dias_transcurridos >= dias_alerta:
+                    # Marcar alerta como inactiva
+                    requests.patch(
+                        f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
+                        headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
+                        json={"activa": False},
+                        timeout=10
+                    )
+                    print(f"[Alertas] Alerta {alerta['id']} expirada — {dias_transcurridos} días")
+                    continue
+
+                # 2. Verificar si ya se mandó email hoy
+                ultimo_envio = alerta.get("ultimo_envio")
+                if ultimo_envio:
+                    try:
+                        ultimo = datetime.fromisoformat(ultimo_envio.replace("Z", "+00:00")).replace(tzinfo=None)
+                        if (ahora - ultimo).total_seconds() < 86400:  # 24 horas
+                            print(f"[Alertas] Alerta {alerta['id']} — email ya enviado hoy, saltando")
+                            continue
+                    except:
+                        pass
+
+                # 3. Buscar ofertas que hagan match
+                producto_alerta = alerta.get("destino", "").lower()
+                palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
+                presupuesto = float(alerta.get("presupuesto") or 99999)
+                fuente_alerta = alerta.get("fuente", "Cualquier tienda")
+
+                matches = []
+                for oferta in ofertas_supabase:
+                    producto_oferta = oferta.get("destino", "").lower()
+                    precio_ok = oferta["precio"] <= presupuesto
+                    tienda_ok = not fuente_alerta or fuente_alerta == "Cualquier tienda" or fuente_alerta.lower() in oferta["fuente"].lower()
+                    producto_match = any(word in producto_oferta for word in palabras_alerta)
+                    if precio_ok and tienda_ok and producto_match:
+                        matches.append(oferta)
+
+                if not matches:
+                    continue
+
+                # 4. Enviar UN solo email consolidado con todos los matches
+                print(f"[Match] {alerta['email']} -> {len(matches)} ofertas encontradas")
+                enviar_email_consolidado(alerta, matches, dias_alerta, dias_transcurridos)
+
+                # 5. Actualizar ultimo_envio
+                requests.patch(
+                    f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
+                    headers={**headers, "Content-Type": "application/json", "Prefer": "return=minimal"},
+                    json={"ultimo_envio": ahora.isoformat()},
+                    timeout=10
+                )
+
+            except Exception as e:
+                print(f"[Alertas] Error procesando alerta {alerta.get('id')}: {e}")
+
+    except Exception as e:
+        print(f"[Alertas] Error general: {e}")
+
+def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
+    """Envía un solo email con todas las ofertas que hacen match"""
+    dias_restantes = dias_alerta - dias_transcurridos
+
+    # Construir cards de ofertas
+    ofertas_html = ""
+    for oferta in ofertas[:8]:  # máximo 8 ofertas por email
+        ofertas_html += f"""
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+                <div style="flex:1;">
+                    <p style="margin:0 0 4px;font-size:0.7rem;color:#0071e3;font-weight:600;text-transform:uppercase;">{oferta['fuente']}</p>
+                    <p style="margin:0 0 8px;font-weight:600;font-size:0.95rem;color:#1d1d1f;">{oferta['destino']}</p>
+                    <p style="margin:0;font-size:0.75rem;color:#64748b;">{oferta['tipo_promo']}</p>
+                </div>
+                <div style="text-align:right;">
+                    <p style="margin:0 0 8px;font-size:1.4rem;font-weight:800;color:#0ea5e9;">{oferta['precio_fmt']}</p>
+                    <a href="{oferta['url']}" style="background:#0071e3;color:#fff;padding:6px 14px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:600;">Ver →</a>
+                </div>
             </div>
-            <a href="{oferta['url']}" style="display:block;background:#38bdf8;color:#0a1628;padding:14px;border-radius:10px;text-decoration:none;font-weight:700;text-align:center;">Ver oferta ahora →</a>
-            <p style="color:#94a3b8;font-size:11px;margin-top:20px;text-align:center;">Deal Travel · dealtravel.mx</p>
+        </div>"""
+
+    html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;">
+        <div style="background:#0a1628;padding:24px;border-radius:12px 12px 0 0;text-align:center;">
+            <h1 style="color:#38bdf8;margin:0 0 4px;font-size:1.8rem;">Deal<span style="color:#fff;">Travel</span></h1>
+            <p style="color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} para ti</p>
+        </div>
+        <div style="background:#fff;padding:24px;border-radius:0 0 12px 12px;">
+            <div style="background:#f0f8ff;border:1px solid #cce5ff;border-radius:10px;padding:12px 16px;margin-bottom:20px;">
+                <p style="margin:0;font-size:0.85rem;color:#0071e3;">
+                    🔔 Tu alerta: <strong>{alerta['destino']}</strong> · 
+                    Presupuesto: <strong>${float(alerta.get('presupuesto', 0)):,.0f} MXN</strong> · 
+                    <span style="color:#64748b;">Vence en {dias_restantes} día{'s' if dias_restantes != 1 else ''}</span>
+                </p>
+            </div>
+            {ofertas_html}
+            <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;">
+                <a href="https://www.dealtravel.mx" style="background:#0071e3;color:#fff;padding:12px 24px;border-radius:980px;text-decoration:none;font-weight:600;font-size:0.9rem;">Ver todas las ofertas en dealtravel.mx</a>
+            </div>
+            <p style="color:#94a3b8;font-size:0.72rem;margin-top:16px;text-align:center;">
+                Deal Travel · dealtravel.mx<br>
+                Tu alerta expira en {dias_restantes} día{'s' if dias_restantes != 1 else ''}. 
+                <a href="https://www.dealtravel.mx#alerta" style="color:#0071e3;">Renovar alerta</a>
+            </p>
         </div>
     </div>"""
+
     try:
         r = requests.post(
             "https://api.resend.com/emails",
@@ -442,14 +524,14 @@ def enviar_alerta_email(alerta, oferta):
             json={
                 "from": "Deal Travel <alertas@dealtravel.mx>",
                 "to": [alerta["email"]],
-                "subject": f"Oferta: {oferta['destino'][:50]} - {oferta['precio_fmt']}",
+                "subject": f"🔥 {len(ofertas)} oferta{'s' if len(ofertas) > 1 else ''} para '{alerta['destino']}' — dealtravel.mx",
                 "html": html
             }
         )
         if r.status_code == 200:
-            print(f"[Email] Enviado a {alerta['email']}")
+            print(f"[Email] Consolidado enviado a {alerta['email']} ({len(ofertas)} ofertas)")
         else:
-            print(f"[Email] Error: {r.status_code}")
+            print(f"[Email] Error: {r.status_code} — {r.text[:100]}")
     except Exception as e:
         print(f"[Email] Error: {e}")
 
@@ -473,7 +555,7 @@ def monitorear():
     return todas
 
 if __name__ == "__main__":
-    print("Deal Travel Scraper v6")
+    print("Deal Travel Scraper v7")
     monitorear()
     schedule.every(1).hours.do(monitorear)
     schedule.every().day.at("07:00").do(monitorear)
