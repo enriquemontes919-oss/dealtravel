@@ -462,6 +462,10 @@ function seleccionarDias(dias) {
   document.getElementById(`opt-${dias}d`).classList.add('selected');
 }
 
+let ofertasMostradas = 20;
+const OFERTAS_POR_PAGINA = 20;
+let ofertasFiltradas = [];
+
 async function cargarOfertas() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=200`, {
@@ -470,9 +474,12 @@ async function cargarOfertas() {
     const ofertas = await res.json();
     if(ofertas && ofertas.length > 0) {
       todasLasOfertas = ofertas;
+      ofertasFiltradas = ofertas;
       document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
       renderHotDeals(ofertas);
-      renderOfertas(ofertas);
+      ofertasMostradas = OFERTAS_POR_PAGINA;
+      renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+      actualizarBotonCargarMas();
     } else {
       document.getElementById('deals-grid').innerHTML = '<div class="no-results">No hay ofertas disponibles.</div>';
       document.getElementById('hot-grid').innerHTML = '';
@@ -480,6 +487,28 @@ async function cargarOfertas() {
   } catch(e) {
     document.getElementById('deals-grid').innerHTML = '<div class="no-results">Error cargando ofertas.</div>';
   }
+}
+
+function actualizarBotonCargarMas() {
+  const btn = document.getElementById('btn-cargar-mas');
+  const info = document.getElementById('info-ofertas');
+  if(!btn) return;
+  const total = ofertasFiltradas.length;
+  const restantes = total - ofertasMostradas;
+  if(restantes > 0) {
+    btn.style.display = 'block';
+    btn.textContent = `Ver ${Math.min(restantes, OFERTAS_POR_PAGINA)} ofertas más`;
+    if(info) info.textContent = `Mostrando ${Math.min(ofertasMostradas, total)} de ${total} ofertas`;
+  } else {
+    btn.style.display = 'none';
+    if(info) info.textContent = `Mostrando todas las ofertas (${total})`;
+  }
+}
+
+function cargarMasOfertas() {
+  ofertasMostradas += OFERTAS_POR_PAGINA;
+  renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+  actualizarBotonCargarMas();
 }
 
 function renderCard(o) {
