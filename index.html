@@ -90,7 +90,7 @@ section{padding:5rem 5%;}
 .deal-footer{display:flex;align-items:center;justify-content:space-between;}
 .deal-prices{display:flex;flex-direction:column;}
 .deal-price{font-size:1.4rem;font-weight:700;color:#1d1d1f;letter-spacing:-0.5px;}
-.deal-old{font-size:0.75rem;color:#aeaeb2;}
+.deal-old{font-size:0.75rem;color:#aeaeb2;text-decoration:line-through;}
 .deal-btn{background:#0071e3;color:#fff;padding:0.45rem 1rem;border-radius:980px;font-size:0.78rem;font-weight:600;text-decoration:none;transition:all 0.2s;white-space:nowrap;}
 .deal-btn:hover{background:#0077ed;}
 .loading{text-align:center;padding:3rem;color:#6e6e73;font-size:0.9rem;}
@@ -180,9 +180,9 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
   <div style="position:relative;z-index:1;width:100%;">
     <div class="hero-logo"><img src="logo-dealtravelmx.png" alt="Deal Travel"></div>
     <div class="hero-badge">Monitoreo en tiempo real · múltiples tiendas</div>
-   <h1>Deals que viajan,<br>alertas que <em>llegan.</em></h1>
+    <h1>Deals que viajan,<br>alertas que <em>llegan.</em></h1>
     <p class="hero-tagline">Compra más, paga menos.</p>
-    <p>Te avisamos cuando bajen los precios en Expedia, Amazon, Liverpool, Walmart, Mercado Libre, Nike, Adidas, Zara, Hoteles.com, Trivago, Kiwi y más tiendas.</p>
+    <p>Te avisamos cuando bajen los precios en Amazon, Liverpool, Walmart, Mercado Libre, Nike, Adidas, Zara, Expedia, Hoteles.com, Trivago, Kiwi y más tiendas.</p>
     <div class="hero-btns">
       <a href="#alerta" class="btn-primary">🔔 Crear mi alerta gratis</a>
       <a href="#ofertas" class="btn-outline">🔍 Ver ofertas ahora</a>
@@ -262,7 +262,7 @@ footer{background:#1d1d1f;color:#fff;padding:3rem 5% 1.5rem;}
     <p class="section-label">Categorías</p>
     <h2 class="section-title">¿Qué estás buscando?</h2>
     <div class="cat-grid">
-     <div class="cat-card" onclick="filtrarCategoria('viajes')"><div class="cat-icon">✈️</div><h3>Viajes</h3><p>Hoteles, vuelos y más</p></div>
+      <div class="cat-card" onclick="filtrarCategoria('viajes')"><div class="cat-icon">✈️</div><h3>Viajes</h3><p>Hoteles, vuelos y más</p></div>
       <div class="cat-card" onclick="filtrarCategoria('electronico')"><div class="cat-icon">📱</div><h3>Electrónicos</h3><p>Celulares, laptops, TVs</p></div>
       <div class="cat-card" onclick="filtrarCategoria('moda')"><div class="cat-icon">👗</div><h3>Moda</h3><p>Ropa, zapatos, accesorios</p></div>
       <div class="cat-card" onclick="filtrarCategoria('hogar')"><div class="cat-icon">🏠</div><h3>Hogar</h3><p>Muebles, electrodomésticos</p></div>
@@ -491,7 +491,11 @@ function renderHotDeals(ofertas) {
       <div class="hot-card">
         <div class="hot-card-store">${o.fuente}</div>
         <div class="hot-card-title">${o.destino}</div>
-        <div class="hot-card-price">${o.precio_fmt}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          ${o.precio_original ? `<span style="text-decoration:line-through;color:#aeaeb2;font-size:0.8rem;">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
+          <span class="hot-card-price">${o.precio_fmt}</span>
+          ${o.descuento_pct ? `<span style="background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:6px;">-${o.descuento_pct}%</span>` : ''}
+        </div>
         <div class="hot-card-promo">${o.tipo_promo}</div>
       </div>
     </a>`).join('');
@@ -507,17 +511,17 @@ function renderOfertas(ofertas) {
     <div class="deal-card" data-tipo="${o.tipo||'general'}">
       <div class="deal-img-wrap">
         <div class="deal-img-placeholder">${ICONS[o.tipo]||'🛍️'}</div>
-        <span class="deal-discount">${o.tipo_promo||'Oferta'}</span>
+        <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : o.tipo_promo||'Oferta'}</span>
         <span class="deal-store">${o.fuente}</span>
       </div>
       <div class="deal-body">
         <div class="deal-category">${o.tipo||'General'}</div>
         <div class="deal-title">${o.destino||'Producto en oferta'}</div>
-        <div class="deal-promo">${o.palabras_clave||''}</div>
+        <div class="deal-promo">${o.tipo_promo||''}</div>
         <div class="deal-footer">
           <div class="deal-prices">
+            ${o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
             <div class="deal-price">${o.precio_fmt}</div>
-            <div class="deal-old">Verificado hoy</div>
           </div>
           <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
         </div>
@@ -547,17 +551,17 @@ async function buscarOfertas() {
         <div class="deal-card">
           <div class="deal-img-wrap">
             <div class="deal-img-placeholder">${ICONS[o.tipo]||'🛍️'}</div>
-            <span class="deal-discount">${o.tipo_promo||'Oferta'}</span>
+            <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : o.tipo_promo||'Oferta'}</span>
             <span class="deal-store">${o.fuente}</span>
           </div>
           <div class="deal-body">
             <div class="deal-category">${o.tipo||'General'}</div>
             <div class="deal-title">${o.destino||'Producto en oferta'}</div>
-            <div class="deal-promo">${o.palabras_clave||''}</div>
+            <div class="deal-promo">${o.tipo_promo||''}</div>
             <div class="deal-footer">
               <div class="deal-prices">
+                ${o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
                 <div class="deal-price">${o.precio_fmt}</div>
-                <div class="deal-old">Verificado hoy</div>
               </div>
               <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
             </div>
