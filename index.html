@@ -41,11 +41,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .nav-cta:hover{background:var(--blue);transform:translateY(-1px);}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 5% 5rem;position:relative;overflow:hidden;background:var(--white);}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 5% 5rem;position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#e8f2fd 60%,#cce0f8 100%);}
 .hero-bg{position:absolute;inset:0;pointer-events:none;}
-.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.5;}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;}
 .hero-blob-1{width:600px;height:600px;background:radial-gradient(circle,#dbeafe 0%,transparent 70%);top:-100px;left:-100px;}
-.hero-blob-2{width:500px;height:500px;background:radial-gradient(circle,#fce7e7 0%,transparent 70%);bottom:-50px;right:-50px;}
+.hero-blob-2{width:500px;height:500px;background:radial-gradient(circle,#bfdbfe 0%,transparent 70%);bottom:-50px;right:-50px;}
 .hero-blob-3{width:400px;height:400px;background:radial-gradient(circle,#e0f2e0 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);}
 .hero-inner{position:relative;z-index:1;max-width:780px;margin:0 auto;}
 .hero-logo{margin-bottom:2.5rem;animation:fadeUp 0.8s ease both;}
@@ -53,16 +53,20 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);color:var(--text-2);padding:0.4rem 1.1rem;border-radius:980px;font-size:0.78rem;font-weight:500;margin-bottom:1.8rem;box-shadow:var(--shadow-sm);animation:fadeUp 0.8s 0.1s ease both;}
 .hero-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-3px;color:var(--text);margin-bottom:0.5rem;animation:fadeUp 0.8s 0.2s ease both;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-3px;color:var(--text);margin-bottom:0.5rem;}
 .hero h1 em{font-style:normal;color:var(--blue);}
-.hero-tagline{font-family:'Syne',sans-serif;font-size:clamp(1rem,2vw,1.2rem);font-weight:600;color:var(--text-3);letter-spacing:0.02em;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.3s ease both;}
-.hero-desc{font-size:1.05rem;color:var(--text-2);max-width:520px;margin:0 auto 2.5rem;line-height:1.7;font-weight:400;animation:fadeUp 0.8s 0.4s ease both;}
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;animation:fadeUp 0.8s 0.5s ease both;}
+.hero-line-left{display:inline-block;animation:slideFromLeft 0.9s 0.2s cubic-bezier(0.22,1,0.36,1) both;}
+.hero-line-right{display:inline-block;animation:slideFromRight 0.9s 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes slideFromLeft{from{opacity:0;transform:translateX(-60px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideFromRight{from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:translateX(0);}}
+.hero-tagline{font-family:'Syne',sans-serif;font-size:clamp(1rem,2vw,1.2rem);font-weight:600;color:var(--text-3);letter-spacing:0.02em;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.6s ease both;}
+.hero-desc{font-size:1.05rem;color:var(--text-2);max-width:520px;margin:0 auto 2.5rem;line-height:1.7;font-weight:400;animation:fadeUp 0.8s 0.7s ease both;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;animation:fadeUp 0.8s 0.8s ease both;}
 .btn-primary{background:var(--text);color:#fff;padding:0.9rem 2.2rem;border-radius:980px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.25s;letter-spacing:0.01em;}
 .btn-primary:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,113,227,0.3);}
 .btn-outline{background:transparent;color:var(--text);border:1.5px solid rgba(0,0,0,0.15);padding:0.9rem 2.2rem;border-radius:980px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.25s;}
 .btn-outline:hover{border-color:var(--text);background:var(--text);color:#fff;transform:translateY(-2px);}
-.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.6s ease both;}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.9s ease both;}
 .hero-stat{text-align:center;}
 .hero-stat-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--text);letter-spacing:-1px;}
 .hero-stat-label{font-size:0.75rem;color:var(--text-3);font-weight:500;margin-top:2px;}
@@ -108,9 +112,7 @@ section{padding:5rem 5%;}
 .categorias-inner{max-width:1100px;margin:0 auto;}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
 .cat-card{border-radius:var(--radius);padding:1.8rem 1.2rem;cursor:pointer;transition:all 0.3s;text-align:center;position:relative;overflow:hidden;border:1px solid transparent;}
-.cat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;}
 .cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
-.cat-card:hover::before{opacity:1;}
 .cat-viajes{background:linear-gradient(135deg,#0c1a3a 0%,#1a3a6e 100%);color:#fff;}
 .cat-electronico{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#fff;}
 .cat-moda{background:linear-gradient(135deg,#2d1b4e 0%,#4a1942 100%);color:#fff;}
@@ -133,9 +135,7 @@ section{padding:5rem 5%;}
 .hot-deals{margin-bottom:2.5rem;}
 .hot-deals-title{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
 .hot-deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
-.hot-card{border-radius:var(--radius-sm);padding:1.1rem;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;}
-.hot-card-bg{position:absolute;inset:0;opacity:0.07;background:var(--red);}
-.hot-card{background:var(--white);border:1px solid rgba(255,59,48,0.15);}
+.hot-card{background:var(--white);border:1px solid rgba(255,59,48,0.15);border-radius:var(--radius-sm);padding:1.1rem;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;}
 .hot-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,59,48,0.12);border-color:rgba(255,59,48,0.3);}
 .hot-card-store{font-size:0.62rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
 .hot-card-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.3;}
@@ -283,7 +283,10 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
   <div class="hero-inner">
     <div class="hero-logo"><img src="logo-dealtravelmx.png" alt="Deal Travel"></div>
     <div class="hero-eyebrow"><span class="hero-dot"></span>Monitoreo en tiempo real · múltiples tiendas</div>
-    <h1>Deals que viajan,<br>alertas que <em>llegan.</em></h1>
+    <h1>
+      <span class="hero-line-left">Deals que viajan,</span><br>
+      <span class="hero-line-right">alertas que <em>llegan.</em></span>
+    </h1>
     <p class="hero-tagline">Compra más, paga menos.</p>
     <p class="hero-desc">Te avisamos cuando bajen los precios en Amazon, Mercado Libre, Nike, Adidas, Expedia, Hoteles.com, Trivago, Kiwi y más tiendas.</p>
     <div class="hero-btns">
@@ -539,25 +542,14 @@ const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
 
 const CAT_ICONS = {
-  'electronico': '📱',
-  'moda': '👗',
-  'hogar': '🏠',
-  'deporte': '⚽',
-  'belleza': '💄',
-  'juguetes': '🧸',
-  'viajes': '✈️',
-  'general': '🛍️'
+  'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽',
+  'belleza':'💄','juguetes':'🧸','viajes':'✈️','general':'🛍️'
 };
-
 const CAT_BG = {
-  'electronico': 'deal-img-wrap-electronico',
-  'moda': 'deal-img-wrap-moda',
-  'hogar': 'deal-img-wrap-hogar',
-  'belleza': 'deal-img-wrap-belleza',
-  'deporte': 'deal-img-wrap-deporte',
-  'viajes': 'deal-img-wrap-viajes',
-  'juguetes': 'deal-img-wrap-general',
-  'general': 'deal-img-wrap-general'
+  'electronico':'deal-img-wrap-electronico','moda':'deal-img-wrap-moda',
+  'hogar':'deal-img-wrap-hogar','belleza':'deal-img-wrap-belleza',
+  'deporte':'deal-img-wrap-deporte','viajes':'deal-img-wrap-viajes',
+  'juguetes':'deal-img-wrap-general','general':'deal-img-wrap-general'
 };
 
 let todasLasOfertas = [];
@@ -565,6 +557,28 @@ let ofertasFiltradas = [];
 let ofertasMostradas = 20;
 const OFERTAS_POR_PAGINA = 20;
 let diasSeleccionados = 7;
+
+// CAMPANILLA
+function tocarCampanilla() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const tiempos = [0, 0.18, 0.36];
+    const frecuencias = [1046, 1318, 1568];
+    tiempos.forEach((t, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(frecuencias[i], ctx.currentTime + t);
+      osc.frequency.exponentialRampToValueAtTime(frecuencias[i] * 0.5, ctx.currentTime + t + 0.4);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.5);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.5);
+    });
+  } catch(e) {}
+}
 
 function seleccionarDias(dias) {
   diasSeleccionados = dias;
@@ -790,7 +804,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-window.addEventListener('DOMContentLoaded', cargarOfertas);
+window.addEventListener('DOMContentLoaded', () => {
+  cargarOfertas();
+  setTimeout(tocarCampanilla, 800);
+});
 </script>
 </body>
 </html>
