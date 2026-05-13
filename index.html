@@ -4,7 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Deal Travel — Alertas de Ofertas en México</title>
-<meta name="description" content="Monitoreo de descuentos en Amazon, Liverpool, Walmart, Mercado Libre y más.">
+<meta name="description" content="Te avisamos cuando bajen los precios en Amazon, Mercado Libre, Nike, Expedia y más tiendas. Alertas gratis de descuentos en México.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Deal Travel — Deals que viajan, alertas que llegan">
+<meta property="og:description" content="Monitoreo de precios en tiempo real. Te avisamos cuando bajen los precios en tus tiendas favoritas. 100% gratis.">
+<meta property="og:image" content="https://www.dealtravel.mx/og-image.png">
+<meta property="og:url" content="https://www.dealtravel.mx">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Deal Travel — Deals que viajan, alertas que llegan">
+<meta name="twitter:description" content="Monitoreo de precios en tiempo real. Alertas gratis de descuentos en México.">
+<meta name="twitter:image" content="https://www.dealtravel.mx/og-image.png">
+
+<!-- Favicon SVG inline -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230071e3'/><text y='72' x='50' text-anchor='middle' font-size='60' font-family='Arial' font-weight='bold' fill='white'>D</text></svg>">
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6670443237202134" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,9 +88,23 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .hero-stat-label{font-size:0.75rem;color:var(--text-3);font-weight:500;margin-top:2px;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 
+/* SCROLL ARROW */
+.scroll-arrow{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:fadeUp 1s 1.2s ease both;cursor:pointer;z-index:2;}
+.scroll-arrow span{font-size:0.7rem;color:var(--text-3);font-weight:500;letter-spacing:0.05em;text-transform:uppercase;}
+.scroll-arrow-icon{width:28px;height:28px;border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+
 /* BANNER AWIN */
 .awin-banner{background:var(--white);padding:0.6rem 5%;display:flex;justify-content:center;margin-top:72px;border-bottom:1px solid var(--border);}
 .awin-banner img{max-width:728px;height:auto;display:block;}
+
+/* STATS BANNER */
+.stats-banner{background:var(--text);padding:2rem 5%;}
+.stats-banner-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:1.5rem;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+.stat-num span{color:var(--blue);}
+.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);font-weight:500;margin-top:4px;letter-spacing:0.03em;}
 
 /* SEARCH */
 .search-section{background:var(--white);padding:2.5rem 5%;border-bottom:1px solid var(--border);}
@@ -86,7 +116,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .search-field input,.search-field select{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.65rem 0.9rem;color:var(--text);font-size:0.9rem;outline:none;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
 .search-field input:focus,.search-field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
 .search-field input::placeholder{color:var(--text-3);}
-.btn-search{background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.75rem 1.6rem;font-weight:600;font-size:0.88rem;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s;letter-spacing:0.01em;}
+.btn-search{background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.75rem 1.6rem;font-weight:600;font-size:0.88rem;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s;}
 .btn-search:hover{background:var(--blue);}
 .search-results{margin-top:1.5rem;display:none;}
 .search-results.visible{display:block;}
@@ -99,6 +129,20 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 section{padding:5rem 5%;}
 .section-eyebrow{font-size:0.7rem;font-weight:700;color:var(--blue);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;}
 .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:0.8rem;color:var(--text);line-height:1.1;}
+
+/* POR QUÉ DEAL TRAVEL */
+.why{background:var(--bg);}
+.why-inner{max-width:1100px;margin:0 auto;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.why-card{background:var(--white);border-radius:var(--radius);padding:2rem;border:1px solid var(--border);transition:all 0.25s;position:relative;overflow:hidden;}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.why-card:hover::before{transform:scaleX(1);}
+.why-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);}
+.why-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+.why-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;letter-spacing:-0.3px;}
+.why-card p{font-size:0.88rem;color:var(--text-2);line-height:1.7;}
+.why-card .why-vs{font-size:0.78rem;color:var(--text-3);margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border);}
+.why-card .why-vs strong{color:var(--red);}
 
 /* TIENDAS */
 .tiendas{background:var(--white);}
@@ -120,7 +164,7 @@ section{padding:5rem 5%;}
 .cat-deporte{background:linear-gradient(135deg,#3a1a0a 0%,#6e2e0a 100%);color:#fff;}
 .cat-belleza{background:linear-gradient(135deg,#3a0a1a 0%,#6e1a3a 100%);color:#fff;}
 .cat-icon{font-size:2rem;margin-bottom:0.8rem;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));}
-.cat-card h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.3rem;letter-spacing:0.01em;}
+.cat-card h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.3rem;}
 .cat-card p{font-size:0.72rem;opacity:0.7;}
 
 /* DEALS */
@@ -135,7 +179,7 @@ section{padding:5rem 5%;}
 .hot-deals{margin-bottom:2.5rem;}
 .hot-deals-title{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
 .hot-deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
-.hot-card{background:var(--white);border:1px solid rgba(255,59,48,0.15);border-radius:var(--radius-sm);padding:1.1rem;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;}
+.hot-card{background:var(--white);border:1px solid rgba(255,59,48,0.15);border-radius:var(--radius-sm);padding:1.1rem;transition:all 0.25s;cursor:pointer;}
 .hot-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,59,48,0.12);border-color:rgba(255,59,48,0.3);}
 .hot-card-store{font-size:0.62rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
 .hot-card-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.3;}
@@ -155,8 +199,9 @@ section{padding:5rem 5%;}
 .deal-img-wrap-viajes{background:linear-gradient(135deg,#001a3a 0%,#003380 100%);}
 .deal-img-wrap-general{background:linear-gradient(135deg,#1a1a1a 0%,#3a3a3a 100%);}
 .deal-img-icon{font-size:3.5rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));opacity:0.9;}
-.deal-discount{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-size:0.68rem;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:0.03em;}
-.deal-store-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:0.03em;}
+.deal-discount{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-size:0.68rem;font-weight:800;padding:3px 8px;border-radius:6px;}
+.deal-store-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:6px;}
+.deal-verified{position:absolute;bottom:8px;left:10px;background:rgba(34,197,94,0.9);color:#fff;font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:0.03em;display:flex;align-items:center;gap:3px;}
 .deal-body{padding:1.1rem;}
 .deal-category{font-size:0.62rem;color:var(--blue);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;}
 .deal-title{font-size:0.92rem;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.35;}
@@ -181,6 +226,16 @@ section{padding:5rem 5%;}
 .ad-label{position:absolute;top:5px;right:8px;font-size:0.55rem;color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;}
 .ad-300x250{width:100%;height:250px;}
 .ad-300x600{width:100%;height:300px;}
+
+/* ALERT COUNTER BANNER */
+.alert-counter{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);padding:2.5rem 5%;text-align:center;}
+.alert-counter-inner{max-width:700px;margin:0 auto;}
+.alert-counter h2{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:0.5rem;}
+.alert-counter p{color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:1.5rem;}
+.alert-counter-num{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;}
+.alert-counter-label{font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:4px;letter-spacing:0.05em;text-transform:uppercase;}
+.alert-counter-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--blue);padding:0.8rem 1.8rem;border-radius:980px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.5rem;transition:all 0.2s;}
+.alert-counter-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.2);}
 
 /* ALERT SECTION */
 .alert-section{background:var(--bg);}
@@ -218,7 +273,7 @@ section{padding:5rem 5%;}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;}
 .step{text-align:center;}
 .step-num{width:48px;height:48px;border-radius:50%;background:var(--text);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;}
-.step h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;letter-spacing:-0.2px;}
+.step h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
 .step p{font-size:0.85rem;color:var(--text-2);line-height:1.7;}
 
 /* TESTIMONIALS */
@@ -252,6 +307,7 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
   .nav-links{display:none;}
   .hero h1{letter-spacing:-1.5px;}
   .hero-stats{gap:1.5rem;}
+  .stats-banner-inner{gap:2rem;}
 }
 </style>
 </head>
@@ -299,7 +355,33 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
       <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Gratis</div></div>
     </div>
   </div>
+  <div class="scroll-arrow" onclick="document.getElementById('buscador').scrollIntoView({behavior:'smooth'})">
+    <span>Explorar</span>
+    <div class="scroll-arrow-icon">↓</div>
+  </div>
 </section>
+
+<!-- STATS BANNER -->
+<div class="stats-banner">
+  <div class="stats-banner-inner">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-ofertas">—</div>
+      <div class="stat-label">Ofertas activas ahora</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">12<span>+</span></div>
+      <div class="stat-label">Tiendas monitoreadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-alertas">—</div>
+      <div class="stat-label">Alertas creadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24<span>/7</span></div>
+      <div class="stat-label">Monitoreo activo</div>
+    </div>
+  </div>
+</div>
 
 <div class="search-section" id="buscador">
   <div class="search-inner">
@@ -337,11 +419,39 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
           <p style="font-size:0.85rem;font-weight:600;color:var(--blue);margin-bottom:2px;">🔔 ¿No encontraste el precio que buscas?</p>
           <p style="font-size:0.78rem;color:var(--text-2);">Crea una alerta y te avisamos cuando baje el precio de <strong id="alerta-producto-nombre"></strong>.</p>
         </div>
-        <button onclick="crearAlertaRapida()" style="background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.6rem 1.2rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s;">Crear alerta →</button>
+        <button onclick="crearAlertaRapida()" style="background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.6rem 1.2rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Crear alerta →</button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- POR QUÉ DEAL TRAVEL -->
+<section class="why">
+  <div class="why-inner">
+    <p class="section-eyebrow">Nuestra ventaja</p>
+    <h2 class="section-title">¿Por qué Deal Travel?</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">⚡</span>
+        <h3>Monitoreo cada hora</h3>
+        <p>Revisamos los precios de todas las tiendas cada 60 minutos, para que seas el primero en saber cuando baja el precio que buscas.</p>
+        <div class="why-vs">vs. buscar manualmente: <strong>horas de tu tiempo perdidas</strong></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🎯</span>
+        <h3>Alertas personalizadas</h3>
+        <p>Tú defines el producto, la tienda y el presupuesto. Solo te avisamos cuando hay una oferta que realmente te interesa. Sin spam.</p>
+        <div class="why-vs">vs. apps genéricas: <strong>notificaciones irrelevantes</strong></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🌐</span>
+        <h3>12+ tiendas en un solo lugar</h3>
+        <p>Amazon, Mercado Libre, Nike, Adidas, Expedia, Hoteles.com, Trivago y más. Todo monitoreado automáticamente sin que hagas nada.</p>
+        <div class="why-vs">vs. revisar cada sitio: <strong>demasiado tiempo y esfuerzo</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="tiendas">
   <div class="tiendas-inner">
@@ -393,9 +503,7 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
       </div>
       <div class="hot-deals">
         <div class="hot-deals-title">🔥 Las más hot ahora</div>
-        <div class="hot-deals-grid" id="hot-grid">
-          <div class="loading">Cargando...</div>
-        </div>
+        <div class="hot-deals-grid" id="hot-grid"><div class="loading">Cargando...</div></div>
       </div>
       <div class="deals-filters">
         <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
@@ -406,9 +514,7 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
         <button class="filter-btn" onclick="filtrar('belleza',this)">Belleza</button>
         <button class="filter-btn" onclick="filtrar('viajes',this)">Viajes</button>
       </div>
-      <div class="deals-grid" id="deals-grid">
-        <div class="loading">Cargando ofertas...</div>
-      </div>
+      <div class="deals-grid" id="deals-grid"><div class="loading">Cargando ofertas...</div></div>
       <div class="load-more-wrap">
         <p class="load-more-info" id="info-ofertas"></p>
         <button class="btn-load-more" id="btn-cargar-mas" onclick="cargarMasOfertas()">Ver 20 ofertas más</button>
@@ -428,6 +534,17 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
     </div>
   </div>
 </section>
+
+<!-- ALERT COUNTER BANNER -->
+<div class="alert-counter">
+  <div class="alert-counter-inner">
+    <h2>Únete a quienes ya ahorran</h2>
+    <p>Cada día más usuarios reciben alertas de precios y compran mejor.</p>
+    <div class="alert-counter-num" id="counter-alertas">—</div>
+    <div class="alert-counter-label">Alertas activas en este momento</div>
+    <a href="#alerta" class="alert-counter-cta">🔔 Crear mi alerta gratis</a>
+  </div>
+</div>
 
 <section class="alert-section" id="alerta">
   <div class="alert-inner">
@@ -528,7 +645,11 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
       </div>
       <div class="footer-links"><h4>Tiendas</h4><ul><li><a href="#">Amazon MX</a></li><li><a href="#">Mercado Libre</a></li><li><a href="#">Nike MX</a></li><li><a href="#">Expedia MX</a></li></ul></div>
       <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#">Electrónicos</a></li><li><a href="#">Moda</a></li><li><a href="#">Viajes</a></li><li><a href="#">Deportes</a></li></ul></div>
-      <div class="footer-links"><h4>Legal</h4><ul><li><a href="#">Privacidad</a></li><li><a href="#">Términos</a></li><li><a href="#">Cookies</a></li></ul></div>
+      <div class="footer-links"><h4>Legal</h4><ul>
+        <li><a href="/privacidad.html">Privacidad</a></li>
+        <li><a href="/terminos.html">Términos</a></li>
+        <li><a href="/cookies.html">Cookies</a></li>
+      </ul></div>
     </div>
     <div class="footer-bottom">
       <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
@@ -540,43 +661,53 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
 <script>
 const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
+const CAT_ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸','viajes':'✈️','general':'🛍️'};
+const CAT_BG = {'electronico':'deal-img-wrap-electronico','moda':'deal-img-wrap-moda','hogar':'deal-img-wrap-hogar','belleza':'deal-img-wrap-belleza','deporte':'deal-img-wrap-deporte','viajes':'deal-img-wrap-viajes','juguetes':'deal-img-wrap-general','general':'deal-img-wrap-general'};
 
-const CAT_ICONS = {
-  'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽',
-  'belleza':'💄','juguetes':'🧸','viajes':'✈️','general':'🛍️'
-};
-const CAT_BG = {
-  'electronico':'deal-img-wrap-electronico','moda':'deal-img-wrap-moda',
-  'hogar':'deal-img-wrap-hogar','belleza':'deal-img-wrap-belleza',
-  'deporte':'deal-img-wrap-deporte','viajes':'deal-img-wrap-viajes',
-  'juguetes':'deal-img-wrap-general','general':'deal-img-wrap-general'
-};
-
-let todasLasOfertas = [];
-let ofertasFiltradas = [];
-let ofertasMostradas = 20;
+let todasLasOfertas = [], ofertasFiltradas = [], ofertasMostradas = 20, diasSeleccionados = 7;
 const OFERTAS_POR_PAGINA = 20;
-let diasSeleccionados = 7;
 
-// CAMPANILLA
 function tocarCampanilla() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const tiempos = [0, 0.18, 0.36];
-    const frecuencias = [1046, 1318, 1568];
-    tiempos.forEach((t, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+    [[0,1046],[0.18,1318],[0.36,1568]].forEach(([t,f]) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(frecuencias[i], ctx.currentTime + t);
-      osc.frequency.exponentialRampToValueAtTime(frecuencias[i] * 0.5, ctx.currentTime + t + 0.4);
+      osc.frequency.setValueAtTime(f, ctx.currentTime + t);
+      osc.frequency.exponentialRampToValueAtTime(f * 0.5, ctx.currentTime + t + 0.4);
       gain.gain.setValueAtTime(0.18, ctx.currentTime + t);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.5);
       osc.start(ctx.currentTime + t);
       osc.stop(ctx.currentTime + t + 0.5);
     });
+  } catch(e) {}
+}
+
+function animarContador(el, target, prefix='', suffix='') {
+  if(!el) return;
+  let start = 0, duration = 1500, startTime = null;
+  function step(ts) {
+    if(!startTime) startTime = ts;
+    const progress = Math.min((ts - startTime) / duration, 1);
+    const val = Math.floor(progress * target);
+    el.textContent = prefix + val.toLocaleString('es-MX') + suffix;
+    if(progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+async function cargarStats() {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=count`, {headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'count=exact'}}),
+      fetch(`${SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=count`, {headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'count=exact'}})
+    ]);
+    const totalOfertas = parseInt(r1.headers.get('content-range')?.split('/')[1] || 0);
+    const totalAlertas = parseInt(r2.headers.get('content-range')?.split('/')[1] || 0);
+    animarContador(document.getElementById('stat-ofertas'), totalOfertas);
+    animarContador(document.getElementById('stat-alertas'), totalAlertas);
+    animarContador(document.getElementById('counter-alertas'), totalAlertas);
   } catch(e) {}
 }
 
@@ -631,6 +762,17 @@ function cargarMasOfertas() {
   actualizarBotonCargarMas();
 }
 
+function getFechaVerificada(fecha) {
+  if(!fecha) return 'Verificado hoy';
+  try {
+    const f = fecha.includes('/') ? fecha.split(' ')[0].split('/').reverse().join('-') : fecha;
+    const diff = Math.floor((new Date() - new Date(f)) / 86400000);
+    if(diff === 0) return '✓ Verificado hoy';
+    if(diff === 1) return '✓ Verificado ayer';
+    return `✓ Verificado hace ${diff} días`;
+  } catch(e) { return '✓ Verificado hoy'; }
+}
+
 function renderCard(o) {
   const sinPrecio = o.precio_fmt === 'Ver precio';
   const tipo = o.tipo || 'general';
@@ -642,6 +784,7 @@ function renderCard(o) {
         <div class="deal-img-icon">${icon}</div>
         <span class="deal-discount">${!sinPrecio && o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
         <span class="deal-store-badge">${o.fuente}</span>
+        <span class="deal-verified">${getFechaVerificada(o.fecha)}</span>
       </div>
       <div class="deal-body">
         <div class="deal-category">${tipo}</div>
@@ -650,9 +793,7 @@ function renderCard(o) {
         <div class="deal-footer">
           <div class="deal-prices">
             ${!sinPrecio && o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
-            ${sinPrecio
-              ? `<div style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</div>`
-              : `<div class="deal-price">${o.precio_fmt}</div>`}
+            ${sinPrecio ? `<div style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</div>` : `<div class="deal-price">${o.precio_fmt}</div>`}
           </div>
           <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
         </div>
@@ -666,16 +807,13 @@ function renderHotDeals(ofertas) {
   if(!hot.length) { grid.innerHTML = ''; return; }
   grid.innerHTML = hot.map(o => {
     const sinPrecio = o.precio_fmt === 'Ver precio';
-    return `
-    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+    return `<a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
       <div class="hot-card">
         <div class="hot-card-store">${o.fuente}</div>
         <div class="hot-card-title">${o.destino}</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
           ${!sinPrecio && o.precio_original ? `<span style="text-decoration:line-through;color:var(--text-3);font-size:0.8rem;">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
-          ${sinPrecio
-            ? `<span style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</span>`
-            : `<span class="hot-card-price">${o.precio_fmt}</span>`}
+          ${sinPrecio ? `<span style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</span>` : `<span class="hot-card-price">${o.precio_fmt}</span>`}
           ${!sinPrecio && o.descuento_pct ? `<span style="background:var(--red);color:#fff;font-size:0.62rem;font-weight:800;padding:2px 7px;border-radius:6px;">-${o.descuento_pct}%</span>` : ''}
         </div>
         <div class="hot-card-promo">${o.tipo_promo}</div>
@@ -686,10 +824,7 @@ function renderHotDeals(ofertas) {
 
 function renderOfertas(ofertas) {
   const grid = document.getElementById('deals-grid');
-  if(!ofertas || ofertas.length === 0) {
-    grid.innerHTML = '<div class="no-results">No hay ofertas en esta categoría.</div>';
-    return;
-  }
+  if(!ofertas || ofertas.length === 0) { grid.innerHTML = '<div class="no-results">No hay ofertas en esta categoría.</div>'; return; }
   grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
 }
 
@@ -714,10 +849,7 @@ async function buscarOfertas() {
       grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
       count.textContent = `${ofertas.length} oferta${ofertas.length>1?'s':''} encontrada${ofertas.length>1?'s':''}`;
     }
-    if(q) {
-      document.getElementById('alerta-producto-nombre').textContent = q;
-      document.getElementById('alerta-rapida').style.display = 'block';
-    }
+    if(q) { document.getElementById('alerta-producto-nombre').textContent = q; document.getElementById('alerta-rapida').style.display = 'block'; }
   } catch(e) { console.log('Error buscando:', e); }
 }
 
@@ -761,38 +893,25 @@ async function submitAlert() {
   const telefono = document.getElementById('telefono').value.trim();
   if(!producto || !presupuesto || !email) { alert('Por favor completa: producto, precio máximo y email.'); return; }
   const btn = document.querySelector('.form-submit');
-  btn.disabled = true;
-  btn.textContent = 'Guardando...';
+  btn.disabled = true; btn.textContent = 'Guardando...';
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/alertas`, {
       method: 'POST',
       headers: {'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
-      body: JSON.stringify({
-        origen: 'dealtravel.mx',
-        destino: producto,
-        tipo: categoria || 'General',
-        presupuesto: parseFloat(presupuesto),
-        fecha_salida: '',
-        email,
-        telefono,
-        fuente: tienda || 'Cualquier tienda',
-        activa: true,
-        dias_alerta: diasSeleccionados
-      })
+      body: JSON.stringify({origen:'dealtravel.mx',destino:producto,tipo:categoria||'General',presupuesto:parseFloat(presupuesto),fecha_salida:'',email,telefono,fuente:tienda||'Cualquier tienda',activa:true,dias_alerta:diasSeleccionados})
     });
     if(res.ok || res.status===201) {
       document.getElementById('success-producto').textContent = producto;
       document.getElementById('success').style.display = 'block';
       btn.textContent = '✓ Alerta activada';
       btn.style.background = '#22c55e';
+      cargarStats();
     } else {
-      btn.disabled = false;
-      btn.textContent = 'Activar alerta de precio →';
+      btn.disabled = false; btn.textContent = 'Activar alerta de precio →';
       alert('Error al guardar. Intenta de nuevo.');
     }
   } catch(e) {
-    btn.disabled = false;
-    btn.textContent = 'Activar alerta de precio →';
+    btn.disabled = false; btn.textContent = 'Activar alerta de precio →';
     alert('Error de conexión.');
   }
 }
@@ -806,6 +925,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
 window.addEventListener('DOMContentLoaded', () => {
   cargarOfertas();
+  cargarStats();
   setTimeout(tocarCampanilla, 800);
 });
 </script>
