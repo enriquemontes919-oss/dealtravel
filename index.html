@@ -782,7 +782,7 @@ function renderCard(o) {
     <div class="deal-card" data-tipo="${tipo}">
       <div class="deal-img-wrap ${bgClass}">
         <div class="deal-img-icon">${icon}</div>
-        <span class="deal-discount">${!sinPrecio && o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
+        <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
         <span class="deal-store-badge">${o.fuente}</span>
         <span class="deal-verified">${getFechaVerificada(o.fecha)}</span>
       </div>
@@ -793,7 +793,9 @@ function renderCard(o) {
         <div class="deal-footer">
           <div class="deal-prices">
             ${!sinPrecio && o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
-            ${sinPrecio ? `<div style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</div>` : `<div class="deal-price">${o.precio_fmt}</div>`}
+            ${sinPrecio
+              ? `<div style="font-size:0.82rem;font-weight:700;color:var(--blue);">Precio en Amazon</div>`
+              : `<div class="deal-price">${o.precio_fmt}</div>`}
           </div>
           <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
         </div>
