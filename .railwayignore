@@ -1,4 +1,7 @@
-scraper.py
-*.env
+# Deal Travel — Railway ignore
+# El scraper AHORA SÍ corre en Railway — NO ignorar scraper.py ni agents/
+# Solo ignorar archivos de desarrollo local
+.env
 __pycache__/
 *.pyc
+.DS_Store
