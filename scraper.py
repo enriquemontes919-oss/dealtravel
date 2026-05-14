@@ -64,12 +64,34 @@ def marcar_inactivas_viejas():
             print(f"[Supabase] Error limpieza {tienda}: {e}")
     print("[Supabase] Ofertas viejas marcadas como inactivas")
 
+def limpiar_tiendas_fijas(ofertas):
+    """Borra ofertas anteriores de tiendas fijas antes de reinsertar.
+    Así nunca se acumulan duplicados por reinserción horaria."""
+    hdrs = supabase_headers()
+    fuentes_fijas = set(o["fuente"] for o in ofertas if o["fuente"] in TIENDAS_FIJAS)
+    for fuente in fuentes_fijas:
+        try:
+            fuente_enc = requests.utils.quote(fuente)
+            r = requests.delete(
+                f"{SUPABASE_URL}/rest/v1/ofertas?fuente=eq.{fuente_enc}",
+                headers={**hdrs, "Prefer": "return=minimal"}, timeout=10
+            )
+            print(f"[Supabase] Limpieza previa: {fuente}")
+        except Exception as e:
+            print(f"[Supabase] Error limpiando {fuente}: {e}")
+
 def guardar_en_supabase(ofertas):
     hdrs = {**supabase_headers(), "Prefer": "return=minimal"}
+
+    # Primero limpiar tiendas fijas para evitar duplicados
+    limpiar_tiendas_fijas(ofertas)
+
     nuevas = 0
     for oferta in ofertas:
         try:
             es_fija = oferta["fuente"] in TIENDAS_FIJAS
+            # Tiendas fijas: siempre insertar (ya limpiamos antes)
+            # Mercado Libre: solo insertar si no existe (tiene productos únicos reales)
             if es_fija or not oferta_ya_existe(oferta["destino"], oferta["precio"], oferta["fuente"]):
                 r = requests.post(
                     f"{SUPABASE_URL}/rest/v1/ofertas",
@@ -79,7 +101,7 @@ def guardar_en_supabase(ofertas):
                     nuevas += 1
         except Exception as e:
             print(f"[Supabase] Error guardando oferta: {e}")
-    print(f"[Supabase] {nuevas} ofertas nuevas guardadas (de {len(ofertas)} encontradas)")
+    print(f"[Supabase] {nuevas} ofertas guardadas (de {len(ofertas)} encontradas)")
 
 # ── Orquestador ───────────────────────────────────────────────────────────────
 
