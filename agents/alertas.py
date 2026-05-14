@@ -46,10 +46,25 @@ def revisar_alertas(todas_ofertas):
                     print(f"[Alertas] Alerta {alerta['id']} expirada")
                     continue
 
-                # 2. Claves ya notificadas
-                ya_notificados = set(alerta.get("ofertas_notificadas") or [])
+                # 2. Cooldown: no enviar más de 1 email cada 24h por alerta
+                ultimo_envio = alerta.get("ultimo_envio")
+                if ultimo_envio:
+                    try:
+                        ultimo = datetime.fromisoformat(
+                            ultimo_envio.replace("Z", "+00:00")
+                        ).replace(tzinfo=None)
+                        horas = (ahora - ultimo).total_seconds() / 3600
+                        if horas < 24:
+                            print(f"[Alertas] Alerta {alerta['id']} — cooldown ({horas:.1f}h desde último envío)")
+                            continue
+                    except:
+                        pass
 
-                # 3. Matching
+                # 3. Claves ya notificadas
+                ya_notificados = set(alerta.get("ofertas_notificadas") or [])
+                print(f"[Alertas] Alerta {alerta['id']} — {len(ya_notificados)} ofertas ya notificadas")
+
+                # 4. Matching
                 producto_alerta = alerta.get("destino", "").lower()
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto     = float(alerta.get("presupuesto") or 99999)
@@ -235,4 +250,3 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             print(f"[Email] Error {r.status_code}: {r.text[:100]}")
     except Exception as e:
         print(f"[Email] Excepción: {e}")
-
