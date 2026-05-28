@@ -1,6 +1,6 @@
 """
 run_mercadolibre.py — Entry point para GitHub Actions
-Corre solo el agente de Mercado Libre y guarda en Supabase
+Usa Access Token oficial de ML para búsquedas autenticadas
 """
 import os
 import requests
@@ -12,15 +12,10 @@ load_dotenv()
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://zutcsoloxabwtrvfzmlm.supabase.co")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT")
 
-HEADERS_ML = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept": "application/json",
-    "Accept-Language": "es-MX,es;q=0.9",
-}
+ML_CLIENT_ID     = "8811685687859386"
+ML_CLIENT_SECRET = "rPuY0Q2oPlXqZZlVdw40kQ2xFU205DjZ"
+ML_REFRESH_TOKEN = os.getenv("ML_REFRESH_TOKEN", "")
+ML_ACCESS_TOKEN  = os.getenv("ML_ACCESS_TOKEN", "APP_USR-8811685687859386-052818-379beb12c596da7542b8762d42a67ba3-3434595846")
 
 BUSQUEDAS = [
     ("laptop",          "electronico"),
@@ -39,15 +34,19 @@ BUSQUEDAS = [
 
 PRECIO_MAX_MXN = 50000
 
-def scrape_ml():
+def scrape_ml(token):
     ofertas = []
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json",
+    }
     for query, tipo in BUSQUEDAS:
         try:
             url = (
                 f"https://api.mercadolibre.com/sites/MLM/search"
                 f"?q={requests.utils.quote(query)}&sort=relevance&limit=8"
             )
-            r = requests.get(url, headers=HEADERS_ML, timeout=15)
+            r = requests.get(url, headers=headers, timeout=15)
             if r.status_code != 200:
                 print(f"[ML] HTTP {r.status_code} para '{query}'")
                 continue
@@ -88,13 +87,11 @@ def guardar_en_supabase(ofertas):
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Prefer": "return=minimal"
     }
-    # Primero borrar ofertas anteriores de ML
     requests.delete(
         f"{SUPABASE_URL}/rest/v1/ofertas?fuente=eq.Mercado%20Libre",
         headers=hdrs, timeout=10
     )
     print("[ML] Ofertas anteriores eliminadas")
-
     nuevas = 0
     for oferta in ofertas:
         try:
@@ -112,6 +109,6 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"ML SCRAPER — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     print("=" * 50)
-    ofertas = scrape_ml()
+    ofertas = scrape_ml(ML_ACCESS_TOKEN)
     guardar_en_supabase(ofertas)
     print("DONE")
