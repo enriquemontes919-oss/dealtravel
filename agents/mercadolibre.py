@@ -28,7 +28,7 @@ def scraper_url(target_url):
     """Envuelve la URL de ML con el proxy de Scraperapi"""
     from urllib.parse import quote
     return (
-        f"http://api.scraperapi.com"
+        f"https://api.scraperapi.com"
         f"?api_key={SCRAPERAPI_KEY}"
         f"&url={quote(target_url, safe='')}"
     )
