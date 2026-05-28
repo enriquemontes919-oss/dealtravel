@@ -1,21 +1,18 @@
 """
 run_mercadolibre.py — Entry point para GitHub Actions
-Usa Access Token oficial de ML para búsquedas autenticadas
+Usa Scraperapi para evitar el bloqueo de IP de ML
 """
 import os
 import requests
 from datetime import datetime
+from urllib.parse import quote
 from dotenv import load_dotenv
 
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://zutcsoloxabwtrvfzmlm.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT")
-
-ML_CLIENT_ID     = "8811685687859386"
-ML_CLIENT_SECRET = "rPuY0Q2oPlXqZZlVdw40kQ2xFU205DjZ"
-ML_REFRESH_TOKEN = os.getenv("ML_REFRESH_TOKEN", "")
-ML_ACCESS_TOKEN  = os.getenv("ML_ACCESS_TOKEN", "APP_USR-8811685687859386-052818-379beb12c596da7542b8762d42a67ba3-3434595846")
+SUPABASE_URL   = os.getenv("SUPABASE_URL", "https://zutcsoloxabwtrvfzmlm.supabase.co")
+SUPABASE_KEY   = os.getenv("SUPABASE_KEY", "sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT")
+SCRAPERAPI_KEY = os.getenv("SCRAPERAPI_KEY", "")
 
 BUSQUEDAS = [
     ("laptop",          "electronico"),
@@ -34,19 +31,16 @@ BUSQUEDAS = [
 
 PRECIO_MAX_MXN = 50000
 
-def scrape_ml(token):
+def scrape_ml():
     ofertas = []
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/json",
-    }
     for query, tipo in BUSQUEDAS:
         try:
-            url = (
+            ml_url = (
                 f"https://api.mercadolibre.com/sites/MLM/search"
                 f"?q={requests.utils.quote(query)}&sort=relevance&limit=8"
             )
-            r = requests.get(url, headers=headers, timeout=15)
+            api_url = f"https://api.scraperapi.com?api_key={SCRAPERAPI_KEY}&url={quote(ml_url, safe='')}"
+            r = requests.get(api_url, timeout=60)
             if r.status_code != 200:
                 print(f"[ML] HTTP {r.status_code} para '{query}'")
                 continue
@@ -109,6 +103,9 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"ML SCRAPER — {datetime.now().strftime('%d/%m/%Y %H:%M')}")
     print("=" * 50)
-    ofertas = scrape_ml(ML_ACCESS_TOKEN)
+    if not SCRAPERAPI_KEY:
+        print("[ML] Sin SCRAPERAPI_KEY — abortando")
+        exit(1)
+    ofertas = scrape_ml()
     guardar_en_supabase(ofertas)
     print("DONE")
