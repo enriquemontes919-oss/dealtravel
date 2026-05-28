@@ -1,1 +1,27 @@
+name: Mercado Libre Scraper
 
+on:
+  schedule:
+    - cron: '30 * * * *'  # Cada hora a los :30 (Railway corre a los :00)
+  workflow_dispatch:        # También permite correrlo manualmente
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run Mercado Libre agent
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: python run_mercadolibre.py
