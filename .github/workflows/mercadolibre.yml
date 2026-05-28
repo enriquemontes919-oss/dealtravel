@@ -2,8 +2,8 @@ name: Mercado Libre Scraper
 
 on:
   schedule:
-    - cron: '30 * * * *'  # Cada hora a los :30 (Railway corre a los :00)
-  workflow_dispatch:        # También permite correrlo manualmente
+    - cron: '30 * * * *'
+  workflow_dispatch:
 
 jobs:
   scrape:
