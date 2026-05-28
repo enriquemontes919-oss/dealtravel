@@ -2,12 +2,13 @@
 agents/mercadolibre.py — Agente Mercado Libre vía Scraperapi
 Resuelve el bloqueo de IP de Railway usando proxy de Scraperapi
 """
+import os
 import time
 import random
 import requests
 from agents.base import PRECIO_MAX_MXN, ahora_str
 
-SCRAPERAPI_KEY = "b6d886be42dcdb3efd40bbdc289178df"
+SCRAPERAPI_KEY = os.getenv("SCRAPERAPI_KEY", "")
 
 BUSQUEDAS = [
     ("laptop",          "electronico"),
@@ -25,7 +26,6 @@ BUSQUEDAS = [
 ]
 
 def scraper_url(target_url):
-    """Envuelve la URL de ML con el proxy de Scraperapi"""
     from urllib.parse import quote
     return (
         f"https://api.scraperapi.com"
@@ -36,24 +36,23 @@ def scraper_url(target_url):
 def run():
     ofertas = []
 
+    if not SCRAPERAPI_KEY:
+        print("[MercadoLibre] Sin SCRAPERAPI_KEY — saltando agente")
+        return ofertas
+
     for query, tipo in BUSQUEDAS:
         try:
             ml_url = (
                 f"https://api.mercadolibre.com/sites/MLM/search"
                 f"?q={requests.utils.quote(query)}&sort=relevance&limit=8"
             )
-            r = requests.get(
-                scraper_url(ml_url),
-                timeout=30  # Scraperapi necesita más tiempo
-            )
+            r = requests.get(scraper_url(ml_url), timeout=30)
             if r.status_code != 200:
                 print(f"[MercadoLibre] HTTP {r.status_code} para '{query}'")
                 time.sleep(random.uniform(2, 4))
                 continue
 
-            data = r.json()
-            resultados = data.get("results", [])
-
+            resultados = r.json().get("results", [])
             for item in resultados:
                 precio   = item.get("price", 0)
                 original = item.get("original_price") or 0
