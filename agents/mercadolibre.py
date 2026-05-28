@@ -1,11 +1,14 @@
 """
-agents/mercadolibre.py — Agente Mercado Libre (API oficial MLM)
-Único agente con precios 100% reales en tiempo real desde el día 1.
+agents/mercadolibre.py — Agente Mercado Libre con Access Token oficial
+Client Credentials flow — no requiere intervención del usuario
 """
 import time
 import random
 import requests
 from agents.base import PRECIO_MAX_MXN, ahora_str
+
+ML_CLIENT_ID     = "8811685687859386"
+ML_CLIENT_SECRET = "rPuY0Q2oPlXqZZlVdw40kQ2xFU205DjZ"
 
 BUSQUEDAS = [
     ("laptop",          "electronico"),
@@ -18,33 +21,57 @@ BUSQUEDAS = [
     ("refrigerador",    "hogar"),
     ("perfume",         "belleza"),
     ("nintendo switch", "electronico"),
+    ("playstation",     "electronico"),
+    ("smartwatch",      "electronico"),
 ]
 
-# Headers que simulan un navegador real — evita el 403
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept":          "application/json, text/plain, */*",
-    "Accept-Language": "es-MX,es;q=0.9,en;q=0.8",
-    "Referer":         "https://www.mercadolibre.com.mx/",
-    "Origin":          "https://www.mercadolibre.com.mx",
-}
+def obtener_access_token():
+    """Obtiene Access Token via Client Credentials — no requiere login de usuario"""
+    try:
+        r = requests.post(
+            "https://api.mercadolibre.com/oauth/token",
+            headers={"Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"},
+            data={
+                "grant_type":    "client_credentials",
+                "client_id":     ML_CLIENT_ID,
+                "client_secret": ML_CLIENT_SECRET,
+            },
+            timeout=15
+        )
+        if r.status_code == 200:
+            token = r.json().get("access_token")
+            print(f"[MercadoLibre] Access Token obtenido ✓")
+            return token
+        else:
+            print(f"[MercadoLibre] Error obteniendo token: {r.status_code} — {r.text[:100]}")
+            return None
+    except Exception as e:
+        print(f"[MercadoLibre] Error token: {e}")
+        return None
 
 def run():
     ofertas = []
+
+    token = obtener_access_token()
+    if not token:
+        print("[MercadoLibre] Sin token — saltando agente")
+        return ofertas
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept":        "application/json",
+    }
+
     for query, tipo in BUSQUEDAS:
         try:
             url = (
                 f"https://api.mercadolibre.com/sites/MLM/search"
                 f"?q={requests.utils.quote(query)}&sort=relevance&limit=8"
             )
-            r = requests.get(url, headers=HEADERS, timeout=15)
+            r = requests.get(url, headers=headers, timeout=15)
             if r.status_code != 200:
                 print(f"[MercadoLibre] HTTP {r.status_code} para '{query}'")
-                time.sleep(random.uniform(3, 6))
+                time.sleep(random.uniform(2, 4))
                 continue
 
             for item in r.json().get("results", []):
@@ -72,8 +99,8 @@ def run():
                     "activa":          True,
                 })
 
-            # Delay entre búsquedas para no ser bloqueados
-            time.sleep(random.uniform(1.5, 3.0))
+            # Delay entre búsquedas
+            time.sleep(random.uniform(1.0, 2.0))
 
         except Exception as e:
             print(f"[MercadoLibre] Error '{query}': {e}")
