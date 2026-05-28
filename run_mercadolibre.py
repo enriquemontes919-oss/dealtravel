@@ -39,12 +39,29 @@ def scrape_ml():
                 f"https://api.mercadolibre.com/sites/MLM/search"
                 f"?q={requests.utils.quote(query)}&sort=relevance&limit=8"
             )
-            api_url = f"https://api.scraperapi.com?api_key={SCRAPERAPI_KEY}&url={quote(ml_url, safe='')}"
-            r = requests.get(api_url, timeout=60)
+            # Scraperapi con headers para forzar JSON
+            api_url = (
+                f"https://api.scraperapi.com"
+                f"?api_key={SCRAPERAPI_KEY}"
+                f"&url={quote(ml_url, safe='')}"
+                f"&keep_headers=true"
+            )
+            r = requests.get(
+                api_url,
+                headers={"Accept": "application/json"},
+                timeout=60
+            )
             if r.status_code != 200:
                 print(f"[ML] HTTP {r.status_code} para '{query}'")
                 continue
-            for item in r.json().get("results", []):
+
+            try:
+                data = r.json()
+            except Exception:
+                print(f"[ML] Respuesta no es JSON para '{query}' — posible HTML de error")
+                continue
+
+            for item in data.get("results", []):
                 precio   = item.get("price", 0)
                 original = item.get("original_price") or 0
                 if not (200 <= precio <= PRECIO_MAX_MXN):
@@ -68,7 +85,7 @@ def scrape_ml():
                     "fecha":           datetime.now().strftime("%d/%m/%Y %H:%M"),
                     "activa":          True,
                 })
-            print(f"[ML] '{query}' procesado")
+            print(f"[ML] '{query}' procesado — {len(data.get('results', []))} resultados")
         except Exception as e:
             print(f"[ML] Error '{query}': {e}")
     print(f"[ML] {len(ofertas)} ofertas con descuento encontradas")
