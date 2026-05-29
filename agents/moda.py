@@ -1,8 +1,23 @@
 """
 agents/moda.py — Agentes de tiendas de moda: Nike, Adidas, Puma, Zara, H&M
 Catálogo curado con precios y descuentos reales.
-Cuando Awin apruebe Nike/Adidas → reemplazar URLs por deep links de Product Feed.
+Nike MX: deep link Awin MID 117547 activo desde Mayo 2026 ✅
+Adidas MX: pendiente aprobación Awin → URL directa por ahora
 """
+from agents.base import AWIN_ID
+
+AWIN_MID_NIKE = "117547"
+
+def nike_url(path="/mx/w/sale-3yaep"):
+    """Deep link Awin para Nike MX — MID 117547"""
+    from urllib.parse import quote
+    destino = f"https://www.nike.com{path}"
+    return (
+        f"https://www.awin1.com/cread.php?"
+        f"awinmid={AWIN_MID_NIKE}&awinaffid={AWIN_ID}"
+        f"&ued={quote(destino, safe='')}"
+    )
+
 from agents.base import precio_original, ahora_str
 
 # ── Nike MX ──────────────────────────────────────────────────────────────────
@@ -30,7 +45,7 @@ def run_nike():
             "precio_fmt":      f"${precio:,.0f} MXN",
             "precio_original": orig,
             "descuento_pct":   descuento,
-            "url":             "https://www.nike.com/mx/w/sale-3yaep",
+            "url":             nike_url(),
             "tipo_promo":      f"-{descuento}% Sale Nike MX",
             "palabras_clave":  keywords,
             "fecha":           ahora_str(),
@@ -166,4 +181,3 @@ def run_hm():
         })
     print(f"[H&M MX] {len(ofertas)} ofertas")
     return ofertas
-
