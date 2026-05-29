@@ -1,46 +1,47 @@
 """
-agents/liverpool.py — Agente Liverpool MX
+agents/palacio.py — Agente El Palacio de Hierro
 URLs verificadas desde Google Search — Mayo 2026
-Estructura: liverpool.com.mx/tienda/categoria/catID
+Estructura: elpalaciodehierro.com/seccion/categoria/
 """
 from agents.base import precio_original, ahora_str
 
-LIVERPOOL_PRODUCTOS = [
-    # Electrónica
-    ("Liverpool — Smart TV Samsung 55\" 4K QLED",   12999, 30, "electronico",
-     "https://www.liverpool.com.mx/tienda/pantallas-y-televisores/catst77704435"),
-    ("Liverpool — iPhone 15 128GB",                 16999, 15, "electronico",
-     "https://www.liverpool.com.mx/tienda/celulares/cat5150024"),
-    ("Liverpool — Laptop HP 15\" Core i5 8GB RAM",   9999, 20, "electronico",
-     "https://www.liverpool.com.mx/tienda/computadoras-laptop/cat980042"),
-    ("Liverpool — Audífonos Sony WH-1000XM5",        5999, 25, "electronico",
-     "https://www.liverpool.com.mx/tienda/audifonos/catst16778857"),
-    ("Liverpool — iPad 10ma Gen 64GB WiFi",          8499, 15, "electronico",
-     "https://www.liverpool.com.mx/tienda/tablets/cat1010044"),
-    # Moda
-    ("Liverpool — Tenis Nike Air Max 270 Hombre",    2199, 20, "moda",
-     "https://www.liverpool.com.mx/tienda/tenis-de-hombre/catst7543627"),
-    ("Liverpool — Tenis Adidas Ultraboost 22",       2799, 25, "moda",
-     "https://www.liverpool.com.mx/tienda/tenis/catst4760950"),
-    ("Liverpool — Chamarra Tommy Hilfiger Hombre",   2499, 30, "moda",
-     "https://www.liverpool.com.mx/tienda/chamarras-y-chalecos/catst55391142"),
-    ("Liverpool — Bolsa Coach Dreamer Piel",         4999, 35, "moda",
-     "https://www.liverpool.com.mx/tienda/bolsos-y-carteras/cat1100145"),
-    ("Liverpool — Perfume CH Good Girl 80ml",        1899, 20, "belleza",
-     "https://www.liverpool.com.mx/tienda/perfumes-para-dama/cat1100067"),
-    # Hogar
-    ("Liverpool — Cafetera Nespresso Vertuo Pop",    1999, 25, "hogar",
-     "https://www.liverpool.com.mx/tienda/nespresso/catst81012509"),
-    ("Liverpool — Aspiradora Robot iRobot Roomba",   5999, 30, "hogar",
-     "https://www.liverpool.com.mx/tienda/aspiradoras/cat1000441"),
+PALACIO_PRODUCTOS = [
+    # Moda mujer
+    ("Palacio — Bolsa Michael Kors Jet Set Piel",      4999, 30, "moda",
+     "https://www.elpalaciodehierro.com/mujer/bolsos-y-carteras/"),
+    ("Palacio — Vestido Ralph Lauren Midi Mujer",      4799, 30, "moda",
+     "https://www.elpalaciodehierro.com/mujer/ropa/vestidos/"),
+    ("Palacio — Chamarra Calvin Klein Mujer",          3499, 25, "moda",
+     "https://www.elpalaciodehierro.com/mujer/ropa/chamarras-y-abrigos/"),
+    ("Palacio — Tenis Prada Downtown Mujer",          14999, 20, "moda",
+     "https://www.elpalaciodehierro.com/mujer/zapatos/tenis/"),
+    # Moda hombre
+    ("Palacio — Tenis Gucci Rhython Hombre",          18999, 20, "moda",
+     "https://www.elpalaciodehierro.com/hombre/zapatos/tenis/"),
+    ("Palacio — Cartera Coach Para Hombre Piel",       2199, 30, "moda",
+     "https://www.elpalaciodehierro.com/hombre/accesorios/carteras/"),
+    ("Palacio — Reloj Fossil Automático Hombre",       3499, 25, "moda",
+     "https://www.elpalaciodehierro.com/hombre/accesorios/relojes/"),
+    # Belleza / perfumes
+    ("Palacio — Perfume Chanel No.5 EDP 100ml",        4999, 15, "belleza",
+     "https://www.elpalaciodehierro.com/belleza/fragancias/para-ella/"),
+    ("Palacio — Perfume YSL Libre EDP 90ml",           3899, 20, "belleza",
+     "https://www.elpalaciodehierro.com/belleza/fragancias/para-ella/"),
+    ("Palacio — Set Skincare La Mer Hidratante",        8999, 25, "belleza",
+     "https://www.elpalaciodehierro.com/belleza/cuidado-de-la-piel/"),
+    ("Palacio — Crema Facial Clinique Hidratante 50ml",  899, 20, "belleza",
+     "https://www.elpalaciodehierro.com/belleza/cuidado-de-la-piel/"),
+    # Accesorios / viaje
+    ("Palacio — Maleta Samsonite Spinner 24\" Hardside", 3999, 30, "hogar",
+     "https://www.elpalaciodehierro.com/mujer/bolsos-y-carteras/maletas-y-equipaje/"),
 ]
 
 def run():
     ofertas = []
-    for nombre, precio, descuento, tipo, url in LIVERPOOL_PRODUCTOS:
+    for nombre, precio, descuento, tipo, url in PALACIO_PRODUCTOS:
         orig = precio_original(precio, descuento)
         ofertas.append({
-            "fuente":          "Liverpool",
+            "fuente":          "Palacio de Hierro",
             "tipo":            tipo,
             "destino":         nombre,
             "precio":          precio,
@@ -48,10 +49,10 @@ def run():
             "precio_original": orig,
             "descuento_pct":   descuento,
             "url":             url,
-            "tipo_promo":      f"-{descuento}% Oferta Liverpool",
+            "tipo_promo":      f"-{descuento}% Oferta Palacio de Hierro",
             "palabras_clave":  nombre.lower(),
             "fecha":           ahora_str(),
             "activa":          True,
         })
-    print(f"[Liverpool] {len(ofertas)} ofertas")
+    print(f"[Palacio de Hierro] {len(ofertas)} ofertas")
     return ofertas
