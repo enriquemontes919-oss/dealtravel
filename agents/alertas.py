@@ -1,36 +1,57 @@
 """
 agents/alertas.py — Sistema de alertas: matching, email consolidado y WhatsApp
+
+FIX Mayo 2026 — Ofertas repetidas en emails:
+  Problema raíz: clave_oferta() usaba destino|fuente. Como limpiar_tiendas_fijas()
+  borra y re-inserta cada hora con nuevos IDs, las claves seguían siendo iguales
+  PERO el campo `ofertas_notificadas` se comparaba contra claves que podían variar
+  si el nombre del destino tenía espacios o mayúsculas distintas.
+
+  Solución: clave normalizada = fuente|destino_slug (lowercase, sin espacios extras).
+  Además: el matching ahora usa `todas_ofertas` (lo que encontró el scraper en esta
+  ejecución) en lugar de releer Supabase, evitando race conditions.
 """
 import requests
 from datetime import datetime
-from agents.base import SUPABASE_URL, RESEND_API_KEY, supabase_headers, clave_oferta
+from agents.base import SUPABASE_URL, RESEND_API_KEY, supabase_headers
+
+
+def _clave_normalizada(oferta):
+    """
+    Clave estable: fuente + destino normalizado.
+    Resiste re-inserciones con nuevos IDs en Supabase.
+    """
+    fuente  = (oferta.get("fuente") or "").strip().lower()
+    destino = (oferta.get("destino") or "").strip().lower()
+    # Quitar prefijo "fuente — " si existe (ej: "Liverpool — Smart TV...")
+    if " — " in destino:
+        destino = destino.split(" — ", 1)[1]
+    return f"{fuente}|{destino[:60]}"
+
 
 def revisar_alertas(todas_ofertas):
     if not RESEND_API_KEY:
         print("[Alertas] Sin RESEND_API_KEY — emails desactivados")
         return
 
+    if not todas_ofertas:
+        print("[Alertas] Sin ofertas para revisar")
+        return
+
     try:
-        hdrs = supabase_headers()
-        r = requests.get(
+        hdrs  = supabase_headers()
+        r     = requests.get(
             f"{SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=*",
             headers=hdrs, timeout=10
         )
         alertas = r.json()
-        print(f"[Alertas] {len(alertas)} alertas activas")
-
-        r2 = requests.get(
-            f"{SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=*",
-            headers=hdrs, timeout=10
-        )
-        ofertas_supabase = r2.json()
-        print(f"[Ofertas] {len(ofertas_supabase)} ofertas en Supabase")
+        print(f"[Alertas] {len(alertas)} alertas activas | {len(todas_ofertas)} ofertas disponibles")
 
         ahora = datetime.now()
 
         for alerta in alertas:
             try:
-                # 1. Verificar expiración
+                # ── 1. Verificar expiración ───────────────────────────────
                 dias_alerta = alerta.get("dias_alerta") or 7
                 fecha_creacion = datetime.fromisoformat(
                     alerta["created_at"].replace("Z", "+00:00")
@@ -43,10 +64,10 @@ def revisar_alertas(todas_ofertas):
                         headers={**hdrs, "Prefer": "return=minimal"},
                         json={"activa": False}, timeout=10
                     )
-                    print(f"[Alertas] Alerta {alerta['id']} expirada")
+                    print(f"[Alertas] Alerta {alerta['id']} expirada — desactivada")
                     continue
 
-                # 2. Cooldown: no enviar más de 1 email cada 24h por alerta
+                # ── 2. Cooldown 24h ───────────────────────────────────────
                 ultimo_envio = alerta.get("ultimo_envio")
                 if ultimo_envio:
                     try:
@@ -55,53 +76,63 @@ def revisar_alertas(todas_ofertas):
                         ).replace(tzinfo=None)
                         horas = (ahora - ultimo).total_seconds() / 3600
                         if horas < 24:
-                            print(f"[Alertas] Alerta {alerta['id']} — cooldown ({horas:.1f}h desde último envío)")
+                            print(f"[Alertas] {alerta['id']} — cooldown ({horas:.1f}h)")
                             continue
-                    except:
+                    except Exception:
                         pass
 
-                # 3. Claves ya notificadas
+                # ── 3. Claves ya notificadas (normalizadas) ───────────────
                 ya_notificados = set(alerta.get("ofertas_notificadas") or [])
-                print(f"[Alertas] Alerta {alerta['id']} — {len(ya_notificados)} ofertas ya notificadas")
 
-                # 4. Matching
+                # ── 4. Matching ───────────────────────────────────────────
                 producto_alerta = alerta.get("destino", "").lower()
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto     = float(alerta.get("presupuesto") or 99999)
                 fuente_alerta   = alerta.get("fuente", "Cualquier tienda")
 
                 matches_nuevos = []
-                for oferta in ofertas_supabase:
-                    clave = clave_oferta(oferta)
+                for oferta in todas_ofertas:
+                    clave = _clave_normalizada(oferta)
+
+                    # Saltar si ya fue notificada
                     if clave in ya_notificados:
                         continue
-                    precio_ok   = oferta["precio"] == 0 or oferta["precio"] <= presupuesto
-                    tienda_ok   = (
+
+                    precio_ok = oferta["precio"] == 0 or oferta["precio"] <= presupuesto
+                    tienda_ok = (
                         not fuente_alerta
                         or fuente_alerta == "Cualquier tienda"
                         or fuente_alerta.lower() in oferta["fuente"].lower()
                     )
                     producto_ok = any(
                         word in oferta.get("destino", "").lower()
+                        or word in oferta.get("palabras_clave", "").lower()
                         for word in palabras_alerta
                     )
+
                     if precio_ok and tienda_ok and producto_ok:
                         matches_nuevos.append(oferta)
 
                 if not matches_nuevos:
-                    print(f"[Alertas] Alerta {alerta['id']} — sin ofertas nuevas")
+                    print(f"[Alertas] {alerta['id']} ({alerta['email']}) — sin ofertas nuevas")
                     continue
 
                 print(f"[Match] {alerta['email']} → {len(matches_nuevos)} ofertas nuevas")
+
+                # ── 5. Enviar email ───────────────────────────────────────
                 enviar_email_consolidado(alerta, matches_nuevos, dias_alerta, dias_transcurridos)
 
-                # WhatsApp si eligió ese método
+                # ── 6. WhatsApp si eligió ese método ─────────────────────
                 telefono = alerta.get("telefono", "").strip()
                 if telefono and "whatsapp" in (alerta.get("tipo") or "").lower():
                     enviar_whatsapp(alerta, matches_nuevos)
 
-                # 4. Actualizar claves notificadas
-                nuevas_claves = list(ya_notificados) + [clave_oferta(o) for o in matches_nuevos]
+                # ── 7. Persistir claves notificadas ───────────────────────
+                # Guardamos claves normalizadas para que sean estables
+                # entre ejecuciones aunque Supabase re-inserte con nuevos IDs
+                nuevas_claves = list(ya_notificados) + [
+                    _clave_normalizada(o) for o in matches_nuevos
+                ]
                 requests.patch(
                     f"{SUPABASE_URL}/rest/v1/alertas?id=eq.{alerta['id']}",
                     headers={**hdrs, "Prefer": "return=minimal"},
@@ -119,6 +150,8 @@ def revisar_alertas(todas_ofertas):
         print(f"[Alertas] Error general: {e}")
 
 
+# ── Utilidades ────────────────────────────────────────────────────────────────
+
 def _limpiar_numero(telefono):
     numero = "".join(filter(str.isdigit, telefono))
     if not numero.startswith("52") and len(numero) == 10:
@@ -133,7 +166,7 @@ def enviar_whatsapp(alerta, ofertas):
     numero = _limpiar_numero(telefono)
     lineas = [f"🔔 *Deal Travel* — Nueva oferta para '{alerta['destino']}':\n"]
     for o in ofertas[:3]:
-        precio_txt = o["precio_fmt"] if o["precio_fmt"] != "Ver precio" else "Ver precio en tienda"
+        precio_txt = o["precio_fmt"]
         lineas += [
             f"• *{o['destino'][:40]}*",
             f"  {o['fuente']} · {precio_txt}",
@@ -150,14 +183,15 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
     dias_restantes = dias_alerta - dias_transcurridos
 
     # Sección WhatsApp
-    telefono = alerta.get("telefono", "").strip()
+    telefono  = alerta.get("telefono", "").strip()
     wa_section = ""
     if telefono:
         numero = _limpiar_numero(telefono)
         lineas_wa = [f"🔔 Deal Travel — Oferta para '{alerta['destino']}':\n"]
         for o in ofertas[:3]:
-            precio_txt = o["precio_fmt"] if o["precio_fmt"] != "Ver precio" else "Ver precio en tienda"
-            lineas_wa.append(f"• {o['destino'][:40]} — {o['fuente']} · {precio_txt} — {o['url']}")
+            lineas_wa.append(
+                f"• {o['destino'][:40]} — {o['fuente']} · {o['precio_fmt']} — {o['url']}"
+            )
         lineas_wa.append("\nVer todas: https://www.dealtravel.mx")
         wa_link = f"https://wa.me/{numero}?text={requests.utils.quote(chr(10).join(lineas_wa))}"
         wa_section = f"""
@@ -170,20 +204,23 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
     # Cards de ofertas
     ofertas_html = ""
     for oferta in ofertas[:8]:
-        precio_orig   = oferta.get("precio_original")
-        descuento     = oferta.get("descuento_pct")
-        sin_precio    = oferta.get("precio_fmt") == "Ver precio"
+        precio_orig      = oferta.get("precio_original")
+        descuento        = oferta.get("descuento_pct")
         precio_orig_html = ""
-        if not sin_precio and precio_orig and precio_orig > oferta["precio"]:
-            precio_orig_html = f'<span style="text-decoration:line-through;color:#aeaeb2;font-size:0.8rem;">${precio_orig:,.0f}</span> '
+        if precio_orig and precio_orig > oferta["precio"]:
+            precio_orig_html = (
+                f'<span style="text-decoration:line-through;color:#aeaeb2;'
+                f'font-size:0.8rem;">${precio_orig:,.0f}</span> '
+            )
         descuento_badge = (
-            f'<span style="background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;">-{descuento}%</span>'
+            f'<span style="background:#ff3b30;color:#fff;font-size:0.65rem;'
+            f'font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;">'
+            f'-{descuento}%</span>'
             if descuento else ""
         )
         precio_display = (
-            '<span style="font-size:1rem;font-weight:700;color:#0071e3;">Precio en Amazon →</span>'
-            if sin_precio
-            else f'<span style="font-size:1.4rem;font-weight:800;color:#0ea5e9;">{oferta["precio_fmt"]}</span>'
+            f'<span style="font-size:1.4rem;font-weight:800;color:#0ea5e9;">'
+            f'{oferta["precio_fmt"]}</span>'
         )
         ofertas_html += f"""
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
@@ -237,7 +274,8 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
                 "from":    "Deal Travel <alertas@dealtravel.mx>",
                 "to":      [alerta["email"]],
                 "subject": (
-                    f"🔥 {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nueva{'s' if len(ofertas)>1 else ''}"
+                    f"🔥 {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''}"
+                    f" nueva{'s' if len(ofertas)>1 else ''}"
                     f" para '{alerta['destino']}' — dealtravel.mx"
                 ),
                 "html": html,
@@ -245,7 +283,7 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             timeout=15
         )
         if r.status_code == 200:
-            print(f"[Email] Enviado a {alerta['email']} ({len(ofertas)} ofertas)")
+            print(f"[Email] ✓ Enviado a {alerta['email']} ({len(ofertas)} ofertas)")
         else:
             print(f"[Email] Error {r.status_code}: {r.text[:100]}")
     except Exception as e:
