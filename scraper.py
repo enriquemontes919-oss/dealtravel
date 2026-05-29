@@ -14,6 +14,8 @@ from agents.mercadolibre import run as run_mercadolibre
 from agents.moda         import run_nike, run_adidas, run_puma, run_zara, run_hm
 from agents.viajes       import run as run_viajes
 from agents.xcaret       import run as run_xcaret
+from agents.liverpool    import run as run_liverpool
+from agents.palacio      import run as run_palacio
 from agents.alertas      import revisar_alertas
 from agents.base         import SUPABASE_URL, SUPABASE_KEY, supabase_headers
 
@@ -21,6 +23,7 @@ TIENDAS_FIJAS = [
     "Nike MX", "Adidas MX", "Puma MX", "Zara MX", "H&M MX",
     "Trivago", "Kiwi", "Sirenis Hotels", "Amazon MX",
     "Expedia MX", "Hoteles.com MX", "Xcaret",
+    "Liverpool", "Palacio de Hierro",
 ]
 
 def oferta_ya_existe(destino, precio, fuente):
@@ -110,9 +113,15 @@ def monitorear():
     todas.extend(run_hm())
     todas.extend(run_viajes())
     todas.extend(run_xcaret())
+    todas.extend(run_liverpool())
+    todas.extend(run_palacio())
 
     print(f"\nTOTAL encontradas: {len(todas)}")
     guardar_en_supabase(todas)
+
+    # IMPORTANTE: pasar `todas` directamente a revisar_alertas
+    # evita releer Supabase y garantiza que el matching use
+    # exactamente las mismas ofertas recién insertadas
     revisar_alertas(todas)
 
     print("=" * 55)
