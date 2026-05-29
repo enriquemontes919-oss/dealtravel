@@ -1,58 +1,946 @@
-"""
-agents/palacio.py — Agente El Palacio de Hierro
-URLs verificadas desde Google Search — Mayo 2026
-Estructura: elpalaciodehierro.com/seccion/categoria/
-"""
-from agents.base import precio_original, ahora_str
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deal Travel — Alertas de Ofertas en México</title>
+<meta name="description" content="Te avisamos cuando bajen los precios en Amazon, Mercado Libre, Nike, Expedia y más tiendas. Alertas gratis de descuentos en México.">
 
-PALACIO_PRODUCTOS = [
-    # Moda mujer
-    ("Palacio — Bolsa Michael Kors Jet Set Piel",      4999, 30, "moda",
-     "https://www.elpalaciodehierro.com/mujer/bolsos-y-carteras/"),
-    ("Palacio — Vestido Ralph Lauren Midi Mujer",      4799, 30, "moda",
-     "https://www.elpalaciodehierro.com/mujer/ropa/vestidos/"),
-    ("Palacio — Chamarra Calvin Klein Mujer",          3499, 25, "moda",
-     "https://www.elpalaciodehierro.com/mujer/ropa/chamarras-y-abrigos/"),
-    ("Palacio — Tenis Prada Downtown Mujer",          14999, 20, "moda",
-     "https://www.elpalaciodehierro.com/mujer/zapatos/tenis/"),
-    # Moda hombre
-    ("Palacio — Tenis Gucci Rhython Hombre",          18999, 20, "moda",
-     "https://www.elpalaciodehierro.com/hombre/zapatos/tenis/"),
-    ("Palacio — Cartera Coach Para Hombre Piel",       2199, 30, "moda",
-     "https://www.elpalaciodehierro.com/hombre/accesorios/carteras/"),
-    ("Palacio — Reloj Fossil Automático Hombre",       3499, 25, "moda",
-     "https://www.elpalaciodehierro.com/hombre/accesorios/relojes/"),
-    # Belleza / perfumes
-    ("Palacio — Perfume Chanel No.5 EDP 100ml",        4999, 15, "belleza",
-     "https://www.elpalaciodehierro.com/belleza/fragancias/para-ella/"),
-    ("Palacio — Perfume YSL Libre EDP 90ml",           3899, 20, "belleza",
-     "https://www.elpalaciodehierro.com/belleza/fragancias/para-ella/"),
-    ("Palacio — Set Skincare La Mer Hidratante",        8999, 25, "belleza",
-     "https://www.elpalaciodehierro.com/belleza/cuidado-de-la-piel/"),
-    ("Palacio — Crema Facial Clinique Hidratante 50ml",  899, 20, "belleza",
-     "https://www.elpalaciodehierro.com/belleza/cuidado-de-la-piel/"),
-    # Accesorios / viaje
-    ("Palacio — Maleta Samsonite Spinner 24\" Hardside", 3999, 30, "hogar",
-     "https://www.elpalaciodehierro.com/mujer/bolsos-y-carteras/maletas-y-equipaje/"),
-]
+<!-- Open Graph -->
+<meta property="og:title" content="Deal Travel — Deals que viajan, alertas que llegan">
+<meta property="og:description" content="Monitoreo de precios en tiempo real. Te avisamos cuando bajen los precios en tus tiendas favoritas. 100% gratis.">
+<meta property="og:image" content="https://www.dealtravel.mx/og-image.png">
+<meta property="og:url" content="https://www.dealtravel.mx">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Deal Travel — Deals que viajan, alertas que llegan">
+<meta name="twitter:description" content="Monitoreo de precios en tiempo real. Alertas gratis de descuentos en México.">
+<meta name="twitter:image" content="https://www.dealtravel.mx/og-image.png">
 
-def run():
-    ofertas = []
-    for nombre, precio, descuento, tipo, url in PALACIO_PRODUCTOS:
-        orig = precio_original(precio, descuento)
-        ofertas.append({
-            "fuente":          "Palacio de Hierro",
-            "tipo":            tipo,
-            "destino":         nombre,
-            "precio":          precio,
-            "precio_fmt":      f"${precio:,.0f} MXN",
-            "precio_original": orig,
-            "descuento_pct":   descuento,
-            "url":             url,
-            "tipo_promo":      f"-{descuento}% Oferta Palacio de Hierro",
-            "palabras_clave":  nombre.lower(),
-            "fecha":           ahora_str(),
-            "activa":          True,
-        })
-    print(f"[Palacio de Hierro] {len(ofertas)} ofertas")
-    return ofertas
+<!-- Favicon SVG inline -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230071e3'/><text y='72' x='50' text-anchor='middle' font-size='60' font-family='Arial' font-weight='bold' fill='white'>D</text></svg>">
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6670443237202134" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0071e3;
+  --blue-dark: #0058b0;
+  --blue-light: #e8f2fd;
+  --red: #ff3b30;
+  --text: #0a0a0a;
+  --text-2: #4a4a4a;
+  --text-3: #8a8a8a;
+  --bg: #f7f7f5;
+  --white: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.14);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:72px;position:fixed;top:0;width:100%;z-index:100;background:rgba(247,247,245,0.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.logo img{height:60px;width:auto;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{color:var(--text-2);text-decoration:none;font-size:0.875rem;font-weight:500;letter-spacing:0.01em;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:var(--text);color:#fff;padding:0.55rem 1.3rem;border-radius:980px;font-weight:600;font-size:0.85rem;text-decoration:none;transition:all 0.2s;letter-spacing:0.01em;}
+.nav-cta:hover{background:var(--blue);transform:translateY(-1px);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 5% 5rem;position:relative;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#e8f2fd 60%,#cce0f8 100%);}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;}
+.hero-blob-1{width:600px;height:600px;background:radial-gradient(circle,#dbeafe 0%,transparent 70%);top:-100px;left:-100px;}
+.hero-blob-2{width:500px;height:500px;background:radial-gradient(circle,#bfdbfe 0%,transparent 70%);bottom:-50px;right:-50px;}
+.hero-blob-3{width:400px;height:400px;background:radial-gradient(circle,#e0f2e0 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);}
+.hero-inner{position:relative;z-index:1;max-width:780px;margin:0 auto;}
+.hero-logo{margin-bottom:2.5rem;animation:fadeUp 0.8s ease both;}
+.hero-logo img{height:160px;width:auto;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--border);color:var(--text-2);padding:0.4rem 1.1rem;border-radius:980px;font-size:0.78rem;font-weight:500;margin-bottom:1.8rem;box-shadow:var(--shadow-sm);animation:fadeUp 0.8s 0.1s ease both;}
+.hero-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-3px;color:var(--text);margin-bottom:0.5rem;}
+.hero h1 em{font-style:normal;color:var(--blue);}
+.hero-line-left{display:inline-block;animation:slideFromLeft 0.9s 0.2s cubic-bezier(0.22,1,0.36,1) both;}
+.hero-line-right{display:inline-block;animation:slideFromRight 0.9s 0.45s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes slideFromLeft{from{opacity:0;transform:translateX(-60px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideFromRight{from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:translateX(0);}}
+.hero-tagline{font-family:'Syne',sans-serif;font-size:clamp(1rem,2vw,1.2rem);font-weight:600;color:var(--text-3);letter-spacing:0.02em;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.6s ease both;}
+.hero-desc{font-size:1.05rem;color:var(--text-2);max-width:520px;margin:0 auto 2.5rem;line-height:1.7;font-weight:400;animation:fadeUp 0.8s 0.7s ease both;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;animation:fadeUp 0.8s 0.8s ease both;}
+.btn-primary{background:var(--text);color:#fff;padding:0.9rem 2.2rem;border-radius:980px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.25s;letter-spacing:0.01em;}
+.btn-primary:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,113,227,0.3);}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid rgba(0,0,0,0.15);padding:0.9rem 2.2rem;border-radius:980px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:all 0.25s;}
+.btn-outline:hover{border-color:var(--text);background:var(--text);color:#fff;transform:translateY(-2px);}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s 0.9s ease both;}
+.hero-stat{text-align:center;}
+.hero-stat-num{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--text);letter-spacing:-1px;}
+.hero-stat-label{font-size:0.75rem;color:var(--text-3);font-weight:500;margin-top:2px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* SCROLL ARROW */
+.scroll-arrow{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:fadeUp 1s 1.2s ease both;cursor:pointer;z-index:2;}
+.scroll-arrow span{font-size:0.7rem;color:var(--text-3);font-weight:500;letter-spacing:0.05em;text-transform:uppercase;}
+.scroll-arrow-icon{width:28px;height:28px;border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+
+/* BANNER AWIN */
+.awin-banner{background:var(--white);padding:0.6rem 5%;display:flex;justify-content:center;margin-top:72px;border-bottom:1px solid var(--border);}
+.awin-banner img{max-width:728px;height:auto;display:block;}
+
+/* STATS BANNER */
+.stats-banner{background:var(--text);padding:2rem 5%;}
+.stats-banner-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:1.5rem;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+.stat-num span{color:var(--blue);}
+.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);font-weight:500;margin-top:4px;letter-spacing:0.03em;}
+
+/* SEARCH */
+.search-section{background:var(--white);padding:2.5rem 5%;border-bottom:1px solid var(--border);}
+.search-inner{max-width:860px;margin:0 auto;}
+.search-label{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:1rem;letter-spacing:-0.3px;}
+.search-box{background:var(--bg);border-radius:var(--radius);padding:1rem 1.2rem;display:flex;gap:0.8rem;flex-wrap:wrap;align-items:flex-end;border:1px solid var(--border);}
+.search-field{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;}
+.search-field label{font-size:0.7rem;color:var(--text-3);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;}
+.search-field input,.search-field select{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.65rem 0.9rem;color:var(--text);font-size:0.9rem;outline:none;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.search-field input:focus,.search-field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
+.search-field input::placeholder{color:var(--text-3);}
+.btn-search{background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.75rem 1.6rem;font-weight:600;font-size:0.88rem;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s;}
+.btn-search:hover{background:var(--blue);}
+.search-results{margin-top:1.5rem;display:none;}
+.search-results.visible{display:block;}
+.search-results-title{font-size:0.8rem;color:var(--text-3);margin-bottom:1rem;font-weight:500;}
+.no-results{text-align:center;padding:2.5rem;color:var(--text-3);font-size:0.9rem;}
+.alerta-rapida{display:none;margin-top:1.5rem;background:var(--blue-light);border:1px solid rgba(0,113,227,0.15);border-radius:var(--radius);padding:1.2rem 1.5rem;}
+.alerta-rapida-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+
+/* SECTIONS */
+section{padding:5rem 5%;}
+.section-eyebrow{font-size:0.7rem;font-weight:700;color:var(--blue);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:0.8rem;color:var(--text);line-height:1.1;}
+
+/* POR QUÉ DEAL TRAVEL */
+.why{background:var(--bg);}
+.why-inner{max-width:1100px;margin:0 auto;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.why-card{background:var(--white);border-radius:var(--radius);padding:2rem;border:1px solid var(--border);transition:all 0.25s;position:relative;overflow:hidden;}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.why-card:hover::before{transform:scaleX(1);}
+.why-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);}
+.why-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+.why-card h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;letter-spacing:-0.3px;}
+.why-card p{font-size:0.88rem;color:var(--text-2);line-height:1.7;}
+.why-card .why-vs{font-size:0.78rem;color:var(--text-3);margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border);}
+.why-card .why-vs strong{color:var(--red);}
+
+/* TIENDAS */
+.tiendas{background:var(--white);}
+.tiendas-inner{max-width:1100px;margin:0 auto;}
+.tiendas-scroll{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem;}
+.tienda-pill{background:var(--bg);border:1px solid var(--border);border-radius:980px;padding:0.4rem 1rem;font-size:0.82rem;color:var(--text-2);font-weight:500;transition:all 0.2s;cursor:default;}
+.tienda-pill:hover{background:var(--text);color:#fff;border-color:var(--text);}
+
+/* CATEGORÍAS */
+.categorias{background:var(--bg);}
+.categorias-inner{max-width:1100px;margin:0 auto;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:2rem;}
+.cat-card{border-radius:var(--radius);padding:1.8rem 1.2rem;cursor:pointer;transition:all 0.3s;text-align:center;position:relative;overflow:hidden;border:1px solid transparent;}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.cat-viajes{background:linear-gradient(135deg,#0c1a3a 0%,#1a3a6e 100%);color:#fff;}
+.cat-electronico{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);color:#fff;}
+.cat-moda{background:linear-gradient(135deg,#2d1b4e 0%,#4a1942 100%);color:#fff;}
+.cat-hogar{background:linear-gradient(135deg,#1a3a2a 0%,#2d5a3d 100%);color:#fff;}
+.cat-deporte{background:linear-gradient(135deg,#3a1a0a 0%,#6e2e0a 100%);color:#fff;}
+.cat-belleza{background:linear-gradient(135deg,#3a0a1a 0%,#6e1a3a 100%);color:#fff;}
+.cat-icon{font-size:2rem;margin-bottom:0.8rem;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));}
+.cat-card h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.3rem;}
+.cat-card p{font-size:0.72rem;opacity:0.7;}
+
+/* DEALS */
+.deals{background:var(--white);padding:5rem 5%;}
+.content-with-sidebar{display:grid;grid-template-columns:1fr 300px;gap:2.5rem;max-width:1100px;margin:0 auto;}
+.deals-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.deals-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:4px;}
+.filter-btn{background:transparent;border:1.5px solid var(--border);color:var(--text-2);padding:0.4rem 1.1rem;border-radius:980px;font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap;font-weight:500;}
+.filter-btn:hover,.filter-btn.active{background:var(--text);color:#fff;border-color:var(--text);}
+
+/* HOT DEALS */
+.hot-deals{margin-bottom:2.5rem;}
+.hot-deals-title{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:6px;}
+.hot-deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
+.hot-card{background:var(--white);border:1px solid rgba(255,59,48,0.15);border-radius:var(--radius-sm);padding:1.1rem;transition:all 0.25s;cursor:pointer;}
+.hot-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,59,48,0.12);border-color:rgba(255,59,48,0.3);}
+.hot-card-store{font-size:0.62rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px;}
+.hot-card-title{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.3;}
+.hot-card-price{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.hot-card-promo{font-size:0.68rem;color:var(--text-3);font-weight:500;margin-top:3px;}
+
+/* DEAL CARDS */
+.deals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem;}
+.deal-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all 0.3s;cursor:pointer;}
+.deal-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:transparent;}
+.deal-img-wrap{position:relative;height:170px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.deal-img-wrap-electronico{background:linear-gradient(135deg,#0f1f3d 0%,#1a3a6e 100%);}
+.deal-img-wrap-moda{background:linear-gradient(135deg,#1e0a2e 0%,#3d1a5e 100%);}
+.deal-img-wrap-hogar{background:linear-gradient(135deg,#0a2010 0%,#1a4a28 100%);}
+.deal-img-wrap-belleza{background:linear-gradient(135deg,#2a0a18 0%,#5e1a38 100%);}
+.deal-img-wrap-deporte{background:linear-gradient(135deg,#2a1000 0%,#6e2800 100%);}
+.deal-img-wrap-viajes{background:linear-gradient(135deg,#001a3a 0%,#003380 100%);}
+.deal-img-wrap-general{background:linear-gradient(135deg,#1a1a1a 0%,#3a3a3a 100%);}
+.deal-img-icon{font-size:3.5rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.4));opacity:0.9;}
+.deal-discount{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-size:0.68rem;font-weight:800;padding:3px 8px;border-radius:6px;}
+.deal-store-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:6px;}
+.deal-verified{position:absolute;bottom:8px;left:10px;background:rgba(34,197,94,0.9);color:#fff;font-size:0.58rem;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:0.03em;display:flex;align-items:center;gap:3px;}
+.deal-body{padding:1.1rem;}
+.deal-category{font-size:0.62rem;color:var(--blue);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;}
+.deal-title{font-size:0.92rem;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.35;}
+.deal-promo{font-size:0.7rem;color:var(--text-3);margin-bottom:0.9rem;line-height:1.4;}
+.deal-footer{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;}
+.deal-prices{display:flex;flex-direction:column;}
+.deal-price{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+.deal-old{font-size:0.72rem;color:var(--text-3);text-decoration:line-through;}
+.deal-btn{background:var(--text);color:#fff;padding:0.45rem 1rem;border-radius:980px;font-size:0.75rem;font-weight:600;text-decoration:none;transition:all 0.2s;white-space:nowrap;flex-shrink:0;}
+.deal-btn:hover{background:var(--blue);}
+.loading{text-align:center;padding:3rem;color:var(--text-3);font-size:0.9rem;}
+
+/* LOAD MORE */
+.load-more-wrap{text-align:center;margin-top:2rem;}
+.load-more-info{font-size:0.8rem;color:var(--text-3);margin-bottom:1rem;font-weight:500;}
+.btn-load-more{display:none;background:transparent;color:var(--text);border:1.5px solid var(--border);border-radius:980px;padding:0.8rem 2rem;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.btn-load-more:hover{background:var(--text);color:#fff;border-color:var(--text);}
+
+/* SIDEBAR ADS */
+.sidebar-ad-stack{display:flex;flex-direction:column;gap:1rem;}
+.ad-slot{background:var(--bg);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border:1px dashed var(--border);}
+.ad-label{position:absolute;top:5px;right:8px;font-size:0.55rem;color:var(--text-3);letter-spacing:0.05em;text-transform:uppercase;}
+.ad-300x250{width:100%;height:250px;}
+.ad-300x600{width:100%;height:300px;}
+
+/* ALERT COUNTER BANNER */
+.alert-counter{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dark) 100%);padding:2.5rem 5%;text-align:center;}
+.alert-counter-inner{max-width:700px;margin:0 auto;}
+.alert-counter h2{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:0.5rem;}
+.alert-counter p{color:rgba(255,255,255,0.7);font-size:0.9rem;margin-bottom:1.5rem;}
+.alert-counter-num{font-family:'Syne',sans-serif;font-size:3.5rem;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;}
+.alert-counter-label{font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:4px;letter-spacing:0.05em;text-transform:uppercase;}
+.alert-counter-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--blue);padding:0.8rem 1.8rem;border-radius:980px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.5rem;transition:all 0.2s;}
+.alert-counter-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.2);}
+
+/* ALERT SECTION */
+.alert-section{background:var(--bg);}
+.alert-inner{max-width:720px;margin:0 auto;}
+.alert-header{text-align:center;margin-bottom:2.5rem;}
+.alert-form{background:var(--white);border-radius:var(--radius);padding:2.2rem;box-shadow:var(--shadow-md);border:1px solid var(--border);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:1rem;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group label{font-size:0.7rem;color:var(--text-3);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;}
+.form-group input,.form-group select{background:var(--bg);border:1.5px solid transparent;border-radius:var(--radius-sm);padding:0.75rem 0.9rem;color:var(--text);font-size:0.88rem;outline:none;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(0,113,227,0.1);}
+.form-group input::placeholder{color:var(--text-3);}
+.form-divider{font-size:0.7rem;color:var(--text-3);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.6rem;margin-top:0.5rem;}
+.dias-selector{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.dia-opt{flex:1;min-width:65px;text-align:center;background:var(--bg);border:1.5px solid transparent;border-radius:var(--radius-sm);padding:0.7rem 0.5rem;cursor:pointer;transition:all 0.2s;}
+.dia-opt:hover,.dia-opt.selected{border-color:var(--blue);background:var(--blue-light);}
+.dia-opt input[type=radio]{display:none;}
+.dia-opt-num{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);display:block;}
+.dia-opt-label{font-size:0.62rem;color:var(--text-3);display:block;margin-top:2px;font-weight:500;}
+.dia-opt.selected .dia-opt-num{color:var(--blue);}
+.notify-opts{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.notify-opt{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid transparent;border-radius:var(--radius-sm);padding:0.75rem 1rem;cursor:pointer;flex:1;min-width:130px;transition:all 0.2s;}
+.notify-opt:hover,.notify-opt.selected{border-color:var(--blue);background:var(--blue-light);}
+.notify-opt input[type=checkbox]{accent-color:var(--blue);width:15px;height:15px;}
+.notify-opt-label{font-size:0.85rem;font-weight:600;color:var(--text);}
+.notify-opt-sub{font-size:0.65rem;color:var(--text-3);}
+.form-submit{width:100%;background:var(--text);color:#fff;border:none;border-radius:980px;padding:1rem;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;}
+.form-submit:hover{background:var(--blue);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,113,227,0.3);}
+.success-msg{display:none;text-align:center;padding:1.2rem;background:#f0fff4;border:1.5px solid #86efac;border-radius:var(--radius-sm);color:#166534;font-weight:600;margin-top:0.8rem;font-size:0.9rem;}
+
+/* HOW */
+.how{background:var(--white);}
+.how-inner{max-width:1000px;margin:0 auto;}
+.how-header{text-align:center;margin-bottom:3.5rem;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;}
+.step{text-align:center;}
+.step-num{width:48px;height:48px;border-radius:50%;background:var(--text);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;}
+.step h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
+.step p{font-size:0.85rem;color:var(--text-2);line-height:1.7;}
+
+/* TESTIMONIALS */
+.testimonials{background:var(--bg);}
+.testimonials-inner{max-width:1000px;margin:0 auto;text-align:center;}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2.5rem;}
+.testi{background:var(--white);border-radius:var(--radius);padding:1.8rem;text-align:left;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:all 0.25s;}
+.testi:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.stars{color:#f59e0b;font-size:0.85rem;margin-bottom:0.8rem;letter-spacing:2px;}
+.testi-text{font-size:0.88rem;color:var(--text-2);line-height:1.75;margin-bottom:1.2rem;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;color:#fff;flex-shrink:0;}
+.testi-name{font-size:0.85rem;font-weight:600;color:var(--text);}
+.testi-loc{font-size:0.72rem;color:var(--text-3);}
+
+/* FOOTER */
+footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:2.5rem;margin-bottom:2.5rem;}
+.footer-logo img{height:40px;width:auto;margin-bottom:0.6rem;filter:brightness(0) invert(1);}
+.footer-brand p{color:rgba(255,255,255,0.45);font-size:0.82rem;max-width:220px;line-height:1.7;}
+.footer-links h4{font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
+.footer-links a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+.footer-bottom p{color:rgba(255,255,255,0.25);font-size:0.75rem;}
+
+@media(max-width:900px){
+  .content-with-sidebar{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .hero h1{letter-spacing:-1.5px;}
+  .hero-stats{gap:1.5rem;}
+  .stats-banner-inner{gap:2rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><img src="logo-dealtravelmx.png" alt="Deal Travel"></div>
+  <ul class="nav-links">
+    <li><a href="#buscador">Buscar</a></li>
+    <li><a href="#ofertas">Ofertas</a></li>
+    <li><a href="#alerta">Alertas</a></li>
+    <li><a href="#como">Cómo funciona</a></li>
+  </ul>
+  <a href="#alerta" class="nav-cta">Crear alerta gratis</a>
+</nav>
+
+<div class="awin-banner">
+  <a rel="sponsored" href="https://www.awin1.com/cread.php?s=2702014&v=20563&q=395852&r=2876425">
+    <img src="https://www.awin1.com/cshow.php?s=2702014&v=20563&q=395852&r=2876425" border="0">
+  </a>
+</div>
+
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-blob hero-blob-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-logo"><img src="logo-dealtravelmx.png" alt="Deal Travel"></div>
+    <div class="hero-eyebrow"><span class="hero-dot"></span>Monitoreo en tiempo real · múltiples tiendas</div>
+    <h1>
+      <span class="hero-line-left">Deals que viajan,</span><br>
+      <span class="hero-line-right">alertas que <em>llegan.</em></span>
+    </h1>
+    <p class="hero-tagline">Compra más, paga menos.</p>
+    <p class="hero-desc">Te avisamos cuando bajen los precios en Amazon, Mercado Libre, Nike, Adidas, Expedia, Hoteles.com, Trivago, Kiwi y más tiendas.</p>
+    <div class="hero-btns">
+      <a href="#alerta" class="btn-primary">🔔 Crear mi alerta gratis</a>
+      <a href="#ofertas" class="btn-outline">Ver ofertas ahora</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">12+</div><div class="hero-stat-label">Tiendas monitoreadas</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">24/7</div><div class="hero-stat-label">Monitoreo activo</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">100%</div><div class="hero-stat-label">Gratis</div></div>
+    </div>
+  </div>
+  <div class="scroll-arrow" onclick="document.getElementById('buscador').scrollIntoView({behavior:'smooth'})">
+    <span>Explorar</span>
+    <div class="scroll-arrow-icon">↓</div>
+  </div>
+</section>
+
+<!-- STATS BANNER -->
+<div class="stats-banner">
+  <div class="stats-banner-inner">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-ofertas">—</div>
+      <div class="stat-label">Ofertas activas ahora</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">12<span>+</span></div>
+      <div class="stat-label">Tiendas monitoreadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-alertas">—</div>
+      <div class="stat-label">Alertas creadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24<span>/7</span></div>
+      <div class="stat-label">Monitoreo activo</div>
+    </div>
+  </div>
+</div>
+
+<div class="search-section" id="buscador">
+  <div class="search-inner">
+    <p class="search-label">Busca tu producto</p>
+    <div class="search-box">
+      <div class="search-field">
+        <label>Producto o marca</label>
+        <input type="text" id="search-producto" placeholder="iPhone, Nike Air Max, Hotel Cancún...">
+      </div>
+      <div class="search-field">
+        <label>Categoría</label>
+        <select id="search-categoria">
+          <option value="todas">Todas las categorías</option>
+          <option value="electronico">Electrónicos</option>
+          <option value="moda">Moda</option>
+          <option value="hogar">Hogar</option>
+          <option value="deporte">Deportes</option>
+          <option value="belleza">Belleza</option>
+          <option value="viajes">Viajes</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label>Precio máx. (MXN)</label>
+        <input type="number" id="search-precio" placeholder="Sin límite">
+      </div>
+      <button class="btn-search" onclick="buscarOfertas()">Buscar →</button>
+    </div>
+    <div class="search-results" id="search-results">
+      <div class="search-results-title" id="search-count"></div>
+      <div class="deals-grid" id="search-grid"></div>
+    </div>
+    <div class="alerta-rapida" id="alerta-rapida">
+      <div class="alerta-rapida-inner">
+        <div>
+          <p style="font-size:0.85rem;font-weight:600;color:var(--blue);margin-bottom:2px;">🔔 ¿No encontraste el precio que buscas?</p>
+          <p style="font-size:0.78rem;color:var(--text-2);">Crea una alerta y te avisamos cuando baje el precio de <strong id="alerta-producto-nombre"></strong>.</p>
+        </div>
+        <button onclick="crearAlertaRapida()" style="background:var(--text);color:#fff;border:none;border-radius:980px;padding:0.6rem 1.2rem;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Crear alerta →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POR QUÉ DEAL TRAVEL -->
+<section class="why">
+  <div class="why-inner">
+    <p class="section-eyebrow">Nuestra ventaja</p>
+    <h2 class="section-title">¿Por qué Deal Travel?</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">⚡</span>
+        <h3>Monitoreo cada hora</h3>
+        <p>Revisamos los precios de todas las tiendas cada 60 minutos, para que seas el primero en saber cuando baja el precio que buscas.</p>
+        <div class="why-vs">vs. buscar manualmente: <strong>horas de tu tiempo perdidas</strong></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🎯</span>
+        <h3>Alertas personalizadas</h3>
+        <p>Tú defines el producto, la tienda y el presupuesto. Solo te avisamos cuando hay una oferta que realmente te interesa. Sin spam.</p>
+        <div class="why-vs">vs. apps genéricas: <strong>notificaciones irrelevantes</strong></div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🌐</span>
+        <h3>12+ tiendas en un solo lugar</h3>
+        <p>Amazon, Mercado Libre, Nike, Adidas, Expedia, Hoteles.com, Trivago y más. Todo monitoreado automáticamente sin que hagas nada.</p>
+        <div class="why-vs">vs. revisar cada sitio: <strong>demasiado tiempo y esfuerzo</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tiendas">
+  <div class="tiendas-inner">
+    <p class="section-eyebrow">Donde buscamos</p>
+    <h2 class="section-title">Tiendas monitoreadas</h2>
+    <div class="tiendas-scroll">
+      <span class="tienda-pill">Amazon MX</span>
+      <span class="tienda-pill">Mercado Libre</span>
+      <span class="tienda-pill">Walmart MX</span>
+      <span class="tienda-pill">Liverpool</span>
+      <span class="tienda-pill">Nike MX</span>
+      <span class="tienda-pill">Adidas MX</span>
+      <span class="tienda-pill">Puma MX</span>
+      <span class="tienda-pill">Zara MX</span>
+      <span class="tienda-pill">H&M MX</span>
+      <span class="tienda-pill">Trivago</span>
+      <span class="tienda-pill">Kiwi Vuelos</span>
+      <span class="tienda-pill">Sirenis Hotels</span>
+      <span class="tienda-pill">Expedia MX</span>
+      <span class="tienda-pill">Hoteles.com MX</span>
+    </div>
+  </div>
+</section>
+
+<section class="categorias">
+  <div class="categorias-inner">
+    <p class="section-eyebrow">Explorar</p>
+    <h2 class="section-title">¿Qué estás buscando?</h2>
+    <div class="cat-grid">
+      <div class="cat-card cat-viajes" onclick="filtrarCategoria('viajes')"><span class="cat-icon">✈️</span><h3>Viajes</h3><p>Hoteles, vuelos y más</p></div>
+      <div class="cat-card cat-electronico" onclick="filtrarCategoria('electronico')"><span class="cat-icon">📱</span><h3>Electrónicos</h3><p>Celulares, laptops, TVs</p></div>
+      <div class="cat-card cat-moda" onclick="filtrarCategoria('moda')"><span class="cat-icon">👗</span><h3>Moda</h3><p>Ropa, zapatos, accesorios</p></div>
+      <div class="cat-card cat-hogar" onclick="filtrarCategoria('hogar')"><span class="cat-icon">🏠</span><h3>Hogar</h3><p>Muebles, electrodomésticos</p></div>
+      <div class="cat-card cat-deporte" onclick="filtrarCategoria('deporte')"><span class="cat-icon">⚽</span><h3>Deportes</h3><p>Ropa y equipos deportivos</p></div>
+      <div class="cat-card cat-belleza" onclick="filtrarCategoria('belleza')"><span class="cat-icon">💄</span><h3>Belleza</h3><p>Skincare y maquillaje</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="deals" id="ofertas">
+  <div class="content-with-sidebar">
+    <div>
+      <div class="deals-header">
+        <div>
+          <p class="section-eyebrow">Actualizadas hoy</p>
+          <h2 class="section-title">Ofertas del momento</h2>
+        </div>
+        <div id="total-ofertas" style="font-size:0.8rem;color:var(--text-3);font-weight:500;"></div>
+      </div>
+      <div class="hot-deals">
+        <div class="hot-deals-title">🔥 Las más hot ahora</div>
+        <div class="hot-deals-grid" id="hot-grid"><div class="loading">Cargando...</div></div>
+      </div>
+      <div class="deals-filters">
+        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrar('electronico',this)">Electrónicos</button>
+        <button class="filter-btn" onclick="filtrar('moda',this)">Moda</button>
+        <button class="filter-btn" onclick="filtrar('hogar',this)">Hogar</button>
+        <button class="filter-btn" onclick="filtrar('deporte',this)">Deportes</button>
+        <button class="filter-btn" onclick="filtrar('belleza',this)">Belleza</button>
+        <button class="filter-btn" onclick="filtrar('viajes',this)">Viajes</button>
+      </div>
+      <div class="deals-grid" id="deals-grid"><div class="loading">Cargando ofertas...</div></div>
+      <div class="load-more-wrap">
+        <p class="load-more-info" id="info-ofertas"></p>
+        <button class="btn-load-more" id="btn-cargar-mas" onclick="cargarMasOfertas()">Ver 20 ofertas más</button>
+      </div>
+    </div>
+    <div class="sidebar-ad-stack">
+      <div class="ad-slot ad-300x250">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:250px" data-ad-client="ca-pub-6670443237202134" data-ad-slot="6618539960"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+      <div class="ad-slot ad-300x600">
+        <span class="ad-label">Publicidad</span>
+        <ins class="adsbygoogle" style="display:inline-block;width:300px;height:600px" data-ad-client="ca-pub-6670443237202134" data-ad-slot="7057523667"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERT COUNTER BANNER -->
+<div class="alert-counter">
+  <div class="alert-counter-inner">
+    <h2>Únete a quienes ya ahorran</h2>
+    <p>Cada día más usuarios reciben alertas de precios y compran mejor.</p>
+    <div class="alert-counter-num" id="counter-alertas">—</div>
+    <div class="alert-counter-label">Alertas activas en este momento</div>
+    <a href="#alerta" class="alert-counter-cta">🔔 Crear mi alerta gratis</a>
+  </div>
+</div>
+
+<section class="alert-section" id="alerta">
+  <div class="alert-inner">
+    <div class="alert-header">
+      <p class="section-eyebrow">Gratis · Sin spam</p>
+      <h2 class="section-title">Crea tu alerta de precio</h2>
+      <p style="color:var(--text-2);font-size:0.95rem;margin-top:0.5rem;">Dinos qué quieres comprar y te avisamos cuando baje el precio.</p>
+    </div>
+    <div class="alert-form">
+      <div class="form-grid">
+        <div class="form-group"><label>Producto o marca</label><input type="text" id="producto" placeholder="Ej. iPhone 15, Nike Air Max, Hotel Cancún..."></div>
+        <div class="form-group"><label>Categoría</label>
+          <select id="categoria">
+            <option value="">Cualquier categoría</option>
+            <option>Electrónicos / Tecnología</option>
+            <option>Ropa y Moda</option>
+            <option>Hogar y Muebles</option>
+            <option>Deportes</option>
+            <option>Belleza y Cuidado Personal</option>
+            <option>Viajes y Hoteles</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Tienda preferida</label>
+          <select id="tienda">
+            <option value="">Cualquier tienda</option>
+            <option>Amazon MX</option>
+            <option>Mercado Libre</option>
+            <option>Walmart MX</option>
+            <option>Liverpool</option>
+            <option>Nike MX</option>
+            <option>Adidas MX</option>
+            <option>Trivago</option>
+            <option>Kiwi</option>
+            <option>Sirenis Hotels</option>
+            <option>Expedia MX</option>
+            <option>Hoteles.com MX</option>
+            <option>Zara MX</option>
+            <option>Puma MX</option>
+            <option>H&M MX</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Precio máximo (MXN $)</label><input type="number" id="presupuesto" placeholder="Ej. 5,000"></div>
+        <div class="form-group"><label>Tu correo electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com"></div>
+        <div class="form-group"><label>Celular <span style="color:var(--text-3);font-size:0.65rem;font-weight:400;">opcional</span></label><input type="tel" id="telefono" placeholder="+52 55 1234 5678"></div>
+      </div>
+      <p class="form-divider">¿Por cuántos días quieres recibir alertas?</p>
+      <div class="dias-selector">
+        <label class="dia-opt" id="opt-1d" onclick="seleccionarDias(1)"><input type="radio" name="dias" value="1"><span class="dia-opt-num">1</span><span class="dia-opt-label">día</span></label>
+        <label class="dia-opt selected" id="opt-7d" onclick="seleccionarDias(7)"><input type="radio" name="dias" value="7" checked><span class="dia-opt-num">7</span><span class="dia-opt-label">días</span></label>
+        <label class="dia-opt" id="opt-15d" onclick="seleccionarDias(15)"><input type="radio" name="dias" value="15"><span class="dia-opt-num">15</span><span class="dia-opt-label">días</span></label>
+        <label class="dia-opt" id="opt-30d" onclick="seleccionarDias(30)"><input type="radio" name="dias" value="30"><span class="dia-opt-num">30</span><span class="dia-opt-label">días</span></label>
+      </div>
+      <p class="form-divider">¿Cómo quieres recibir tu alerta?</p>
+      <div class="notify-opts">
+        <label class="notify-opt selected" id="opt-email"><input type="checkbox" checked onchange="toggleOpt('opt-email')"><div><div class="notify-opt-label">📧 Email</div><div class="notify-opt-sub">Gratis · Recomendado</div></div></label>
+        <label class="notify-opt" id="opt-whatsapp"><input type="checkbox" onchange="toggleOpt('opt-whatsapp')"><div><div class="notify-opt-label">💬 WhatsApp</div><div class="notify-opt-sub">Inmediato</div></div></label>
+        <label class="notify-opt" id="opt-sms"><input type="checkbox" onchange="toggleOpt('opt-sms')"><div><div class="notify-opt-label">📱 SMS</div><div class="notify-opt-sub">A tu celular</div></div></label>
+      </div>
+      <button class="form-submit" onclick="submitAlert()">Activar alerta de precio →</button>
+      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos <strong id="success-producto"></strong> dentro de tu presupuesto.</div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="como">
+  <div class="how-inner">
+    <div class="how-header">
+      <p class="section-eyebrow">Simple y rápido</p>
+      <h2 class="section-title">Cómo funciona</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h3>Dinos qué quieres</h3><p>Ingresa el producto o marca que buscas y tu presupuesto máximo.</p></div>
+      <div class="step"><div class="step-num">2</div><h3>Nosotros vigilamos</h3><p>Monitoreamos múltiples tiendas cada hora buscando el mejor precio.</p></div>
+      <div class="step"><div class="step-num">3</div><h3>Recibes tu alerta</h3><p>Te avisamos al instante por email cuando baje el precio.</p></div>
+      <div class="step"><div class="step-num">4</div><h3>Compras y ahorras</h3><p>Haz clic en el link y compra directamente en la tienda al mejor precio.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="testimonials-inner">
+    <p class="section-eyebrow">Lo que dicen</p>
+    <h2 class="section-title">Nuestros usuarios ahorran de verdad</h2>
+    <div class="testi-grid">
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Puse una alerta para un iPhone y en 3 días me llegó la notificación. Lo compré $4,000 más barato en Amazon."</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba meses esperando el precio correcto para una laptop. Me avisaron en cuanto bajó. Ahorré $2,500."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
+      <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Encontré vuelo a Cancún $800 más barato gracias a la alerta. El sitio es increíble."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo"><img src="logo-dealtravelmx.png" alt="Deal Travel"></div>
+        <p>Descuentos que viajan, alertas que llegan.</p>
+      </div>
+      <div class="footer-links"><h4>Tiendas</h4><ul><li><a href="#">Amazon MX</a></li><li><a href="#">Mercado Libre</a></li><li><a href="#">Nike MX</a></li><li><a href="#">Expedia MX</a></li></ul></div>
+      <div class="footer-links"><h4>Categorías</h4><ul><li><a href="#">Electrónicos</a></li><li><a href="#">Moda</a></li><li><a href="#">Viajes</a></li><li><a href="#">Deportes</a></li></ul></div>
+      <div class="footer-links"><h4>Legal</h4><ul>
+        <li><a href="/privacidad.html">Privacidad</a></li>
+        <li><a href="/terminos.html">Términos</a></li>
+        <li><a href="/cookies.html">Cookies</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Deal Travel. Todos los derechos reservados.</p>
+      <p>Hecho para compradores inteligentes 🇲🇽</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://zutcsoloxabwtrvfzmlm.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_5TNTtixQcRsdbS_kmojIOA_6TNjtiLT';
+const CAT_ICONS = {'electronico':'📱','moda':'👗','hogar':'🏠','deporte':'⚽','belleza':'💄','juguetes':'🧸','viajes':'✈️','general':'🛍️'};
+const CAT_BG = {'electronico':'deal-img-wrap-electronico','moda':'deal-img-wrap-moda','hogar':'deal-img-wrap-hogar','belleza':'deal-img-wrap-belleza','deporte':'deal-img-wrap-deporte','viajes':'deal-img-wrap-viajes','juguetes':'deal-img-wrap-general','general':'deal-img-wrap-general'};
+
+let todasLasOfertas = [], ofertasFiltradas = [], ofertasMostradas = 20, diasSeleccionados = 7;
+const OFERTAS_POR_PAGINA = 20;
+
+function tocarCampanilla() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [[0,1046],[0.18,1318],[0.36,1568]].forEach(([t,f]) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, ctx.currentTime + t);
+      osc.frequency.exponentialRampToValueAtTime(f * 0.5, ctx.currentTime + t + 0.4);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.5);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.5);
+    });
+  } catch(e) {}
+}
+
+function animarContador(el, target, prefix='', suffix='') {
+  if(!el) return;
+  let start = 0, duration = 1500, startTime = null;
+  function step(ts) {
+    if(!startTime) startTime = ts;
+    const progress = Math.min((ts - startTime) / duration, 1);
+    const val = Math.floor(progress * target);
+    el.textContent = prefix + val.toLocaleString('es-MX') + suffix;
+    if(progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+async function cargarStats() {
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&select=count`, {headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'count=exact'}}),
+      fetch(`${SUPABASE_URL}/rest/v1/alertas?activa=eq.true&select=count`, {headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'count=exact'}})
+    ]);
+    const totalOfertas = parseInt(r1.headers.get('content-range')?.split('/')[1] || 0);
+    const totalAlertas = parseInt(r2.headers.get('content-range')?.split('/')[1] || 0);
+    animarContador(document.getElementById('stat-ofertas'), totalOfertas);
+    animarContador(document.getElementById('stat-alertas'), totalAlertas);
+    animarContador(document.getElementById('counter-alertas'), totalAlertas);
+  } catch(e) {}
+}
+
+function seleccionarDias(dias) {
+  diasSeleccionados = dias;
+  document.querySelectorAll('.dia-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById(`opt-${dias}d`).classList.add('selected');
+}
+
+async function cargarOfertas() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=200`, {
+      headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}
+    });
+    const ofertas = await res.json();
+    if(ofertas && ofertas.length > 0) {
+      // Tiendas con landing pages directas van primero; dentro del mismo tier, mayor descuento primero
+      const PRIORIDAD = {
+        'Mercado Libre':1,'Amazon MX':2,'Xcaret':3,'Liverpool':4,'Palacio de Hierro':5,
+        'Zara MX':6,'H&M MX':7,'Nike MX':8,'Adidas MX':9,'Puma MX':10,
+        'Trivago':11,'Expedia MX':12,'Hoteles.com MX':13,'Kiwi':14,'Sirenis Hotels':15
+      };
+      ofertas.sort((a,b) => {
+        const pa = PRIORIDAD[a.fuente]||99, pb = PRIORIDAD[b.fuente]||99;
+        if(pa!==pb) return pa-pb;
+        return (b.descuento_pct||0)-(a.descuento_pct||0);
+      });
+      todasLasOfertas = ofertas;
+      ofertasFiltradas = ofertas;
+      document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
+      renderHotDeals(ofertas);
+      ofertasMostradas = OFERTAS_POR_PAGINA;
+      renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+      actualizarBotonCargarMas();
+    } else {
+      document.getElementById('deals-grid').innerHTML = '<div class="no-results">No hay ofertas disponibles.</div>';
+      document.getElementById('hot-grid').innerHTML = '';
+    }
+  } catch(e) {
+    document.getElementById('deals-grid').innerHTML = '<div class="no-results">Error cargando ofertas.</div>';
+  }
+}
+
+function actualizarBotonCargarMas() {
+  const btn = document.getElementById('btn-cargar-mas');
+  const info = document.getElementById('info-ofertas');
+  if(!btn) return;
+  const total = ofertasFiltradas.length;
+  const restantes = total - ofertasMostradas;
+  if(restantes > 0) {
+    btn.style.display = 'inline-block';
+    btn.textContent = `Ver ${Math.min(restantes, OFERTAS_POR_PAGINA)} ofertas más`;
+    if(info) info.textContent = `Mostrando ${Math.min(ofertasMostradas, total)} de ${total} ofertas`;
+  } else {
+    btn.style.display = 'none';
+    if(info) info.textContent = total > 0 ? `Mostrando todas las ofertas (${total})` : '';
+  }
+}
+
+function cargarMasOfertas() {
+  ofertasMostradas += OFERTAS_POR_PAGINA;
+  renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+  actualizarBotonCargarMas();
+}
+
+function getFechaVerificada(fecha) {
+  if(!fecha) return 'Verificado hoy';
+  try {
+    const f = fecha.includes('/') ? fecha.split(' ')[0].split('/').reverse().join('-') : fecha;
+    const diff = Math.floor((new Date() - new Date(f)) / 86400000);
+    if(diff === 0) return '✓ Verificado hoy';
+    if(diff === 1) return '✓ Verificado ayer';
+    return `✓ Verificado hace ${diff} días`;
+  } catch(e) { return '✓ Verificado hoy'; }
+}
+
+function renderCard(o) {
+  const sinPrecio = o.precio_fmt === 'Ver precio';
+  const tipo = o.tipo || 'general';
+  const bgClass = CAT_BG[tipo] || 'deal-img-wrap-general';
+  const icon = CAT_ICONS[tipo] || '🛍️';
+  return `
+    <div class="deal-card" data-tipo="${tipo}">
+      <div class="deal-img-wrap ${bgClass}">
+        <div class="deal-img-icon">${icon}</div>
+        <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
+        <span class="deal-store-badge">${o.fuente}</span>
+        <span class="deal-verified">${getFechaVerificada(o.fecha)}</span>
+      </div>
+      <div class="deal-body">
+        <div class="deal-category">${tipo}</div>
+        <div class="deal-title">${o.destino || 'Producto en oferta'}</div>
+        <div class="deal-promo">${o.tipo_promo || ''}</div>
+        <div class="deal-footer">
+          <div class="deal-prices">
+            ${!sinPrecio && o.precio_original ? `<div class="deal-old">$${o.precio_original.toLocaleString('es-MX')} MXN</div>` : ''}
+            ${sinPrecio
+              ? `<div style="font-size:0.82rem;font-weight:700;color:var(--blue);">Precio en Amazon</div>`
+              : `<div class="deal-price">${o.precio_fmt}</div>`}
+          </div>
+          <a href="${o.url}" target="_blank" rel="noopener noreferrer" class="deal-btn">Ver →</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderHotDeals(ofertas) {
+  const hot = ofertas.filter(o => o.tipo !== 'viajes').slice(0, 4);
+  const grid = document.getElementById('hot-grid');
+  if(!hot.length) { grid.innerHTML = ''; return; }
+  grid.innerHTML = hot.map(o => {
+    const sinPrecio = o.precio_fmt === 'Ver precio';
+    return `<a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <div class="hot-card">
+        <div class="hot-card-store">${o.fuente}</div>
+        <div class="hot-card-title">${o.destino}</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          ${!sinPrecio && o.precio_original ? `<span style="text-decoration:line-through;color:var(--text-3);font-size:0.8rem;">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
+          ${sinPrecio ? `<span style="font-size:0.95rem;font-weight:700;color:var(--blue);">Ver precio →</span>` : `<span class="hot-card-price">${o.precio_fmt}</span>`}
+          ${!sinPrecio && o.descuento_pct ? `<span style="background:var(--red);color:#fff;font-size:0.62rem;font-weight:800;padding:2px 7px;border-radius:6px;">-${o.descuento_pct}%</span>` : ''}
+        </div>
+        <div class="hot-card-promo">${o.tipo_promo}</div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+function renderOfertas(ofertas) {
+  const grid = document.getElementById('deals-grid');
+  if(!ofertas || ofertas.length === 0) { grid.innerHTML = '<div class="no-results">No hay ofertas en esta categoría.</div>'; return; }
+  grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
+}
+
+async function buscarOfertas() {
+  const q = document.getElementById('search-producto').value.toLowerCase().trim();
+  const cat = document.getElementById('search-categoria').value;
+  const max = parseFloat(document.getElementById('search-precio').value) || Infinity;
+  try {
+    let url = `${SUPABASE_URL}/rest/v1/ofertas?activa=eq.true&order=created_at.desc&limit=200`;
+    if(cat && cat !== 'todas') url += `&tipo=eq.${cat}`;
+    const res = await fetch(url, {headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}});
+    let ofertas = await res.json();
+    if(q) ofertas = ofertas.filter(o => (o.destino||'').toLowerCase().includes(q) || (o.palabras_clave||'').toLowerCase().includes(q) || (o.fuente||'').toLowerCase().includes(q));
+    if(max < Infinity) ofertas = ofertas.filter(o => o.precio === 0 || o.precio <= max);
+    const grid = document.getElementById('search-grid');
+    const count = document.getElementById('search-count');
+    document.getElementById('search-results').classList.add('visible');
+    if(ofertas.length === 0) {
+      grid.innerHTML = '<div class="no-results">No encontramos ofertas. Intenta con otro término.</div>';
+      count.textContent = 'Sin resultados';
+    } else {
+      grid.innerHTML = ofertas.map(o => renderCard(o)).join('');
+      count.textContent = `${ofertas.length} oferta${ofertas.length>1?'s':''} encontrada${ofertas.length>1?'s':''}`;
+    }
+    if(q) { document.getElementById('alerta-producto-nombre').textContent = q; document.getElementById('alerta-rapida').style.display = 'block'; }
+  } catch(e) { console.log('Error buscando:', e); }
+}
+
+document.getElementById('search-producto').addEventListener('keydown', e => { if(e.key==='Enter') buscarOfertas(); });
+
+function filtrar(tipo, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  ofertasFiltradas = tipo === 'todos' ? todasLasOfertas : todasLasOfertas.filter(o => o.tipo === tipo);
+  ofertasMostradas = OFERTAS_POR_PAGINA;
+  renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+  actualizarBotonCargarMas();
+}
+
+function filtrarCategoria(tipo) {
+  document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => {
+    const btn = [...document.querySelectorAll('.filter-btn')].find(b => b.textContent.toLowerCase().includes(tipo === 'electronico' ? 'electr' : tipo));
+    filtrar(tipo, btn);
+  }, 600);
+}
+
+function crearAlertaRapida() {
+  const q = document.getElementById('search-producto').value.trim();
+  const max = document.getElementById('search-precio').value;
+  if(q) document.getElementById('producto').value = q;
+  if(max) document.getElementById('presupuesto').value = max;
+  document.getElementById('alerta').scrollIntoView({behavior:'smooth'});
+}
+
+function toggleOpt(id) {
+  document.getElementById(id).classList.toggle('selected', document.getElementById(id).querySelector('input').checked);
+}
+
+async function submitAlert() {
+  const producto = document.getElementById('producto').value.trim();
+  const categoria = document.getElementById('categoria').value;
+  const tienda = document.getElementById('tienda').value;
+  const presupuesto = document.getElementById('presupuesto').value;
+  const email = document.getElementById('email').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  if(!producto || !presupuesto || !email) { alert('Por favor completa: producto, precio máximo y email.'); return; }
+  const btn = document.querySelector('.form-submit');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/alertas`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
+      body: JSON.stringify({origen:'dealtravel.mx',destino:producto,tipo:categoria||'General',presupuesto:parseFloat(presupuesto),fecha_salida:'',email,telefono,fuente:tienda||'Cualquier tienda',activa:true,dias_alerta:diasSeleccionados})
+    });
+    if(res.ok || res.status===201) {
+      document.getElementById('success-producto').textContent = producto;
+      document.getElementById('success').style.display = 'block';
+      btn.textContent = '✓ Alerta activada';
+      btn.style.background = '#22c55e';
+      cargarStats();
+    } else {
+      btn.disabled = false; btn.textContent = 'Activar alerta de precio →';
+      alert('Error al guardar. Intenta de nuevo.');
+    }
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Activar alerta de precio →';
+    alert('Error de conexión.');
+  }
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  cargarOfertas();
+  cargarStats();
+  setTimeout(tocarCampanilla, 800);
+});
+</script>
+</body>
+</html>
