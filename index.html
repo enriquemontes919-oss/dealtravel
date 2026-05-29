@@ -724,6 +724,17 @@ async function cargarOfertas() {
     });
     const ofertas = await res.json();
     if(ofertas && ofertas.length > 0) {
+      // Tiendas con landing pages directas van primero; dentro del mismo tier, mayor descuento primero
+      const PRIORIDAD = {
+        'Mercado Libre':1,'Amazon MX':2,'Xcaret':3,'Liverpool':4,'Palacio de Hierro':5,
+        'Zara MX':6,'H&M MX':7,'Nike MX':8,'Adidas MX':9,'Puma MX':10,
+        'Trivago':11,'Expedia MX':12,'Hoteles.com MX':13,'Kiwi':14,'Sirenis Hotels':15
+      };
+      ofertas.sort((a,b) => {
+        const pa = PRIORIDAD[a.fuente]||99, pb = PRIORIDAD[b.fuente]||99;
+        if(pa!==pb) return pa-pb;
+        return (b.descuento_pct||0)-(a.descuento_pct||0);
+      });
       todasLasOfertas = ofertas;
       ofertasFiltradas = ofertas;
       document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
