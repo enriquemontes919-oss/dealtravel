@@ -1,6 +1,14 @@
 """
 scraper.py — Orquestador principal de DealTravel
 Railway lo ejecuta como cron (0 * * * *) cada hora y lo termina al finalizar.
+
+Junio 2026: Solo anunciantes aprobados en Awin:
+- Nike MX (MID 117547)
+- Lacoste MX (MID 32585)
+- Xcaret (MID 34947)
+- Viajes: Expedia MX, Hoteles.com MX, Trivago, Kiwi MX, Sirenis Hotels
+- Mercado Libre (via GitHub Actions)
+Quitados: Amazon, Liverpool, Palacio, Adidas, Puma, Zara, H&M
 """
 import os
 import requests
@@ -9,21 +17,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from agents.amazon       import run as run_amazon
 from agents.mercadolibre import run as run_mercadolibre
-from agents.moda         import run_nike, run_adidas, run_puma, run_zara, run_hm
+from agents.moda         import run_nike, run_lacoste
 from agents.viajes       import run as run_viajes
 from agents.xcaret       import run as run_xcaret
-from agents.liverpool    import run as run_liverpool
-from agents.palacio      import run as run_palacio
 from agents.alertas      import revisar_alertas
 from agents.base         import SUPABASE_URL, SUPABASE_KEY, supabase_headers
 
 TIENDAS_FIJAS = [
-    "Nike MX", "Adidas MX", "Puma MX", "Zara MX", "H&M MX",
-    "Trivago", "Kiwi", "Sirenis Hotels", "Amazon MX",
+    "Nike MX", "Lacoste MX",
+    "Trivago", "Kiwi MX", "Sirenis Hotels",
     "Expedia MX", "Hoteles.com MX", "Xcaret",
-    "Liverpool", "Palacio de Hierro",
 ]
 
 def oferta_ya_existe(destino, precio, fuente):
@@ -104,24 +108,14 @@ def monitorear():
     marcar_inactivas_viejas()
 
     todas = []
-    todas.extend(run_amazon())
     todas.extend(run_mercadolibre())
     todas.extend(run_nike())
-    todas.extend(run_adidas())
-    todas.extend(run_puma())
-    todas.extend(run_zara())
-    todas.extend(run_hm())
+    todas.extend(run_lacoste())
     todas.extend(run_viajes())
     todas.extend(run_xcaret())
-    todas.extend(run_liverpool())
-    todas.extend(run_palacio())
 
     print(f"\nTOTAL encontradas: {len(todas)}")
     guardar_en_supabase(todas)
-
-    # IMPORTANTE: pasar `todas` directamente a revisar_alertas
-    # evita releer Supabase y garantiza que el matching use
-    # exactamente las mismas ofertas recién insertadas
     revisar_alertas(todas)
 
     print("=" * 55)
