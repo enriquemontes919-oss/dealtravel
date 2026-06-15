@@ -1,16 +1,17 @@
 """
-agents/moda.py — Agentes de tiendas de moda: Nike, Adidas, Puma, Zara, H&M
-Catálogo curado con precios y descuentos reales.
-Nike MX: deep link Awin MID 117547 activo desde Mayo 2026 ✅
-Adidas MX: pendiente aprobación Awin → URL directa por ahora
+agents/moda.py — Agentes de moda: Nike MX y Lacoste MX
+Solo anunciantes aprobados en Awin — Junio 2026
+Nike MX: MID 117547 ✅
+Lacoste MX: MID 32585 ✅
+Quitados: Adidas, Puma, Zara, H&M (sin aprobación Awin)
 """
-from agents.base import AWIN_ID
+from agents.base import AWIN_ID, precio_original, ahora_str
+from urllib.parse import quote
 
-AWIN_MID_NIKE = "117547"
+AWIN_MID_NIKE    = "117547"
+AWIN_MID_LACOSTE = "32585"
 
 def nike_url(path="/mx/w/sale-3yaep"):
-    """Deep link Awin para Nike MX — MID 117547"""
-    from urllib.parse import quote
     destino = f"https://www.nike.com{path}"
     return (
         f"https://www.awin1.com/cread.php?"
@@ -18,7 +19,13 @@ def nike_url(path="/mx/w/sale-3yaep"):
         f"&ued={quote(destino, safe='')}"
     )
 
-from agents.base import precio_original, ahora_str
+def lacoste_url(path="/mx/es/outlet/"):
+    destino = f"https://www.lacoste.com{path}"
+    return (
+        f"https://www.awin1.com/cread.php?"
+        f"awinmid={AWIN_MID_LACOSTE}&awinaffid={AWIN_ID}"
+        f"&ued={quote(destino, safe='')}"
+    )
 
 # ── Nike MX ──────────────────────────────────────────────────────────────────
 
@@ -54,130 +61,36 @@ def run_nike():
     print(f"[Nike MX] {len(ofertas)} ofertas")
     return ofertas
 
-# ── Adidas MX ─────────────────────────────────────────────────────────────────
+# ── Lacoste MX ───────────────────────────────────────────────────────────────
 
-ADIDAS_PRODUCTOS = [
-    ("Adidas Ultraboost 22",       3299, 25, "tenis, running, adidas"),
-    ("Adidas Stan Smith",          1799, 20, "tenis, casual, adidas"),
-    ("Adidas Superstar",           1599, 20, "tenis, casual, adidas"),
-    ("Adidas Tiro Pants",           799, 30, "ropa deportiva, adidas, gym"),
-    ("Adidas Forum Low",           1899, 20, "tenis, casual, adidas"),
-    ("Adidas Entrada Jersey",       499, 35, "ropa deportiva, futbol, adidas"),
-    ("Adidas Essentials Hoodie",    999, 25, "ropa, adidas, casual"),
-    ("Adidas Predator Accuracy",  2499, 20, "tenis futbol, adidas"),
+LACOSTE_PRODUCTOS = [
+    ("Lacoste Polo Classic Fit Hombre",    2299, 20, "polo, ropa, lacoste, hombre"),
+    ("Lacoste Polo Slim Fit Mujer",        2099, 20, "polo, ropa, lacoste, mujer"),
+    ("Lacoste Tenis L-Spin Hombre",        2799, 25, "tenis, casual, lacoste"),
+    ("Lacoste Tenis Lerond Mujer",         2599, 20, "tenis, casual, lacoste"),
+    ("Lacoste Chamarra Blouson Hombre",    3999, 25, "chamarra, ropa, lacoste"),
+    ("Lacoste Bolsa Concept Mujer",        3499, 30, "bolsa, accesorios, lacoste"),
+    ("Lacoste Sudadera Full Zip Hombre",   2799, 20, "sudadera, ropa, lacoste"),
+    ("Lacoste Perfume L.12.12 Blanc",      1899, 15, "perfume, fragancia, lacoste"),
 ]
 
-def run_adidas():
+def run_lacoste():
     ofertas = []
-    for nombre, precio, descuento, keywords in ADIDAS_PRODUCTOS:
+    for nombre, precio, descuento, keywords in LACOSTE_PRODUCTOS:
         orig = precio_original(precio, descuento)
         ofertas.append({
-            "fuente":          "Adidas MX",
+            "fuente":          "Lacoste MX",
             "tipo":            "moda",
             "destino":         nombre,
             "precio":          precio,
             "precio_fmt":      f"${precio:,.0f} MXN",
             "precio_original": orig,
             "descuento_pct":   descuento,
-            "url":             "https://www.adidas.mx/sale",
-            "tipo_promo":      f"-{descuento}% Sale Adidas MX",
+            "url":             lacoste_url(),
+            "tipo_promo":      f"-{descuento}% Outlet Lacoste MX",
             "palabras_clave":  keywords,
             "fecha":           ahora_str(),
             "activa":          True,
         })
-    print(f"[Adidas MX] {len(ofertas)} ofertas")
-    return ofertas
-
-# ── Puma MX ───────────────────────────────────────────────────────────────────
-
-PUMA_PRODUCTOS = [
-    ("Puma Suede Classic XXI",  1299, 20, "tenis, casual, puma"),
-    ("Puma RS-X",               1599, 25, "tenis, casual, puma"),
-    ("Puma Camiseta Teamliga",   449, 30, "ropa, futbol, puma"),
-    ("Puma Softride Enzo",      1199, 20, "tenis, running, puma"),
-    ("Puma Essentials Hoodie",   799, 25, "ropa, casual, puma"),
-]
-
-def run_puma():
-    ofertas = []
-    for nombre, precio, descuento, keywords in PUMA_PRODUCTOS:
-        orig = precio_original(precio, descuento)
-        ofertas.append({
-            "fuente":          "Puma MX",
-            "tipo":            "moda",
-            "destino":         nombre,
-            "precio":          precio,
-            "precio_fmt":      f"${precio:,.0f} MXN",
-            "precio_original": orig,
-            "descuento_pct":   descuento,
-            "url":             "https://mx.puma.com/es/sale",
-            "tipo_promo":      f"-{descuento}% Sale Puma MX",
-            "palabras_clave":  keywords,
-            "fecha":           ahora_str(),
-            "activa":          True,
-        })
-    print(f"[Puma MX] {len(ofertas)} ofertas")
-    return ofertas
-
-# ── Zara MX ───────────────────────────────────────────────────────────────────
-
-ZARA_PRODUCTOS = [
-    ("Zara Blazer Oversized", 1299, 30, "ropa, moda, zara, mujer",  "https://www.zara.com/mx/es/mujer-blazers-oversize-l4189.html"),
-    ("Zara Jeans Slim",        799, 20, "pantalon, moda, zara",     "https://www.zara.com/mx/es/mujer-jeans-slim-l1280.html"),
-    ("Zara Vestido Midi",      999, 25, "vestido, moda, zara, mujer","https://www.zara.com/mx/es/mujer-vestidos-midi-l1303.html"),
-    ("Zara Camisa Oversize",   699, 30, "camisa, moda, zara",       "https://www.zara.com/mx/es/mujer-camisas-l1217.html"),
-    ("Zara Zapatillas Piel",  1499, 20, "zapatos, moda, zara, mujer","https://www.zara.com/mx/es/mujer-zapatos-l1251.html"),
-    ("Zara Bolso Tote",        899, 25, "bolsa, accesorios, zara",  "https://www.zara.com/mx/es/mujer-bolsos-tote-l1025.html"),
-]
-
-def run_zara():
-    ofertas = []
-    for nombre, precio, descuento, keywords, url in ZARA_PRODUCTOS:
-        orig = precio_original(precio, descuento)
-        ofertas.append({
-            "fuente":          "Zara MX",
-            "tipo":            "moda",
-            "destino":         nombre,
-            "precio":          precio,
-            "precio_fmt":      f"${precio:,.0f} MXN",
-            "precio_original": orig,
-            "descuento_pct":   descuento,
-            "url":             url,
-            "tipo_promo":      f"-{descuento}% Sale Zara MX",
-            "palabras_clave":  keywords,
-            "fecha":           ahora_str(),
-            "activa":          True,
-        })
-    print(f"[Zara MX] {len(ofertas)} ofertas")
-    return ofertas
-
-# ── H&M MX ────────────────────────────────────────────────────────────────────
-
-HM_PRODUCTOS = [
-    ("H&M Vestido Floral",   499, 30, "vestido, moda, hm, mujer", "https://www2.hm.com/es_mx/mujer/productos/vestidos/vestidos-floral.html"),
-    ("H&M Jeans Skinny",     599, 25, "pantalon, moda, hm",       "https://www2.hm.com/es_mx/mujer/productos/jeans/jeans-skinny.html"),
-    ("H&M Camiseta Basica",  199, 30, "camiseta, moda, hm",       "https://www2.hm.com/es_mx/mujer/productos/camisetas-y-tops/camisetas.html"),
-    ("H&M Sudadera Logo",    699, 20, "ropa, casual, hm",         "https://www2.hm.com/es_mx/mujer/productos/sudaderas-y-hoodies.html"),
-    ("H&M Chaqueta Denim",   899, 25, "ropa, casual, hm",         "https://www2.hm.com/es_mx/mujer/productos/chaquetas-y-abrigos/chaquetas-denim.html"),
-]
-
-def run_hm():
-    ofertas = []
-    for nombre, precio, descuento, keywords, url in HM_PRODUCTOS:
-        orig = precio_original(precio, descuento)
-        ofertas.append({
-            "fuente":          "H&M MX",
-            "tipo":            "moda",
-            "destino":         nombre,
-            "precio":          precio,
-            "precio_fmt":      f"${precio:,.0f} MXN",
-            "precio_original": orig,
-            "descuento_pct":   descuento,
-            "url":             url,
-            "tipo_promo":      f"-{descuento}% Sale H&M MX",
-            "palabras_clave":  keywords,
-            "fecha":           ahora_str(),
-            "activa":          True,
-        })
-    print(f"[H&M MX] {len(ofertas)} ofertas")
+    print(f"[Lacoste MX] {len(ofertas)} ofertas")
     return ofertas
