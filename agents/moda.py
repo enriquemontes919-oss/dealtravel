@@ -1,9 +1,8 @@
 """
-agents/moda.py — Agentes de moda: Nike MX y Lacoste MX
-Solo anunciantes aprobados en Awin — Junio 2026
+agents/moda.py — Nike MX y Lacoste MX
+Anunciantes aprobados en Awin — Junio 2026
 Nike MX: MID 117547 ✅
 Lacoste MX: MID 32585 ✅
-Quitados: Adidas, Puma, Zara, H&M (sin aprobación Awin)
 """
 from agents.base import AWIN_ID, precio_original, ahora_str
 from urllib.parse import quote
