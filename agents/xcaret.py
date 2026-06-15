@@ -44,7 +44,7 @@ def run():
             "precio_original": orig,
             "descuento_pct":   descuento,
             "url":             xcaret_url(path),
-            "tipo_promo":      f"-{descuento}% Hot Sale · {fechas}",
+            "tipo_promo":      f"-{descuento}% Oferta Xcaret · {fechas}",
             "palabras_clave":  "xcaret, parque, viaje, cancun, riviera maya, todo incluido",
             "fecha":           ahora_str(),
             "activa":          True,
