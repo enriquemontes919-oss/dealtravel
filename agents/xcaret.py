@@ -1,6 +1,7 @@
 """
 agents/xcaret.py — Agente Xcaret (Awin aprobado)
 Deep links via Awin ID 2876425, Advertiser ID 34947
+Fechas dinámicas — sin hardcodear "Hot Sale"
 """
 from urllib.parse import quote
 from agents.base import AWIN_ID, precio_original, generar_fechas_viaje, ahora_str
