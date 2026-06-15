@@ -1,14 +1,14 @@
 """
 scraper.py — Orquestador principal de DealTravel
-Railway lo ejecuta como cron (0 * * * *) cada hora y lo termina al finalizar.
+Railway cron: 0 * * * * (cada hora en punto)
 
-Junio 2026: Solo anunciantes aprobados en Awin:
-- Nike MX (MID 117547)
-- Lacoste MX (MID 32585)
-- Xcaret (MID 34947)
-- Viajes: Expedia MX, Hoteles.com MX, Trivago, Kiwi MX, Sirenis Hotels
+Anunciantes activos — Junio 2026:
+- Amazon MX (sin precio, búsquedas)
+- Nike MX — Awin MID 117547 ✅
+- Lacoste MX — Awin MID 32585 ✅
+- Xcaret — Awin MID 34947 ✅
+- Viajes: Expedia MX, Hoteles.com MX, Trivago, Kiwi MX, Sirenis Hotels ✅
 - Mercado Libre (via GitHub Actions)
-Quitados: Amazon, Liverpool, Palacio, Adidas, Puma, Zara, H&M
 """
 import os
 import requests
@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from agents.amazon       import run as run_amazon
 from agents.mercadolibre import run as run_mercadolibre
 from agents.moda         import run_nike, run_lacoste
 from agents.viajes       import run as run_viajes
@@ -25,6 +26,7 @@ from agents.alertas      import revisar_alertas
 from agents.base         import SUPABASE_URL, SUPABASE_KEY, supabase_headers
 
 TIENDAS_FIJAS = [
+    "Amazon MX",
     "Nike MX", "Lacoste MX",
     "Trivago", "Kiwi MX", "Sirenis Hotels",
     "Expedia MX", "Hoteles.com MX", "Xcaret",
@@ -108,6 +110,7 @@ def monitorear():
     marcar_inactivas_viejas()
 
     todas = []
+    todas.extend(run_amazon())
     todas.extend(run_mercadolibre())
     todas.extend(run_nike())
     todas.extend(run_lacoste())
