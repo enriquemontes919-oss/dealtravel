@@ -42,6 +42,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 /* NAV */
 nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:72px;position:fixed;top:0;width:100%;z-index:100;background:#ffffff;border-bottom:1px solid rgba(0,0,0,0.08);}
 .nav-logo img{height:62px;width:auto;}
+.nav-left{display:flex;align-items:center;gap:16px;}
+.hamburger{background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.2s;}
+.sidebar{position:fixed;top:0;left:-280px;width:280px;height:100vh;background:#fff;z-index:1000;transition:left 0.3s ease;box-shadow:4px 0 24px rgba(0,0,0,0.08);overflow-y:auto;}
+.sidebar.open{left:0;}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:999;opacity:0;visibility:hidden;transition:all 0.3s;}
+.sidebar-overlay.open{opacity:1;visibility:visible;}
+.sidebar-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sidebar-logo{height:36px;}
+.sidebar-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-3);padding:4px;}
+.sidebar-section{padding:16px 20px 8px;font-size:0.68rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.1em;}
+.sidebar-link{display:flex;align-items:center;justify-content:space-between;padding:11px 20px;font-size:0.9rem;font-weight:500;color:var(--text);text-decoration:none;transition:background 0.15s;border-left:3px solid transparent;}
+.sidebar-link:hover{background:var(--purple-light);border-left-color:var(--purple);color:var(--purple);}
+.sidebar-link.highlight{background:var(--purple-light);color:var(--purple);font-weight:600;border-left-color:var(--purple);}
+.sidebar-badge{background:#ff3b30;color:#fff;font-size:0.62rem;font-weight:700;padding:2px 7px;border-radius:980px;}
+.sidebar-divider{height:1px;background:var(--border);margin:8px 20px;}
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links a{color:var(--text-2);text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.2s;}
 .nav-links a:hover{color:var(--purple);}
@@ -285,8 +301,41 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
 </head>
 <body>
 
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="logo-dealtravel.png" class="sidebar-logo" alt="Dealtravel.mx">
+    <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+  </div>
+  <div class="sidebar-section">Ofertas destacadas</div>
+  <a href="#ofertas" class="sidebar-link highlight" onclick="toggleSidebar();cambiarTab('viajes',document.querySelector('.section-tab'))">
+    Ofertas relámpago <span class="sidebar-badge">24h</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">Viajes</div>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('vuelos',document.querySelectorAll('.viaje-filter-btn')[1]),100)">Vuelos</a>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('hoteles',document.querySelectorAll('.viaje-filter-btn')[2]),100)">Hoteles</a>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('paquetes',document.querySelectorAll('.viaje-filter-btn')[3]),100)">Paquetes</a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">Productos</div>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('electronico',document.querySelectorAll('.filter-btn')[1]),100)">Electrónicos</a>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('moda',document.querySelectorAll('.filter-btn')[2]),100)">Moda</a>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('belleza',document.querySelectorAll('.filter-btn')[5]),100)">Belleza</a>
+  <a href="#ofertas" class="sidebar-link" onclick="toggleSidebar();cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('hogar',document.querySelectorAll('.filter-btn')[3]),100)">Hogar</a>
+  <div class="sidebar-divider"></div>
+  <a href="#alerta" class="sidebar-link" onclick="toggleSidebar()">🔔 Crear alerta gratis</a>
+</div>
+
 <nav>
-  <div class="nav-logo"><img src="logo-dealtravel.png" alt="Dealtravel.mx"></div>
+  <div class="nav-left">
+    <button class="hamburger" onclick="toggleSidebar()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-logo"><img src="logo-dealtravel.png" alt="Dealtravel.mx"></div>
+  </div>
   <ul class="nav-links">
     <li class="nav-dropdown">
       <button class="nav-dropdown-toggle">Viajes</button>
@@ -669,19 +718,19 @@ const OFERTAS_POR_PAGINA = 20;
 let todasLasOfertas = [], ofertasFiltradas = [], ofertasMostradas = 0;
 let diasSeleccionados = 7;
 
-const CAT_ICONS = {electronico:'ELC',moda:'MOD',hogar:'HGR',belleza:'BLZ',deporte:'DEP',viajes:'VJE',general:'OFR'};
+const CAT_ICONS = {electronico:'Electrónico',moda:'Moda',hogar:'Hogar',belleza:'Belleza',deporte:'Deporte',viajes:'Viaje',general:'Oferta'};
 
 function getIconoViaje(o) {
   const fuente = (o.fuente||'').toLowerCase();
   const destino = (o.destino||'').toLowerCase();
   const style = 'font-family:Syne,sans-serif;font-size:1.6rem;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-1px;';
   if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('→')) {
-    return `<span style="${style}">FLY</span>`;
+    return `<span style="${style}">Vuelo</span>`;
   }
   if(fuente.includes('booking') || destino.includes('hotel')) {
-    return `<span style="${style}">HTL</span>`;
+    return `<span style="${style}">Hotel</span>`;
   }
-  return `<span style="${style}">PKG</span>`;
+  return `<span style="${style}">Paquete</span>`;
 }
 const CAT_BG = {electronico:'deal-img-wrap-electronico',moda:'deal-img-wrap-moda',hogar:'deal-img-wrap-hogar',belleza:'deal-img-wrap-belleza',deporte:'deal-img-wrap-deporte',viajes:'deal-img-wrap-viajes',general:'deal-img-wrap-general'};
 
@@ -745,18 +794,18 @@ function renderHotel(o) {
   const partes = o.destino.replace('Hotel en ','').split(' — ');
   const ciudad = partes[0] || '';
   const nombre = partes[1] || o.fuente;
-  const flags = {
-    'Cancún':'🇲🇽','Los Cabos':'🇲🇽','Puerto Vallarta':'🇲🇽','Tulum':'🇲🇽',
-    'Playa del Carmen':'🇲🇽','Ciudad de México':'🇲🇽','Oaxaca':'🇲🇽','Guadalajara':'🇲🇽',
-    'Miami':'🇺🇸','Nueva York':'🇺🇸','Houston':'🇺🇸','Chicago':'🇺🇸','Los Ángeles':'🇺🇸',
-    'Madrid':'🇪🇸','Barcelona':'🇪🇸',
-    'París':'🇫🇷','Amsterdam':'🇳🇱','Londres':'🇬🇧',
-    'Punta Cana':'🇩🇴','Buenos Aires':'🇦🇷','São Paulo':'🇧🇷',
-    'Medellín':'🇨🇴','Bogotá':'🇨🇴'
+  const paises = {
+    'Cancún':'México','Los Cabos':'México','Puerto Vallarta':'México','Tulum':'México',
+    'Playa del Carmen':'México','Ciudad de México':'México','Oaxaca':'México','Guadalajara':'México',
+    'Miami':'EUA','Nueva York':'EUA','Houston':'EUA','Chicago':'EUA','Los Ángeles':'EUA',
+    'Madrid':'España','Barcelona':'España',
+    'París':'Francia','Amsterdam':'Holanda','Londres':'Reino Unido',
+    'Punta Cana':'Rep. Dom.','Buenos Aires':'Argentina','São Paulo':'Brasil',
+    'Medellín':'Colombia','Bogotá':'Colombia'
   };
-  const emoji = flags[ciudad] || '🌍';
+  const pais = paises[ciudad] || 'Internacional';
   return `<a href="${o.url}" target="_blank" rel="noopener noreferrer" class="hotel-card">
-    <div class="hotel-img">${emoji}</div>
+    <div class="hotel-img"><span style="font-family:Syne,sans-serif;font-size:0.85rem;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:0.02em;text-transform:uppercase;">${pais}</span></div>
     <div class="hotel-body">
       <div class="hotel-ciudad">${ciudad}</div>
       <div class="hotel-nombre">${nombre}</div>
@@ -947,6 +996,12 @@ async function submitAlert() {
 
 cargarStats();
 cargarOfertas();
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('sidebar').classList.contains('open') ? 'hidden' : '';
+}
 </script>
 </body>
 </html>
