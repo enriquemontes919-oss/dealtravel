@@ -88,7 +88,7 @@ def revisar_alertas(todas_ofertas):
                 producto_alerta = alerta.get("destino", "").lower()
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto     = float(alerta.get("presupuesto") or 99999)
-                fuente_alerta   = alerta.get("fuente", "Cualquier tienda")
+                fuente_alerta   = alerta.get("fuente") or "Cualquier tienda"
 
                 matches_nuevos = []
                 for oferta in todas_ofertas:
@@ -123,7 +123,7 @@ def revisar_alertas(todas_ofertas):
                 enviar_email_consolidado(alerta, matches_nuevos, dias_alerta, dias_transcurridos)
 
                 # ── 6. WhatsApp si eligió ese método ─────────────────────
-                telefono = alerta.get("telefono", "").strip()
+                telefono = (alerta.get("telefono") or "").strip()
                 if telefono and "whatsapp" in (alerta.get("tipo") or "").lower():
                     enviar_whatsapp(alerta, matches_nuevos)
 
@@ -160,7 +160,7 @@ def _limpiar_numero(telefono):
 
 
 def enviar_whatsapp(alerta, ofertas):
-    telefono = alerta.get("telefono", "").strip()
+    telefono = (alerta.get("telefono") or "").strip()
     if not telefono:
         return
     numero = _limpiar_numero(telefono)
@@ -183,7 +183,7 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
     dias_restantes = dias_alerta - dias_transcurridos
 
     # Sección WhatsApp
-    telefono  = alerta.get("telefono", "").strip()
+    telefono  = (alerta.get("telefono") or "").strip()
     wa_section = ""
     if telefono:
         numero = _limpiar_numero(telefono)
