@@ -84,7 +84,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .hero-card-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .hero-card-price{font-size:1.3rem;font-weight:700;color:var(--purple);}
 .hero-card-orig{font-size:0.8rem;color:var(--text-3);text-decoration:line-through;}
-.hero-card-badge{background:var(--lime);color:#1a1a1a;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:980px;}
+.hero-card-badge{background:#ff3b30;color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:980px;}
 .hero-flash{display:inline-flex;align-items:center;gap:5px;background:#fff8e0;border:1px solid #fde68a;color:#b45309;font-size:0.68rem;font-weight:600;padding:3px 10px;border-radius:980px;margin-top:6px;}
 
 /* SEARCH BAR */
@@ -124,7 +124,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .vuelo-precio-wrap{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
 .vuelo-precio{font-size:1.3rem;font-weight:700;color:var(--purple);}
 .vuelo-precio-orig{font-size:0.8rem;color:var(--text-3);text-decoration:line-through;}
-.vuelo-badge{background:var(--lime);color:#1a1a1a;font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:980px;}
+.vuelo-badge{background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:800;padding:2px 8px;border-radius:980px;}
 .vuelo-meta{font-size:0.7rem;color:var(--text-3);margin-top:4px;}
 
 /* HOTEL CARDS */
@@ -156,7 +156,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .deal-img-wrap-viajes{background:linear-gradient(135deg,var(--purple),#8b5cf6);}
 .deal-img-wrap-general{background:linear-gradient(135deg,#374151,#6b7280);}
 .deal-img-icon{font-size:3rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));}
-.deal-discount{position:absolute;top:10px;left:10px;background:var(--lime);color:#1a1a1a;font-size:0.65rem;font-weight:800;padding:3px 9px;border-radius:980px;}
+.deal-discount{position:absolute;top:10px;left:10px;background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:800;padding:3px 9px;border-radius:980px;}
 .deal-store-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:6px;}
 .deal-verified{position:absolute;bottom:8px;left:10px;background:rgba(0,0,0,0.3);color:rgba(255,255,255,0.9);font-size:0.6rem;padding:2px 8px;border-radius:6px;}
 .deal-body{padding:14px;}
@@ -670,6 +670,18 @@ let todasLasOfertas = [], ofertasFiltradas = [], ofertasMostradas = 0;
 let diasSeleccionados = 7;
 
 const CAT_ICONS = {electronico:'📱',moda:'👟',hogar:'🏠',belleza:'💄',deporte:'⚽',viajes:'✈️',general:'🛍️'};
+
+function getIconoViaje(o) {
+  const fuente = (o.fuente||'').toLowerCase();
+  const destino = (o.destino||'').toLowerCase();
+  if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('cdmx →') || destino.includes('mty →') || destino.includes('gdl →') || destino.includes('cun →')) {
+    return '<img src="icon-vuelo.png" style="width:56px;height:56px;object-fit:contain;">';
+  }
+  if(fuente.includes('booking') || destino.includes('hotel')) {
+    return '<img src="icon-hotel.png" style="width:56px;height:56px;object-fit:contain;">';
+  }
+  return '<img src="icon-paquete.png" style="width:56px;height:56px;object-fit:contain;">';
+}
 const CAT_BG = {electronico:'deal-img-wrap-electronico',moda:'deal-img-wrap-moda',hogar:'deal-img-wrap-hogar',belleza:'deal-img-wrap-belleza',deporte:'deal-img-wrap-deporte',viajes:'deal-img-wrap-viajes',general:'deal-img-wrap-general'};
 
 function cambiarTab(tab, btn) {
@@ -764,9 +776,10 @@ function renderViajes(todas) {
 function renderCard(o) {
   const sinPrecio = !o.precio || o.precio === 0;
   const tipo = o.tipo || 'general';
+  const iconHtml = tipo === 'viajes' ? getIconoViaje(o) : `<span style="font-size:3rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3))">${CAT_ICONS[tipo]||'🛍️'}</span>`;
   return `<div class="deal-card">
     <div class="deal-img-wrap ${CAT_BG[tipo]||'deal-img-wrap-general'}">
-      <div class="deal-img-icon">${CAT_ICONS[tipo]||'🛍️'}</div>
+      <div class="deal-img-icon">${iconHtml}</div>
       <span class="deal-discount">${o.descuento_pct ? `-${o.descuento_pct}%` : 'Oferta'}</span>
       <span class="deal-store-badge">${o.fuente}</span>
       <span class="deal-verified">${getFechaVerificada(o.fecha)}</span>
