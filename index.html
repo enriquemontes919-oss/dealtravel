@@ -319,6 +319,40 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
   .hero-stats{gap:1.5rem;}
   .stats-banner-inner{gap:2rem;}
 }
+
+/* ── Tabs Viajes / Productos ── */
+.section-tabs{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:2px solid var(--border);}
+.section-tab{background:none;border:none;padding:0.75rem 1.5rem;font-size:0.95rem;font-weight:600;color:var(--text-3);cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+.section-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.section-tab:hover{color:var(--text);}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
+
+/* ── Cards de vuelo ── */
+.vuelo-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;transition:box-shadow 0.2s;cursor:pointer;}
+.vuelo-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.vuelo-ruta{font-size:1.1rem;font-weight:700;color:var(--text);}
+.vuelo-aerolinea{font-size:0.75rem;color:var(--text-3);font-weight:500;}
+.vuelo-precio-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.vuelo-precio{font-size:1.4rem;font-weight:800;color:var(--blue);}
+.vuelo-precio-orig{font-size:0.85rem;color:var(--text-3);text-decoration:line-through;}
+.vuelo-badge{background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:6px;}
+.vuelo-meta{font-size:0.75rem;color:var(--text-3);}
+.vuelo-flash{display:inline-flex;align-items:center;gap:4px;background:#fff8e1;color:#f59e0b;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid #fde68a;}
+.vuelos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem;}
+
+/* ── Cards de hotel ── */
+.hotel-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;transition:box-shadow 0.2s;}
+.hotel-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.hotel-destino{font-size:0.7rem;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
+.hotel-nombre{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:8px;}
+.hoteles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem;}
+
+/* ── Sub-filtros de viaje ── */
+.viaje-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.viaje-filter-btn{background:transparent;border:1.5px solid var(--border);color:var(--text-2);padding:0.35rem 1rem;border-radius:980px;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;font-weight:500;}
+.viaje-filter-btn.active,.viaje-filter-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.viaje-section-title{font-size:1rem;font-weight:700;color:var(--text);margin:1.2rem 0 0.8rem;display:flex;align-items:center;gap:8px;}
+
 </style>
 </head>
 <body>
@@ -491,20 +525,21 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
     <p class="section-eyebrow">Donde buscamos</p>
     <h2 class="section-title">Tiendas monitoreadas</h2>
     <div class="tiendas-scroll">
-      <span class="tienda-pill">Amazon MX</span>
-      <span class="tienda-pill">Mercado Libre</span>
-      <span class="tienda-pill">Walmart MX</span>
-      <span class="tienda-pill">Liverpool</span>
-      <span class="tienda-pill">Nike MX</span>
-      <span class="tienda-pill">Adidas MX</span>
-      <span class="tienda-pill">Puma MX</span>
-      <span class="tienda-pill">Zara MX</span>
-      <span class="tienda-pill">H&M MX</span>
-      <span class="tienda-pill">Trivago</span>
-      <span class="tienda-pill">Kiwi Vuelos</span>
-      <span class="tienda-pill">Sirenis Hotels</span>
-      <span class="tienda-pill">Expedia MX</span>
-      <span class="tienda-pill">Hoteles.com MX</span>
+      <span class="tienda-pill">✈️ Kayak Vuelos</span>
+      <span class="tienda-pill">🏨 Booking Hoteles</span>
+      <span class="tienda-pill">🌴 Xcaret</span>
+      <span class="tienda-pill">✈️ Expedia MX</span>
+      <span class="tienda-pill">🏨 Hoteles.com MX</span>
+      <span class="tienda-pill">✈️ Trivago</span>
+      <span class="tienda-pill">✈️ Kiwi Vuelos</span>
+      <span class="tienda-pill">🏨 Sirenis Hotels</span>
+      <span class="tienda-pill">👟 Nike MX</span>
+      <span class="tienda-pill">🐊 Lacoste MX</span>
+      <span class="tienda-pill">📱 Honor MX</span>
+      <span class="tienda-pill">🛒 Amazon MX</span>
+      <span class="tienda-pill">🛍️ Mercado Libre</span>
+      <span class="tienda-pill">🔦 LaserPecker</span>
+      <span class="tienda-pill">👓 SmartBuyGlasses</span>
     </div>
   </div>
 </section>
@@ -534,23 +569,51 @@ footer{background:var(--text);color:#fff;padding:3.5rem 5% 1.5rem;}
         </div>
         <div id="total-ofertas" style="font-size:0.8rem;color:var(--text-3);font-weight:500;"></div>
       </div>
-      <div class="hot-deals">
-        <div class="hot-deals-title">🔥 Las más hot ahora</div>
-        <div class="hot-deals-grid" id="hot-grid"><div class="loading">Cargando...</div></div>
+
+      <!-- TABS PRINCIPALES -->
+      <div class="section-tabs">
+        <button class="section-tab active" onclick="cambiarTab('viajes',this)">✈️ Viajes</button>
+        <button class="section-tab" onclick="cambiarTab('productos',this)">🛍️ Productos</button>
       </div>
-      <div class="deals-filters">
-        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrar('electronico',this)">Electrónicos</button>
-        <button class="filter-btn" onclick="filtrar('moda',this)">Moda</button>
-        <button class="filter-btn" onclick="filtrar('hogar',this)">Hogar</button>
-        <button class="filter-btn" onclick="filtrar('deporte',this)">Deportes</button>
-        <button class="filter-btn" onclick="filtrar('belleza',this)">Belleza</button>
-        <button class="filter-btn" onclick="filtrar('viajes',this)">Viajes</button>
+
+      <!-- TAB VIAJES -->
+      <div class="tab-panel active" id="tab-viajes">
+        <div class="viaje-filters">
+          <button class="viaje-filter-btn active" onclick="filtrarViaje('todos',this)">Todos</button>
+          <button class="viaje-filter-btn" onclick="filtrarViaje('vuelos',this)">✈️ Vuelos</button>
+          <button class="viaje-filter-btn" onclick="filtrarViaje('hoteles',this)">🏨 Hoteles</button>
+          <button class="viaje-filter-btn" onclick="filtrarViaje('paquetes',this)">📦 Paquetes</button>
+        </div>
+
+        <div class="viaje-section-title" id="vuelos-title">✈️ Vuelos en oferta <span class="vuelo-flash">⚡ Oferta 24h</span></div>
+        <div class="vuelos-grid" id="vuelos-grid"><div class="loading">Cargando vuelos...</div></div>
+
+        <div class="viaje-section-title" id="hoteles-title">🏨 Hoteles en oferta <span class="vuelo-flash">⚡ Oferta 24h</span></div>
+        <div class="hoteles-grid" id="hoteles-grid"><div class="loading">Cargando hoteles...</div></div>
+
+        <div class="viaje-section-title" id="paquetes-title">🌴 Xcaret y paquetes</div>
+        <div class="deals-grid" id="paquetes-grid"><div class="loading">Cargando paquetes...</div></div>
       </div>
-      <div class="deals-grid" id="deals-grid"><div class="loading">Cargando ofertas...</div></div>
-      <div class="load-more-wrap">
-        <p class="load-more-info" id="info-ofertas"></p>
-        <button class="btn-load-more" id="btn-cargar-mas" onclick="cargarMasOfertas()">Ver 20 ofertas más</button>
+
+      <!-- TAB PRODUCTOS -->
+      <div class="tab-panel" id="tab-productos">
+        <div class="hot-deals">
+          <div class="hot-deals-title">🔥 Las más hot ahora</div>
+          <div class="hot-deals-grid" id="hot-grid"><div class="loading">Cargando...</div></div>
+        </div>
+        <div class="deals-filters">
+          <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+          <button class="filter-btn" onclick="filtrar('electronico',this)">Electrónicos</button>
+          <button class="filter-btn" onclick="filtrar('moda',this)">Moda</button>
+          <button class="filter-btn" onclick="filtrar('hogar',this)">Hogar</button>
+          <button class="filter-btn" onclick="filtrar('deporte',this)">Deportes</button>
+          <button class="filter-btn" onclick="filtrar('belleza',this)">Belleza</button>
+        </div>
+        <div class="deals-grid" id="deals-grid"><div class="loading">Cargando ofertas...</div></div>
+        <div class="load-more-wrap">
+          <p class="load-more-info" id="info-ofertas"></p>
+          <button class="btn-load-more" id="btn-cargar-mas" onclick="cargarMasOfertas()">Ver 20 ofertas más</button>
+        </div>
       </div>
     </div>
     <div class="sidebar-ad-stack">
@@ -802,9 +865,13 @@ async function cargarOfertas() {
       todasLasOfertas = ofertas;
       ofertasFiltradas = ofertas;
       document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
-      renderHotDeals(ofertas);
+      renderViajes(ofertas);
+      const soloProductos = ofertas.filter(o => o.tipo !== 'viajes' && o.fuente !== 'Vuelos Kayak' && o.fuente !== 'Hoteles Booking');
+      todasLasOfertas = soloProductos;
+      ofertasFiltradas = soloProductos;
+      renderHotDeals(soloProductos);
       ofertasMostradas = OFERTAS_POR_PAGINA;
-      renderOfertas(ofertasFiltradas.slice(0, ofertasMostradas));
+      renderOfertas(soloProductos.slice(0, ofertasMostradas));
       actualizarBotonCargarMas();
     } else {
       document.getElementById('deals-grid').innerHTML = '<div class="no-results">No hay ofertas disponibles.</div>';
@@ -1005,6 +1072,96 @@ window.addEventListener('DOMContentLoaded', () => {
   cargarStats();
   setTimeout(tocarCampanilla, 800);
 });
+
+// ── Tabs Viajes / Productos ───────────────────────────────────────────────────
+function cambiarTab(tab, btn) {
+  document.querySelectorAll('.section-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function filtrarViaje(tipo, btn) {
+  document.querySelectorAll('.viaje-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const mostrar = tipo === 'todos';
+  ['vuelos','hoteles','paquetes'].forEach(sec => {
+    const grid = document.getElementById(sec + '-grid');
+    const title = document.getElementById(sec + '-title');
+    const visible = mostrar || tipo === sec;
+    if(grid) grid.style.display = visible ? '' : 'none';
+    if(title) title.style.display = visible ? '' : 'none';
+  });
+}
+
+// ── Render vuelos ─────────────────────────────────────────────────────────────
+function renderVuelo(o) {
+  return `
+    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <div class="vuelo-card">
+        <div>
+          <div class="vuelo-ruta">${o.destino.replace('Vuelo ','').split(' — ')[0]}</div>
+          <div class="vuelo-aerolinea">${o.destino.includes(' — ') ? o.destino.split(' — ')[1] : o.fuente}</div>
+        </div>
+        <div class="vuelo-precio-wrap">
+          ${o.precio_original ? `<span class="vuelo-precio-orig">$${o.precio_original.toLocaleString('es-MX')} MXN</span>` : ''}
+          <span class="vuelo-precio">${o.precio_fmt}</span>
+          ${o.descuento_pct ? `<span class="vuelo-badge">-${o.descuento_pct}%</span>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <span class="vuelo-flash">⚡ Oferta 24h</span>
+          <span class="vuelo-meta">${getFechaVerificada(o.fecha)}</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+// ── Render hoteles ────────────────────────────────────────────────────────────
+function renderHotel(o) {
+  const partes = o.destino.replace('Hotel en ','').split(' — ');
+  const ciudad = partes[0] || '';
+  const nombre = partes[1] || o.fuente;
+  return `
+    <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+      <div class="hotel-card">
+        <div class="hotel-destino">🏨 ${ciudad}</div>
+        <div class="hotel-nombre">${nombre}</div>
+        <div class="vuelo-precio-wrap">
+          ${o.precio_original ? `<span class="vuelo-precio-orig">$${o.precio_original.toLocaleString('es-MX')}/noche</span>` : ''}
+          <span class="vuelo-precio">${o.precio_fmt}</span>
+          ${o.descuento_pct ? `<span class="vuelo-badge">-${o.descuento_pct}%</span>` : ''}
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:4px;">
+          <span class="vuelo-flash">⚡ Oferta 24h</span>
+          <span class="vuelo-meta">${getFechaVerificada(o.fecha)}</span>
+        </div>
+      </div>
+    </a>`;
+}
+
+// ── Render secciones de viaje ─────────────────────────────────────────────────
+function renderViajes(todas) {
+  const vuelos   = todas.filter(o => o.fuente === 'Vuelos Kayak');
+  const hoteles  = todas.filter(o => o.fuente === 'Hoteles Booking');
+  const paquetes = todas.filter(o => o.tipo === 'viajes' && o.fuente !== 'Vuelos Kayak' && o.fuente !== 'Hoteles Booking');
+
+  const vGrid = document.getElementById('vuelos-grid');
+  const hGrid = document.getElementById('hoteles-grid');
+  const pGrid = document.getElementById('paquetes-grid');
+
+  vGrid.innerHTML = vuelos.length
+    ? vuelos.map(renderVuelo).join('')
+    : '<div class="no-results" style="padding:1rem;">No hay vuelos en oferta en este momento. Vuelve pronto.</div>';
+
+  hGrid.innerHTML = hoteles.length
+    ? hoteles.map(renderHotel).join('')
+    : '<div class="no-results" style="padding:1rem;">No hay hoteles en oferta en este momento.</div>';
+
+  pGrid.innerHTML = paquetes.length
+    ? paquetes.map(renderCard).join('')
+    : '<div class="no-results" style="padding:1rem;">Cargando paquetes...</div>';
+}
+
 </script>
 </body>
 </html>
