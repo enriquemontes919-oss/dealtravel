@@ -40,8 +40,8 @@ html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
 /* NAV */
-nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:68px;position:fixed;top:0;width:100%;z-index:100;background:rgba(247,246,255,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-logo img{height:36px;width:auto;}
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:72px;position:fixed;top:0;width:100%;z-index:100;background:#ffffff;border-bottom:1px solid rgba(0,0,0,0.08);}
+.nav-logo img{height:52px;width:auto;}
 .nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links a{color:var(--text-2);text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.2s;}
 .nav-links a:hover{color:var(--purple);}
@@ -131,7 +131,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .hoteles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
 .hotel-card{background:#fff;border:1px solid var(--border-2);border-radius:14px;overflow:hidden;transition:all 0.2s;text-decoration:none;display:block;color:inherit;}
 .hotel-card:hover{border-color:var(--purple);box-shadow:0 4px 20px rgba(82,0,255,0.1);transform:translateY(-2px);}
-.hotel-img{height:80px;background:linear-gradient(135deg,var(--purple) 0%,#8b5cf6 100%);display:flex;align-items:center;justify-content:center;font-size:2rem;}
+.hotel-img{height:72px;background:linear-gradient(135deg,var(--purple) 0%,#8b5cf6 100%);display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
 .hotel-body{padding:14px;}
 .hotel-ciudad{font-size:0.65rem;color:var(--purple);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
 .hotel-nombre{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.3;}
@@ -155,7 +155,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;h
 .deal-img-wrap-deporte{background:linear-gradient(135deg,#1c1917,#78716c);}
 .deal-img-wrap-viajes{background:linear-gradient(135deg,var(--purple),#8b5cf6);}
 .deal-img-wrap-general{background:linear-gradient(135deg,#374151,#6b7280);}
-.deal-img-icon{font-size:3rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));}
+.deal-img-icon{font-size:2.2rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3));display:flex;align-items:center;justify-content:center;}
 .deal-discount{position:absolute;top:10px;left:10px;background:#ff3b30;color:#fff;font-size:0.65rem;font-weight:800;padding:3px 9px;border-radius:980px;}
 .deal-store-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:0.6rem;font-weight:700;padding:3px 8px;border-radius:6px;}
 .deal-verified{position:absolute;bottom:8px;left:10px;background:rgba(0,0,0,0.3);color:rgba(255,255,255,0.9);font-size:0.6rem;padding:2px 8px;border-radius:6px;}
@@ -675,12 +675,12 @@ function getIconoViaje(o) {
   const fuente = (o.fuente||'').toLowerCase();
   const destino = (o.destino||'').toLowerCase();
   if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('cdmx →') || destino.includes('mty →') || destino.includes('gdl →') || destino.includes('cun →')) {
-    return '<img src="icon-vuelo.png" style="width:56px;height:56px;object-fit:contain;">';
+    return '<img src="icon-vuelo.png" style="width:36px;height:36px;object-fit:contain;">';
   }
   if(fuente.includes('booking') || destino.includes('hotel')) {
-    return '<img src="icon-hotel.png" style="width:56px;height:56px;object-fit:contain;">';
+    return '<img src="icon-hotel.png" style="width:36px;height:36px;object-fit:contain;">';
   }
-  return '<img src="icon-paquete.png" style="width:56px;height:56px;object-fit:contain;">';
+  return '<img src="icon-paquete.png" style="width:36px;height:36px;object-fit:contain;">';
 }
 const CAT_BG = {electronico:'deal-img-wrap-electronico',moda:'deal-img-wrap-moda',hogar:'deal-img-wrap-hogar',belleza:'deal-img-wrap-belleza',deporte:'deal-img-wrap-deporte',viajes:'deal-img-wrap-viajes',general:'deal-img-wrap-general'};
 
@@ -744,8 +744,16 @@ function renderHotel(o) {
   const partes = o.destino.replace('Hotel en ','').split(' — ');
   const ciudad = partes[0] || '';
   const nombre = partes[1] || o.fuente;
-  const emojis = {'Cancún':'🏖️','Los Cabos':'🌅','Puerto Vallarta':'🌊','Tulum':'🌿','Ciudad de México':'🏙️','Miami':'🌴','Nueva York':'🗽','Madrid':'🏰','París':'🗼','Punta Cana':'🌺','Medellín':'🌸','Bogotá':'🏔️','Buenos Aires':'💃'};
-  const emoji = emojis[ciudad] || '🏨';
+  const flags = {
+    'Cancún':'🇲🇽','Los Cabos':'🇲🇽','Puerto Vallarta':'🇲🇽','Tulum':'🇲🇽',
+    'Playa del Carmen':'🇲🇽','Ciudad de México':'🇲🇽','Oaxaca':'🇲🇽','Guadalajara':'🇲🇽',
+    'Miami':'🇺🇸','Nueva York':'🇺🇸','Houston':'🇺🇸','Chicago':'🇺🇸','Los Ángeles':'🇺🇸',
+    'Madrid':'🇪🇸','Barcelona':'🇪🇸',
+    'París':'🇫🇷','Amsterdam':'🇳🇱','Londres':'🇬🇧',
+    'Punta Cana':'🇩🇴','Buenos Aires':'🇦🇷','São Paulo':'🇧🇷',
+    'Medellín':'🇨🇴','Bogotá':'🇨🇴'
+  };
+  const emoji = flags[ciudad] || '🌍';
   return `<a href="${o.url}" target="_blank" rel="noopener noreferrer" class="hotel-card">
     <div class="hotel-img">${emoji}</div>
     <div class="hotel-body">
