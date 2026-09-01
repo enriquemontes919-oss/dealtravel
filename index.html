@@ -41,7 +41,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);ove
 
 /* NAV */
 nav{display:flex;justify-content:space-between;align-items:center;padding:0 5%;height:72px;position:fixed;top:0;width:100%;z-index:100;background:#ffffff;border-bottom:1px solid rgba(0,0,0,0.08);}
-.nav-logo img{height:72px;width:auto;}
+.nav-logo{text-decoration:none;cursor:pointer;}.nav-logo img{height:72px;width:auto;}
 .nav-left{display:flex;align-items:center;gap:16px;}
 .hamburger{background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:5px;}
 .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;transition:all 0.2s;}
@@ -334,7 +334,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
-    <div class="nav-logo"><img src="logo-dealtravel.png" alt="Dealtravel.mx"></div>
+    <a href="#" class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="logo-dealtravel.png" alt="Dealtravel.mx"></a>
   </div>
   <ul class="nav-links">
     <li class="nav-dropdown">
@@ -449,7 +449,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <input type="number" id="search-precio" placeholder="Presupuesto máx. (MXN)">
     <button onclick="buscarOfertas()">Buscar ofertas</button>
   </div>
-  <div class="search-results" id="search-results" style="padding:0 0 16px;">
+  <div class="search-results" id="search-results" style="padding:0 0 16px;"><button onclick="document.getElementById('search-results').classList.remove('visible');document.getElementById('search-producto').value='';window.scrollTo({top:0,behavior:'smooth'});" style="background:none;border:1.5px solid var(--border-2);color:var(--text-2);padding:6px 16px;border-radius:980px;font-size:0.8rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;display:block;">← Volver al inicio</button>
     <div class="search-count" id="search-count"></div>
     <div id="alerta-rapida" style="display:none;background:var(--purple-light);border:1px solid var(--border-2);border-radius:10px;padding:10px 16px;margin-bottom:12px;font-size:0.82rem;color:var(--purple);">
       ¿No encuentras lo que buscas? <a href="#alerta" style="font-weight:700;color:var(--purple);">Crea una alerta gratis</a> y te avisamos cuando aparezca la oferta.
