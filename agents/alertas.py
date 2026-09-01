@@ -219,46 +219,47 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             if descuento else ""
         )
         precio_display = (
-            f'<span style="font-size:1.4rem;font-weight:800;color:#0ea5e9;">'
+            f'<span style="font-size:1.4rem;font-weight:800;color:#5200FF;">'
             f'{oferta["precio_fmt"]}</span>'
         )
         ofertas_html += f"""
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
                 <div style="flex:1;">
-                    <p style="margin:0 0 4px;font-size:0.7rem;color:#0071e3;font-weight:600;text-transform:uppercase;">{oferta['fuente']}</p>
+                    <p style="margin:0 0 4px;font-size:0.7rem;color:#5200FF;font-weight:600;text-transform:uppercase;">{oferta['fuente']}</p>
                     <p style="margin:0 0 8px;font-weight:600;font-size:0.95rem;color:#1d1d1f;">{oferta['destino']}</p>
                     <p style="margin:0;font-size:0.75rem;color:#64748b;">{oferta['tipo_promo']}</p>
                 </div>
                 <div style="text-align:right;">
                     <p style="margin:0 0 4px;">{precio_orig_html}{precio_display}{descuento_badge}</p>
-                    <a href="{oferta['url']}" style="background:#0071e3;color:#fff;padding:6px 14px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:600;">Ver →</a>
+                    <a href="{oferta['url']}" style="background:#5200FF;color:#fff;padding:6px 14px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:600;">Ver →</a>
                 </div>
             </div>
         </div>"""
 
-    html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;">
-        <div style="background:#0a1628;padding:24px;border-radius:12px 12px 0 0;text-align:center;">
-            <h1 style="color:#38bdf8;margin:0 0 4px;font-size:1.8rem;">Deal<span style="color:#fff;">Travel</span></h1>
-            <p style="color:rgba(255,255,255,0.6);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nuevas para ti</p>
+    html = f"""<div style="font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f7f6ff;">
+        <div style="background:#5200FF;padding:28px 24px;border-radius:14px 14px 0 0;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:2rem;font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;">
+                dealtravel<span style="color:#CCFF00;">.mx</span>
+            </div>
+            <p style="color:rgba(255,255,255,0.7);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nuevas para ti</p>
         </div>
-        <div style="background:#fff;padding:24px;border-radius:0 0 12px 12px;">
-            <div style="background:#f0f8ff;border:1px solid #cce5ff;border-radius:10px;padding:12px 16px;margin-bottom:20px;">
-                <p style="margin:0;font-size:0.85rem;color:#0071e3;">
-                    🔔 Tu alerta: <strong>{alerta['destino']}</strong> ·
+        <div style="background:#fff;padding:24px;border-radius:0 0 14px 14px;">
+            <div style="background:#f0ebff;border:1px solid rgba(82,0,255,0.15);border-radius:10px;padding:12px 16px;margin-bottom:20px;">
+                <p style="margin:0;font-size:0.85rem;color:#5200FF;">
+                    Tu alerta: <strong>{alerta['destino']}</strong> ·
                     Presupuesto: <strong>${float(alerta.get('presupuesto',0)):,.0f} MXN</strong> ·
                     <span style="color:#64748b;">Vence en {dias_restantes} día{'s' if dias_restantes!=1 else ''}</span>
                 </p>
             </div>
             {ofertas_html}
-            <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;">
-                <a href="https://www.dealtravel.mx" style="background:#0071e3;color:#fff;padding:12px 24px;border-radius:980px;text-decoration:none;font-weight:600;font-size:0.9rem;">Ver todas las ofertas en dealtravel.mx</a>
+            <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid #ede9ff;">
+                <a href="https://www.dealtravel.mx" style="background:#5200FF;color:#fff;padding:12px 28px;border-radius:980px;text-decoration:none;font-weight:700;font-size:0.9rem;">Ver todas las ofertas</a>
             </div>
             {wa_section}
             <p style="color:#94a3b8;font-size:0.72rem;margin-top:16px;text-align:center;">
-                Deal Travel · dealtravel.mx<br>
-                Tu alerta expira en {dias_restantes} día{'s' if dias_restantes!=1 else ''}.
-                <a href="https://www.dealtravel.mx#alerta" style="color:#0071e3;">Renovar alerta</a>
+                dealtravel.mx · Tu alerta expira en {dias_restantes} día{'s' if dias_restantes!=1 else ''}.<br>
+                <a href="https://www.dealtravel.mx#alerta" style="color:#5200FF;">Renovar alerta</a>
             </p>
         </div>
     </div>"""
