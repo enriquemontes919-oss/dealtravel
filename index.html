@@ -291,20 +291,20 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <li class="nav-dropdown">
       <button class="nav-dropdown-toggle">Viajes</button>
       <div class="nav-dropdown-menu">
-        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'))">✈️ Vuelos en oferta</a>
-        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('hoteles',document.querySelectorAll('.viaje-filter-btn')[2]),100)">🏨 Hoteles</a>
-        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('paquetes',document.querySelectorAll('.viaje-filter-btn')[3]),100)">🌴 Paquetes Xcaret</a>
+        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'))">Vuelos en oferta</a>
+        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('hoteles',document.querySelectorAll('.viaje-filter-btn')[2]),100)">Hoteles</a>
+        <a href="#ofertas" onclick="cambiarTab('viajes',document.querySelector('.section-tab'));setTimeout(()=>filtrarViaje('paquetes',document.querySelectorAll('.viaje-filter-btn')[3]),100)">Paquetes Xcaret</a>
         <div class="nav-dropdown-divider"></div>
-        <a href="#alerta">🔔 Crear alerta de viaje</a>
+        <a href="#alerta">Crear alerta de viaje</a>
       </div>
     </li>
     <li class="nav-dropdown">
       <button class="nav-dropdown-toggle">Productos</button>
       <div class="nav-dropdown-menu">
-        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1])">🛍️ Todas las ofertas</a>
-        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('electronico',document.querySelectorAll('.filter-btn')[1]),100)">📱 Electrónicos</a>
-        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('moda',document.querySelectorAll('.filter-btn')[2]),100)">👟 Moda</a>
-        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('belleza',document.querySelectorAll('.filter-btn')[5]),100)">💄 Belleza</a>
+        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1])">Todas las ofertas</a>
+        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('electronico',document.querySelectorAll('.filter-btn')[1]),100)">Electrónicos</a>
+        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('moda',document.querySelectorAll('.filter-btn')[2]),100)">Moda</a>
+        <a href="#ofertas" onclick="cambiarTab('productos',document.querySelectorAll('.section-tab')[1]);setTimeout(()=>filtrar('belleza',document.querySelectorAll('.filter-btn')[5]),100)">Belleza</a>
       </div>
     </li>
     <li><a href="#alerta">Alertas</a></li>
@@ -342,7 +342,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <div class="hero-right">
       <div class="hero-card-stack">
         <a href="https://www.kayak.com.mx/flights/MEX-CUN" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;" class="hero-card">
-          <div class="hero-card-label">✈️ Vuelo relámpago</div>
+          <div class="hero-card-label">Vuelo relámpago</div>
           <div class="hero-card-title">CDMX → Cancún — Volaris ida y vuelta</div>
           <div class="hero-card-row">
             <div>
@@ -356,7 +356,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
           </div>
         </a>
         <a href="https://www.booking.com/searchresults.es-mx.html?ss=Los+Cabos&order=price" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;" class="hero-card">
-          <div class="hero-card-label">🏨 Hotel en oferta</div>
+          <div class="hero-card-label">Hotel en oferta</div>
           <div class="hero-card-title">Los Cabos — Hotel Pueblo Bonito</div>
           <div class="hero-card-row">
             <div>
@@ -370,7 +370,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
           </div>
         </a>
         <a href="https://www.awin1.com/cread.php?awinmid=117547&awinaffid=2876425&ued=https%3A%2F%2Fwww.nike.com%2Fmx%2Fw%2Fsale-3yaep" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;" class="hero-card">
-          <div class="hero-card-label">👟 Nike MX — Sale</div>
+          <div class="hero-card-label">Nike MX — Sale</div>
           <div class="hero-card-title">Nike Air Max 270 — Tenis Hombre</div>
           <div class="hero-card-row">
             <div>
@@ -391,11 +391,11 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <input type="text" id="search-producto" placeholder="Buscar vuelo, hotel, producto...">
     <select id="search-categoria">
       <option value="">Todas las categorías</option>
-      <option value="viajes">✈️ Viajes</option>
-      <option value="electronico">📱 Electrónicos</option>
-      <option value="moda">👟 Moda</option>
-      <option value="hogar">🏠 Hogar</option>
-      <option value="belleza">💄 Belleza</option>
+      <option value="viajes">Viajes</option>
+      <option value="electronico">Electrónicos</option>
+      <option value="moda">Moda</option>
+      <option value="hogar">Hogar</option>
+      <option value="belleza">Belleza</option>
     </select>
     <input type="number" id="search-precio" placeholder="Presupuesto máx. (MXN)">
     <button onclick="buscarOfertas()">Buscar ofertas</button>
@@ -420,23 +420,23 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
   </div>
 
   <div class="section-tabs">
-    <button class="section-tab active" onclick="cambiarTab('viajes',this)">✈️ Viajes y hoteles</button>
-    <button class="section-tab" onclick="cambiarTab('productos',this)">🛍️ Productos</button>
+    <button class="section-tab active" onclick="cambiarTab('viajes',this)">Viajes y hoteles</button>
+    <button class="section-tab" onclick="cambiarTab('productos',this)">Productos</button>
   </div>
 
   <!-- TAB VIAJES -->
   <div class="tab-panel active" id="tab-viajes">
     <div class="viaje-filters">
       <button class="viaje-filter-btn active" onclick="filtrarViaje('todos',this)">Todos</button>
-      <button class="viaje-filter-btn" onclick="filtrarViaje('vuelos',this)">✈️ Vuelos</button>
-      <button class="viaje-filter-btn" onclick="filtrarViaje('hoteles',this)">🏨 Hoteles</button>
-      <button class="viaje-filter-btn" onclick="filtrarViaje('paquetes',this)">🌴 Paquetes</button>
+      <button class="viaje-filter-btn" onclick="filtrarViaje('vuelos',this)">Vuelos</button>
+      <button class="viaje-filter-btn" onclick="filtrarViaje('hoteles',this)">Hoteles</button>
+      <button class="viaje-filter-btn" onclick="filtrarViaje('paquetes',this)">Paquetes</button>
     </div>
-    <div class="viaje-section-title" id="vuelos-title">✈️ Vuelos en oferta <span class="flash-badge">⚡ Oferta 24h</span></div>
+    <div class="viaje-section-title" id="vuelos-title">Vuelos en oferta <span class="flash-badge">Oferta 24h</span></div>
     <div class="vuelos-grid" id="vuelos-grid"><div class="loading">Cargando vuelos...</div></div>
-    <div class="viaje-section-title" id="hoteles-title">🏨 Hoteles en oferta <span class="flash-badge">⚡ Oferta 24h</span></div>
+    <div class="viaje-section-title" id="hoteles-title">Hoteles en oferta <span class="flash-badge">Oferta 24h</span></div>
     <div class="hoteles-grid" id="hoteles-grid"><div class="loading">Cargando hoteles...</div></div>
-    <div class="viaje-section-title" id="paquetes-title">🌴 Xcaret y paquetes turísticos</div>
+    <div class="viaje-section-title" id="paquetes-title">Xcaret y paquetes turísticos</div>
     <div class="deals-grid" id="paquetes-grid"><div class="loading">Cargando paquetes...</div></div>
   </div>
 
@@ -444,11 +444,11 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
   <div class="tab-panel" id="tab-productos">
     <div class="deals-filters">
       <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
-      <button class="filter-btn" onclick="filtrar('electronico',this)">📱 Electrónicos</button>
-      <button class="filter-btn" onclick="filtrar('moda',this)">👟 Moda</button>
-      <button class="filter-btn" onclick="filtrar('hogar',this)">🏠 Hogar</button>
-      <button class="filter-btn" onclick="filtrar('deporte',this)">⚽ Deportes</button>
-      <button class="filter-btn" onclick="filtrar('belleza',this)">💄 Belleza</button>
+      <button class="filter-btn" onclick="filtrar('electronico',this)">Electrónicos</button>
+      <button class="filter-btn" onclick="filtrar('moda',this)">Moda</button>
+      <button class="filter-btn" onclick="filtrar('hogar',this)">Hogar</button>
+      <button class="filter-btn" onclick="filtrar('deporte',this)">Deportes</button>
+      <button class="filter-btn" onclick="filtrar('belleza',this)">Belleza</button>
     </div>
     <div class="deals-grid" id="deals-grid"><div class="loading">Cargando ofertas...</div></div>
     <div class="load-more-wrap">
@@ -464,22 +464,22 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
     <span class="section-eyebrow">Donde buscamos</span>
     <h2 class="section-title">Fuentes monitoreadas</h2>
     <div class="tiendas-scroll" style="margin-top:20px;">
-      <span class="tienda-pill">✈️ Kayak</span>
-      <span class="tienda-pill">🏨 Booking.com</span>
-      <span class="tienda-pill">🌴 Xcaret</span>
-      <span class="tienda-pill">✈️ Expedia MX</span>
-      <span class="tienda-pill">🏨 Hoteles.com</span>
-      <span class="tienda-pill">✈️ Trivago</span>
-      <span class="tienda-pill">✈️ Kiwi</span>
-      <span class="tienda-pill">🏨 Sirenis Hotels</span>
-      <span class="tienda-pill">👟 Nike MX</span>
-      <span class="tienda-pill">🐊 Lacoste MX</span>
-      <span class="tienda-pill">📱 Honor MX</span>
-      <span class="tienda-pill">🔦 LaserPecker</span>
-      <span class="tienda-pill">👓 SmartBuyGlasses</span>
-      <span class="tienda-pill">🎨 Golden Maple</span>
-      <span class="tienda-pill">🛒 Amazon MX</span>
-      <span class="tienda-pill">🛍️ Mercado Libre</span>
+      <span class="tienda-pill">Kayak</span>
+      <span class="tienda-pill">Booking.com</span>
+      <span class="tienda-pill">Xcaret</span>
+      <span class="tienda-pill">Expedia MX</span>
+      <span class="tienda-pill">Hoteles.com</span>
+      <span class="tienda-pill">Trivago</span>
+      <span class="tienda-pill">Kiwi</span>
+      <span class="tienda-pill">Sirenis Hotels</span>
+      <span class="tienda-pill">Nike MX</span>
+      <span class="tienda-pill">Lacoste MX</span>
+      <span class="tienda-pill">Honor MX</span>
+      <span class="tienda-pill">LaserPecker</span>
+      <span class="tienda-pill">SmartBuyGlasses</span>
+      <span class="tienda-pill">Golden Maple</span>
+      <span class="tienda-pill">Amazon MX</span>
+      <span class="tienda-pill">Mercado Libre</span>
     </div>
   </div>
 </section>
@@ -504,11 +504,11 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
         <label>Categoría</label>
         <select id="categoria">
           <option value="">Cualquier categoría</option>
-          <option value="viajes">✈️ Viajes (vuelos y hoteles)</option>
-          <option value="electronico">📱 Electrónicos</option>
-          <option value="moda">👟 Moda</option>
-          <option value="hogar">🏠 Hogar</option>
-          <option value="belleza">💄 Belleza</option>
+          <option value="viajes">Viajes (vuelos y hoteles)</option>
+          <option value="electronico">Electrónicos</option>
+          <option value="moda">Moda</option>
+          <option value="hogar">Hogar</option>
+          <option value="belleza">Belleza</option>
         </select>
       </div>
       <div class="form-group">
@@ -549,12 +549,12 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
       </div>
       <p class="form-divider">¿Cómo quieres recibir tu alerta?</p>
       <div class="notify-opts">
-        <label class="notify-opt selected" id="opt-email"><input type="checkbox" checked onchange="toggleOpt('opt-email')"><div><div class="notify-opt-label">📧 Email</div><div class="notify-opt-sub">Gratis · Recomendado</div></div></label>
-        <label class="notify-opt" id="opt-whatsapp"><input type="checkbox" onchange="toggleOpt('opt-whatsapp')"><div><div class="notify-opt-label">💬 WhatsApp</div><div class="notify-opt-sub">Inmediato</div></div></label>
-        <label class="notify-opt" id="opt-sms"><input type="checkbox" onchange="toggleOpt('opt-sms')"><div><div class="notify-opt-label">📱 SMS</div><div class="notify-opt-sub">A tu celular</div></div></label>
+        <label class="notify-opt selected" id="opt-email"><input type="checkbox" checked onchange="toggleOpt('opt-email')"><div><div class="notify-opt-label">Email</div><div class="notify-opt-sub">Gratis · Recomendado</div></div></label>
+        <label class="notify-opt" id="opt-whatsapp"><input type="checkbox" onchange="toggleOpt('opt-whatsapp')"><div><div class="notify-opt-label">WhatsApp</div><div class="notify-opt-sub">Inmediato</div></div></label>
+        <label class="notify-opt" id="opt-sms"><input type="checkbox" onchange="toggleOpt('opt-sms')"><div><div class="notify-opt-label">SMS</div><div class="notify-opt-sub">A tu celular</div></div></label>
       </div>
       <button class="form-submit" onclick="submitAlert()">Activar alerta gratis →</button>
-      <div class="success-msg" id="success">✅ ¡Alerta creada! Te notificaremos cuando encontremos <strong id="success-producto"></strong> dentro de tu presupuesto.</div>
+      <div class="success-msg" id="success">¡Alerta creada! Te notificaremos cuando encontremos <strong id="success-producto"></strong> dentro de tu presupuesto.</div>
     </div>
   </div>
 </section>
@@ -596,7 +596,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
   <p>Cada día más mexicanos reciben alertas de precios y compran mejor.</p>
   <div class="alert-counter-num" id="counter-alertas">—</div>
   <div class="alert-counter-label">Alertas activas en este momento</div>
-  <a href="#alerta" class="alert-counter-cta">🔔 Crear mi alerta gratis</a>
+  <a href="#alerta" class="alert-counter-cta">Crear mi alerta gratis</a>
 </div>
 
 <!-- BANNERS AWIN -->
@@ -669,18 +669,19 @@ const OFERTAS_POR_PAGINA = 20;
 let todasLasOfertas = [], ofertasFiltradas = [], ofertasMostradas = 0;
 let diasSeleccionados = 7;
 
-const CAT_ICONS = {electronico:'📱',moda:'👟',hogar:'🏠',belleza:'💄',deporte:'⚽',viajes:'✈️',general:'🛍️'};
+const CAT_ICONS = {electronico:'ELC',moda:'MOD',hogar:'HGR',belleza:'BLZ',deporte:'DEP',viajes:'VJE',general:'OFR'};
 
 function getIconoViaje(o) {
   const fuente = (o.fuente||'').toLowerCase();
   const destino = (o.destino||'').toLowerCase();
-  if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('cdmx →') || destino.includes('mty →') || destino.includes('gdl →') || destino.includes('cun →')) {
-    return '<img src="icon-vuelo.png" style="width:36px;height:36px;object-fit:contain;">';
+  const style = 'font-family:Syne,sans-serif;font-size:1.6rem;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-1px;';
+  if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('→')) {
+    return `<span style="${style}">FLY</span>`;
   }
   if(fuente.includes('booking') || destino.includes('hotel')) {
-    return '<img src="icon-hotel.png" style="width:36px;height:36px;object-fit:contain;">';
+    return `<span style="${style}">HTL</span>`;
   }
-  return '<img src="icon-paquete.png" style="width:36px;height:36px;object-fit:contain;">';
+  return `<span style="${style}">PKG</span>`;
 }
 const CAT_BG = {electronico:'deal-img-wrap-electronico',moda:'deal-img-wrap-moda',hogar:'deal-img-wrap-hogar',belleza:'deal-img-wrap-belleza',deporte:'deal-img-wrap-deporte',viajes:'deal-img-wrap-viajes',general:'deal-img-wrap-general'};
 
