@@ -723,7 +723,7 @@ const CAT_ICONS = {electronico:'Electrónico',moda:'Moda',hogar:'Hogar',belleza:
 function getIconoViaje(o) {
   const fuente = (o.fuente||'').toLowerCase();
   const destino = (o.destino||'').toLowerCase();
-  const style = 'font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-1px;';
+  const style = 'font-family:Nunito,sans-serif;font-size:1.6rem;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-1px;';
   if(fuente.includes('kayak') || destino.includes('vuelo') || destino.includes('→')) {
     return `<span style="${style}">Vuelo</span>`;
   }
