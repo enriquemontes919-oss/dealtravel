@@ -1,15 +1,11 @@
 """
-agents/alertas.py — Sistema de alertas: matching, email consolidado y WhatsApp
+agents/alertas.py — Sistema de alertas
 
-FIX Mayo 2026 — Ofertas repetidas en emails:
-  Problema raíz: clave_oferta() usaba destino|fuente. Como limpiar_tiendas_fijas()
-  borra y re-inserta cada hora con nuevos IDs, las claves seguían siendo iguales
-  PERO el campo `ofertas_notificadas` se comparaba contra claves que podían variar
-  si el nombre del destino tenía espacios o mayúsculas distintas.
-
-  Solución: clave normalizada = fuente|destino_slug (lowercase, sin espacios extras).
-  Además: el matching ahora usa `todas_ofertas` (lo que encontró el scraper en esta
-  ejecución) en lugar de releer Supabase, evitando race conditions.
+FIXES Sep 2026:
+- Cooldown mínimo 6h (no 24h) para alertas nuevas, pero nunca repetir misma oferta
+- Clave normalizada más estable — solo fuente + primeras palabras del destino
+- URLs directas en el email (landing de la oferta, no homepage)
+- Matching más amplio para viajes (palabras clave de destino)
 """
 import requests
 from datetime import datetime
@@ -18,15 +14,19 @@ from agents.base import SUPABASE_URL, RESEND_API_KEY, supabase_headers
 
 def _clave_normalizada(oferta):
     """
-    Clave estable: fuente + destino normalizado.
-    Resiste re-inserciones con nuevos IDs en Supabase.
+    Clave estable basada en fuente + destino sin fechas ni precios.
+    Resiste re-inserciones horarias con nuevos IDs.
     """
     fuente  = (oferta.get("fuente") or "").strip().lower()
     destino = (oferta.get("destino") or "").strip().lower()
-    # Quitar prefijo "fuente — " si existe (ej: "Liverpool — Smart TV...")
+    # Quitar prefijo "fuente — "
     if " — " in destino:
         destino = destino.split(" — ", 1)[1]
-    return f"{fuente}|{destino[:60]}"
+    # Quitar fechas dinámicas tipo "· 4 Sep – 6 Sep"
+    if " · " in destino:
+        destino = destino.split(" · ")[0]
+    # Solo primeras 40 chars para estabilidad
+    return f"{fuente}|{destino[:40].strip()}"
 
 
 def revisar_alertas(todas_ofertas):
@@ -67,7 +67,7 @@ def revisar_alertas(todas_ofertas):
                     print(f"[Alertas] Alerta {alerta['id']} expirada — desactivada")
                     continue
 
-                # ── 2. Cooldown 24h ───────────────────────────────────────
+                # ── 2. Cooldown mínimo 6h entre emails ───────────────────
                 ultimo_envio = alerta.get("ultimo_envio")
                 if ultimo_envio:
                     try:
@@ -75,17 +75,18 @@ def revisar_alertas(todas_ofertas):
                             ultimo_envio.replace("Z", "+00:00")
                         ).replace(tzinfo=None)
                         horas = (ahora - ultimo).total_seconds() / 3600
-                        if horas < 24:
+                        if horas < 6:
                             print(f"[Alertas] {alerta['id']} — cooldown ({horas:.1f}h)")
                             continue
                     except Exception:
                         pass
 
-                # ── 3. Claves ya notificadas (normalizadas) ───────────────
+                # ── 3. Claves ya notificadas ──────────────────────────────
                 ya_notificados = set(alerta.get("ofertas_notificadas") or [])
 
                 # ── 4. Matching ───────────────────────────────────────────
-                producto_alerta = alerta.get("destino", "").lower()
+                producto_alerta = (alerta.get("destino") or "").lower()
+                # Palabras de búsqueda — incluir variantes de destino
                 palabras_alerta = [w for w in producto_alerta.split() if len(w) > 2]
                 presupuesto     = float(alerta.get("presupuesto") or 99999)
                 fuente_alerta   = alerta.get("fuente") or "Cualquier tienda"
@@ -94,19 +95,24 @@ def revisar_alertas(todas_ofertas):
                 for oferta in todas_ofertas:
                     clave = _clave_normalizada(oferta)
 
-                    # Saltar si ya fue notificada
+                    # Skip si ya fue notificada
                     if clave in ya_notificados:
                         continue
 
-                    precio_ok = oferta["precio"] == 0 or oferta["precio"] <= presupuesto
+                    precio_ok = oferta.get("precio", 0) == 0 or oferta.get("precio", 0) <= presupuesto
+
                     tienda_ok = (
                         not fuente_alerta
                         or fuente_alerta == "Cualquier tienda"
-                        or fuente_alerta.lower() in oferta["fuente"].lower()
+                        or fuente_alerta.lower() in (oferta.get("fuente") or "").lower()
                     )
+
+                    destino_oferta   = (oferta.get("destino") or "").lower()
+                    keywords_oferta  = (oferta.get("palabras_clave") or "").lower()
+                    texto_oferta     = f"{destino_oferta} {keywords_oferta}"
+
                     producto_ok = any(
-                        word in oferta.get("destino", "").lower()
-                        or word in oferta.get("palabras_clave", "").lower()
+                        word in texto_oferta
                         for word in palabras_alerta
                     )
 
@@ -114,22 +120,20 @@ def revisar_alertas(todas_ofertas):
                         matches_nuevos.append(oferta)
 
                 if not matches_nuevos:
-                    print(f"[Alertas] {alerta['id']} ({alerta['email']}) — sin ofertas nuevas")
+                    print(f"[Alertas] {alerta['id']} ({alerta.get('email')}) — sin ofertas nuevas")
                     continue
 
-                print(f"[Match] {alerta['email']} → {len(matches_nuevos)} ofertas nuevas")
+                print(f"[Match] {alerta.get('email')} → {len(matches_nuevos)} ofertas nuevas")
 
                 # ── 5. Enviar email ───────────────────────────────────────
                 enviar_email_consolidado(alerta, matches_nuevos, dias_alerta, dias_transcurridos)
 
-                # ── 6. WhatsApp si eligió ese método ─────────────────────
+                # ── 6. WhatsApp ───────────────────────────────────────────
                 telefono = (alerta.get("telefono") or "").strip()
                 if telefono and "whatsapp" in (alerta.get("tipo") or "").lower():
                     enviar_whatsapp(alerta, matches_nuevos)
 
-                # ── 7. Persistir claves notificadas ───────────────────────
-                # Guardamos claves normalizadas para que sean estables
-                # entre ejecuciones aunque Supabase re-inserte con nuevos IDs
+                # ── 7. Persistir claves + timestamp ───────────────────────
                 nuevas_claves = list(ya_notificados) + [
                     _clave_normalizada(o) for o in matches_nuevos
                 ]
@@ -142,6 +146,7 @@ def revisar_alertas(todas_ofertas):
                     },
                     timeout=10
                 )
+                print(f"[Alertas] {alerta['id']} — claves guardadas ({len(nuevas_claves)} total)")
 
             except Exception as e:
                 print(f"[Alertas] Error alerta {alerta.get('id')}: {e}")
@@ -149,8 +154,6 @@ def revisar_alertas(todas_ofertas):
     except Exception as e:
         print(f"[Alertas] Error general: {e}")
 
-
-# ── Utilidades ────────────────────────────────────────────────────────────────
 
 def _limpiar_numero(telefono):
     numero = "".join(filter(str.isdigit, telefono))
@@ -164,13 +167,12 @@ def enviar_whatsapp(alerta, ofertas):
     if not telefono:
         return
     numero = _limpiar_numero(telefono)
-    lineas = [f"🔔 *Deal Travel* — Nueva oferta para '{alerta['destino']}':\n"]
+    lineas = [f"dealtravel.mx — Nueva oferta para '{alerta.get('destino')}':\n"]
     for o in ofertas[:3]:
-        precio_txt = o["precio_fmt"]
         lineas += [
-            f"• *{o['destino'][:40]}*",
-            f"  {o['fuente']} · {precio_txt}",
-            f"  {o['url']}\n",
+            f"• {o.get('destino','')[:40]}",
+            f"  {o.get('fuente','')} · {o.get('precio_fmt','')}",
+            f"  {o.get('url','')}\n",
         ]
     lineas.append("Ver todas: https://www.dealtravel.mx")
     mensaje = "\n".join(lineas)
@@ -180,34 +182,38 @@ def enviar_whatsapp(alerta, ofertas):
 
 
 def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
-    dias_restantes = dias_alerta - dias_transcurridos
+    dias_restantes = max(0, dias_alerta - dias_transcurridos)
 
-    # Sección WhatsApp
-    telefono  = (alerta.get("telefono") or "").strip()
+    # WhatsApp section
+    telefono = (alerta.get("telefono") or "").strip()
     wa_section = ""
     if telefono:
         numero = _limpiar_numero(telefono)
-        lineas_wa = [f"🔔 Deal Travel — Oferta para '{alerta['destino']}':\n"]
+        lineas_wa = [f"dealtravel.mx — Oferta para '{alerta.get('destino')}':\n"]
         for o in ofertas[:3]:
             lineas_wa.append(
-                f"• {o['destino'][:40]} — {o['fuente']} · {o['precio_fmt']} — {o['url']}"
+                f"• {o.get('destino','')[:40]} — {o.get('fuente','')} · {o.get('precio_fmt','')} — {o.get('url','')}"
             )
         lineas_wa.append("\nVer todas: https://www.dealtravel.mx")
         wa_link = f"https://wa.me/{numero}?text={requests.utils.quote(chr(10).join(lineas_wa))}"
         wa_section = f"""
         <div style="text-align:center;margin-top:12px;">
             <a href="{wa_link}" style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:8px 18px;border-radius:980px;text-decoration:none;font-size:0.8rem;font-weight:600;">
-                💬 Ver ofertas en WhatsApp
+                Ver en WhatsApp
             </a>
         </div>"""
 
-    # Cards de ofertas
+    # Cards de ofertas con URL directa
     ofertas_html = ""
     for oferta in ofertas[:8]:
-        precio_orig      = oferta.get("precio_original")
-        descuento        = oferta.get("descuento_pct")
+        precio_orig  = oferta.get("precio_original")
+        descuento    = oferta.get("descuento_pct")
+        precio       = oferta.get("precio", 0)
+        precio_fmt   = oferta.get("precio_fmt", "Ver oferta")
+        url_oferta   = oferta.get("url", "https://www.dealtravel.mx")
+
         precio_orig_html = ""
-        if precio_orig and precio_orig > oferta["precio"]:
+        if precio_orig and precio_orig > precio and precio > 0:
             precio_orig_html = (
                 f'<span style="text-decoration:line-through;color:#aeaeb2;'
                 f'font-size:0.8rem;">${precio_orig:,.0f}</span> '
@@ -218,37 +224,36 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             f'-{descuento}%</span>'
             if descuento else ""
         )
-        precio_display = (
-            f'<span style="font-size:1.4rem;font-weight:800;color:#5200FF;">'
-            f'{oferta["precio_fmt"]}</span>'
-        )
+
         ofertas_html += f"""
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-bottom:12px;">
+        <div style="background:#fff;border:1px solid #ede9ff;border-radius:12px;padding:16px;margin-bottom:12px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
                 <div style="flex:1;">
-                    <p style="margin:0 0 4px;font-size:0.7rem;color:#5200FF;font-weight:600;text-transform:uppercase;">{oferta['fuente']}</p>
-                    <p style="margin:0 0 8px;font-weight:600;font-size:0.95rem;color:#1d1d1f;">{oferta['destino']}</p>
-                    <p style="margin:0;font-size:0.75rem;color:#64748b;">{oferta['tipo_promo']}</p>
+                    <p style="margin:0 0 4px;font-size:0.68rem;color:#5200FF;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">{oferta.get('fuente','')}</p>
+                    <p style="margin:0 0 6px;font-weight:600;font-size:0.95rem;color:#1d1d1f;line-height:1.3;">{oferta.get('destino','')}</p>
+                    <p style="margin:0;font-size:0.72rem;color:#64748b;">{oferta.get('tipo_promo','')}</p>
                 </div>
-                <div style="text-align:right;">
-                    <p style="margin:0 0 4px;">{precio_orig_html}{precio_display}{descuento_badge}</p>
-                    <a href="{oferta['url']}" style="background:#5200FF;color:#fff;padding:6px 14px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:600;">Ver →</a>
+                <div style="text-align:right;flex-shrink:0;">
+                    <p style="margin:0 0 8px;">{precio_orig_html}<span style="font-size:1.3rem;font-weight:800;color:#5200FF;">{precio_fmt}</span>{descuento_badge}</p>
+                    <a href="{url_oferta}" style="background:#5200FF;color:#fff;padding:7px 16px;border-radius:980px;text-decoration:none;font-size:0.78rem;font-weight:700;">Ver oferta →</a>
                 </div>
             </div>
         </div>"""
 
-    html = f"""<div style="font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f7f6ff;">
+    html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:600px;margin:0 auto;background:#f7f6ff;">
         <div style="background:#5200FF;padding:28px 24px;border-radius:14px 14px 0 0;text-align:center;">
-            <div style="font-family:Georgia,serif;font-size:2rem;font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;">
+            <div style="font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-0.5px;">
                 dealtravel<span style="color:#CCFF00;">.mx</span>
             </div>
-            <p style="color:rgba(255,255,255,0.7);margin:0;font-size:0.85rem;">Encontramos {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nuevas para ti</p>
+            <p style="color:rgba(255,255,255,0.75);margin:0;font-size:0.85rem;">
+                {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nueva{'s' if len(ofertas)>1 else ''} para ti
+            </p>
         </div>
         <div style="background:#fff;padding:24px;border-radius:0 0 14px 14px;">
             <div style="background:#f0ebff;border:1px solid rgba(82,0,255,0.15);border-radius:10px;padding:12px 16px;margin-bottom:20px;">
                 <p style="margin:0;font-size:0.85rem;color:#5200FF;">
-                    Tu alerta: <strong>{alerta['destino']}</strong> ·
-                    Presupuesto: <strong>${float(alerta.get('presupuesto',0)):,.0f} MXN</strong> ·
+                    Tu alerta: <strong>{alerta.get('destino','')}</strong> ·
+                    Presupuesto máx: <strong>${float(alerta.get('presupuesto') or 0):,.0f} MXN</strong> ·
                     <span style="color:#64748b;">Vence en {dias_restantes} día{'s' if dias_restantes!=1 else ''}</span>
                 </p>
             </div>
@@ -257,9 +262,9 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
                 <a href="https://www.dealtravel.mx" style="background:#5200FF;color:#fff;padding:12px 28px;border-radius:980px;text-decoration:none;font-weight:700;font-size:0.9rem;">Ver todas las ofertas</a>
             </div>
             {wa_section}
-            <p style="color:#94a3b8;font-size:0.72rem;margin-top:16px;text-align:center;">
-                dealtravel.mx · Tu alerta expira en {dias_restantes} día{'s' if dias_restantes!=1 else ''}.<br>
-                <a href="https://www.dealtravel.mx#alerta" style="color:#5200FF;">Renovar alerta</a>
+            <p style="color:#94a3b8;font-size:0.7rem;margin-top:16px;text-align:center;line-height:1.6;">
+                dealtravel.mx · Tu alerta vence en {dias_restantes} día{'s' if dias_restantes!=1 else ''}.<br>
+                <a href="https://www.dealtravel.mx#alerta" style="color:#5200FF;text-decoration:none;">Crear nueva alerta</a>
             </p>
         </div>
     </div>"""
@@ -269,22 +274,21 @@ def enviar_email_consolidado(alerta, ofertas, dias_alerta, dias_transcurridos):
             "https://api.resend.com/emails",
             headers={
                 "Authorization": f"Bearer {RESEND_API_KEY}",
-                "Content-Type": "application/json",
+                "Content-Type":  "application/json",
             },
             json={
-                "from":    "Deal Travel <alertas@dealtravel.mx>",
+                "from":    "dealtravel.mx <alertas@dealtravel.mx>",
                 "to":      [alerta["email"]],
                 "subject": (
-                    f"🔥 {len(ofertas)} oferta{'s' if len(ofertas)>1 else ''}"
-                    f" nueva{'s' if len(ofertas)>1 else ''}"
-                    f" para '{alerta['destino']}' — dealtravel.mx"
+                    f"{len(ofertas)} oferta{'s' if len(ofertas)>1 else ''} nueva{'s' if len(ofertas)>1 else ''}"
+                    f" para '{alerta.get('destino','')}' — dealtravel.mx"
                 ),
                 "html": html,
             },
             timeout=15
         )
         if r.status_code == 200:
-            print(f"[Email] ✓ Enviado a {alerta['email']} ({len(ofertas)} ofertas)")
+            print(f"[Email] Enviado a {alerta['email']} ({len(ofertas)} ofertas)")
         else:
             print(f"[Email] Error {r.status_code}: {r.text[:100]}")
     except Exception as e:
