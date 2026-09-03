@@ -1081,10 +1081,12 @@ async function submitAlert() {
       body: JSON.stringify(alerta)
     });
     if(r.status === 200 || r.status === 201 || r.ok) {
-      document.getElementById('success-producto').textContent = destino;
       document.getElementById('success').style.display = 'block';
-      document.getElementById('destino').value = '';
       document.getElementById('email').value = '';
+      document.getElementById('presupuesto').value = '';
+      ['origen-vuelo','destino-vuelo','mes-vuelo','destino-hotel','mes-hotel','destino-producto'].forEach(id => {
+        const el = document.getElementById(id); if(el) el.value = '';
+      });
       try { const ctx=new AudioContext(); [[0,880],[0.15,1100],[0.3,1320]].forEach(([t,f])=>{ const o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0.15,ctx.currentTime+t); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+t+0.4); o.start(ctx.currentTime+t); o.stop(ctx.currentTime+t+0.5); }); } catch(e){}
     } else { alert('Hubo un error. Intenta de nuevo.'); }
   } catch(e) { alert('Error de conexión. Intenta de nuevo.'); }
