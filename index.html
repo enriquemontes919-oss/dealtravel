@@ -1080,7 +1080,7 @@ async function submitAlert() {
       headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Prefer':'return=minimal'},
       body: JSON.stringify(alerta)
     });
-    if(r.ok||r.status===201) {
+    if(r.status === 200 || r.status === 201 || r.ok) {
       document.getElementById('success-producto').textContent = destino;
       document.getElementById('success').style.display = 'block';
       document.getElementById('destino').value = '';
