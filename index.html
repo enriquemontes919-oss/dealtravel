@@ -545,38 +545,156 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
       <div class="alert-feature">Actualizaciones cada 2 horas</div>
     </div>
     <div class="alert-form">
+      <!-- Tipo de alerta -->
       <div class="form-group">
-        <label>¿Qué estás buscando?</label>
-        <input type="text" id="destino" placeholder="Ej. Vuelo a Cancún, iPhone, tenis Nike...">
-      </div>
-      <div class="form-group">
-        <label>Categoría</label>
-        <select id="categoria">
-          <option value="">Cualquier categoría</option>
-          <option value="viajes">Viajes (vuelos y hoteles)</option>
+        <label>¿Qué tipo de alerta quieres?</label>
+        <select id="categoria" onchange="actualizarFormAlerta()">
+          <option value="">Selecciona una opción</option>
+          <option value="vuelos">Vuelos</option>
+          <option value="hoteles">Hoteles</option>
+          <option value="paquetes">Paquetes (vuelo + hotel)</option>
           <option value="electronico">Electrónicos</option>
           <option value="moda">Moda</option>
           <option value="hogar">Hogar</option>
           <option value="belleza">Belleza</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Tienda preferida</label>
-        <select id="fuente">
-          <option value="">Cualquier tienda</option>
-          <option>Kayak</option>
-          <option>Booking.com</option>
-          <option>Xcaret</option>
-          <option>Expedia MX</option>
-          <option>Hoteles.com MX</option>
-          <option>Trivago</option>
-          <option>Nike MX</option>
-          <option>Lacoste MX</option>
-          <option>Honor MX</option>
-          <option>Amazon MX</option>
-          <option>Mercado Libre</option>
-        </select>
+
+      <!-- VUELOS y PAQUETES -->
+      <div id="campos-vuelo" style="display:none;">
+        <div class="form-group">
+          <label>Ciudad de origen</label>
+          <select id="origen-vuelo">
+            <option value="">Selecciona origen</option>
+            <option value="Ciudad de México">Ciudad de México (CDMX)</option>
+            <option value="Monterrey">Monterrey (MTY)</option>
+            <option value="Guadalajara">Guadalajara (GDL)</option>
+            <option value="Cancún">Cancún (CUN)</option>
+            <option value="Tijuana">Tijuana</option>
+            <option value="Otro">Otra ciudad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Destino</label>
+          <select id="destino-vuelo">
+            <option value="">Selecciona destino</option>
+            <optgroup label="México">
+              <option value="Cancún">Cancún</option>
+              <option value="Los Cabos">Los Cabos</option>
+              <option value="Puerto Vallarta">Puerto Vallarta</option>
+              <option value="Puerto Escondido">Puerto Escondido</option>
+              <option value="Tulum">Tulum</option>
+              <option value="Oaxaca">Oaxaca</option>
+            </optgroup>
+            <optgroup label="EUA">
+              <option value="Miami">Miami</option>
+              <option value="Nueva York">Nueva York</option>
+              <option value="Los Ángeles">Los Ángeles</option>
+              <option value="Chicago">Chicago</option>
+              <option value="Houston">Houston</option>
+            </optgroup>
+            <optgroup label="Europa">
+              <option value="Madrid">Madrid</option>
+              <option value="París">París</option>
+              <option value="Londres">Londres</option>
+              <option value="Amsterdam">Amsterdam</option>
+            </optgroup>
+            <optgroup label="Latinoamérica">
+              <option value="Bogotá">Bogotá</option>
+              <option value="Medellín">Medellín</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="São Paulo">São Paulo</option>
+              <option value="Punta Cana">Punta Cana</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mes aproximado de viaje</label>
+          <select id="mes-vuelo">
+            <option value="">Cualquier fecha</option>
+            <option value="Septiembre">Septiembre 2026</option>
+            <option value="Octubre">Octubre 2026</option>
+            <option value="Noviembre">Noviembre 2026</option>
+            <option value="Diciembre">Diciembre 2026</option>
+            <option value="Enero">Enero 2027</option>
+            <option value="Febrero">Febrero 2027</option>
+            <option value="Marzo">Marzo 2027</option>
+          </select>
+        </div>
       </div>
+
+      <!-- HOTELES -->
+      <div id="campos-hotel" style="display:none;">
+        <div class="form-group">
+          <label>Destino</label>
+          <select id="destino-hotel">
+            <option value="">Selecciona destino</option>
+            <optgroup label="México">
+              <option value="Cancún">Cancún</option>
+              <option value="Los Cabos">Los Cabos</option>
+              <option value="Puerto Vallarta">Puerto Vallarta</option>
+              <option value="Tulum">Tulum</option>
+              <option value="Playa del Carmen">Playa del Carmen</option>
+              <option value="Ciudad de México">Ciudad de México</option>
+              <option value="Oaxaca">Oaxaca</option>
+            </optgroup>
+            <optgroup label="Internacional">
+              <option value="Miami">Miami</option>
+              <option value="Nueva York">Nueva York</option>
+              <option value="Madrid">Madrid</option>
+              <option value="París">París</option>
+              <option value="Punta Cana">Punta Cana</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="Bogotá">Bogotá</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mes de preferencia</label>
+          <select id="mes-hotel">
+            <option value="">Cualquier fecha</option>
+            <option value="Septiembre">Septiembre 2026</option>
+            <option value="Octubre">Octubre 2026</option>
+            <option value="Noviembre">Noviembre 2026</option>
+            <option value="Diciembre">Diciembre 2026</option>
+            <option value="Enero">Enero 2027</option>
+            <option value="Febrero">Febrero 2027</option>
+            <option value="Marzo">Marzo 2027</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Número de noches aprox.</label>
+          <select id="noches-hotel">
+            <option value="">Cualquiera</option>
+            <option value="2">2 noches</option>
+            <option value="3">3 noches</option>
+            <option value="5">5 noches</option>
+            <option value="7">1 semana</option>
+            <option value="14">2 semanas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PRODUCTOS (electrónico, moda, hogar, belleza) -->
+      <div id="campos-producto" style="display:none;">
+        <div class="form-group">
+          <label>¿Qué producto buscas?</label>
+          <input type="text" id="destino-producto" placeholder="Ej. iPhone 15, Nike Air Max, Nespresso...">
+        </div>
+        <div class="form-group">
+          <label>Tienda preferida</label>
+          <select id="fuente-producto">
+            <option value="">Cualquier tienda</option>
+            <option>Amazon MX</option>
+            <option>Mercado Libre</option>
+            <option>Nike MX</option>
+            <option>Lacoste MX</option>
+            <option>Honor MX</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CAMPOS COMUNES -->
       <div class="form-group">
         <label>Presupuesto máximo (MXN)</label>
         <input type="number" id="presupuesto" placeholder="Ej. 5,000">
@@ -603,7 +721,7 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
         <label class="notify-opt" id="opt-sms"><input type="checkbox" onchange="toggleOpt('opt-sms')"><div><div class="notify-opt-label">SMS</div><div class="notify-opt-sub">A tu celular</div></div></label>
       </div>
       <button class="form-submit" onclick="submitAlert()">Activar alerta gratis →</button>
-      <div class="success-msg" id="success">¡Alerta creada! Te notificaremos cuando encontremos <strong id="success-producto"></strong> dentro de tu presupuesto.</div>
+      <div class="success-msg" id="success">¡Alerta creada! Te notificaremos cuando encontremos tu oferta dentro de tu presupuesto.</div>
     </div>
   </div>
 </section>
@@ -938,15 +1056,54 @@ async function buscarOfertas() {
 
 document.getElementById('search-producto').addEventListener('keydown', e => { if(e.key==='Enter') buscarOfertas(); });
 
+function actualizarFormAlerta() {
+  const cat = document.getElementById('categoria').value;
+  document.getElementById('campos-vuelo').style.display = (cat === 'vuelos' || cat === 'paquetes') ? 'block' : 'none';
+  document.getElementById('campos-hotel').style.display = cat === 'hoteles' ? 'block' : 'none';
+  document.getElementById('campos-producto').style.display = ['electronico','moda','hogar','belleza'].includes(cat) ? 'block' : 'none';
+}
+
 async function submitAlert() {
-  const destino = document.getElementById('destino').value.trim();
+  const cat = document.getElementById('categoria').value;
   const email = document.getElementById('email').value.trim();
-  if(!destino||!email) { alert('Por favor ingresa qué buscas y tu correo.'); return; }
+  if(!cat) { alert('Por favor selecciona el tipo de alerta.'); return; }
+  if(!email) { alert('Por favor ingresa tu correo.'); return; }
+
+  // Construir destino y palabras clave según categoría
+  let destino = '';
+  let palabras_clave = '';
+  let fuente = null;
+
+  if(cat === 'vuelos' || cat === 'paquetes') {
+    const origen = document.getElementById('origen-vuelo').value;
+    const dest = document.getElementById('destino-vuelo').value;
+    const mes = document.getElementById('mes-vuelo').value;
+    if(!dest) { alert('Por favor selecciona el destino.'); return; }
+    destino = dest;
+    palabras_clave = [origen, dest, mes, cat].filter(Boolean).join(', ').toLowerCase();
+    fuente = cat === 'paquetes' ? 'Xcaret' : 'Vuelos Kayak';
+  } else if(cat === 'hoteles') {
+    const dest = document.getElementById('destino-hotel').value;
+    const mes = document.getElementById('mes-hotel').value;
+    const noches = document.getElementById('noches-hotel').value;
+    if(!dest) { alert('Por favor selecciona el destino.'); return; }
+    destino = dest;
+    palabras_clave = [dest, mes, noches ? noches+' noches' : ''].filter(Boolean).join(', ').toLowerCase();
+    fuente = 'Hoteles Booking';
+  } else {
+    const prod = document.getElementById('destino-producto').value.trim();
+    if(!prod) { alert('Por favor ingresa el producto que buscas.'); return; }
+    destino = prod;
+    palabras_clave = prod.toLowerCase();
+    fuente = document.getElementById('fuente-producto').value || null;
+  }
+
   const alerta = {
     email, destino,
+    palabras_clave,
     telefono: document.getElementById('telefono').value.trim()||null,
     presupuesto: parseFloat(document.getElementById('presupuesto').value)||null,
-    fuente: document.getElementById('fuente').value||null,
+    fuente: fuente,
     tipo: document.getElementById('opt-whatsapp').classList.contains('selected') ? 'whatsapp' : 'email',
     dias_alerta: diasSeleccionados,
     activa: true,
