@@ -577,21 +577,21 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
         <div class="form-group">
           <label>Ciudad de origen</label>
           <div class="autocomplete-wrap">
-            <input class="autocomplete-input" id="origen-vuelo" type="text" placeholder="Ej. Ciudad de México, Monterrey..." autocomplete="off" oninput="autocomplete(this,'origen-vuelo-list',CIUDADES_ORIGEN)" onkeydown="acKeydown(event,'origen-vuelo-list')">
+            <input class="autocomplete-input" id="origen-vuelo" type="text" placeholder="Ej. Ciudad de México, Monterrey..." autocomplete="off" oninput="dtAutocomplete(this,'origen-vuelo-list',CIUDADES_ORIGEN)" onkeydown="acKeydown(event,'origen-vuelo-list')">
             <div class="autocomplete-list" id="origen-vuelo-list"></div>
           </div>
         </div>
         <div class="form-group">
           <label>Destino</label>
           <div class="autocomplete-wrap">
-            <input class="autocomplete-input" id="destino-vuelo" type="text" placeholder="Ej. Cancún, Madrid, Miami..." autocomplete="off" oninput="autocomplete(this,'destino-vuelo-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-vuelo-list')">
+            <input class="autocomplete-input" id="destino-vuelo" type="text" placeholder="Ej. Cancún, Madrid, Miami..." autocomplete="off" oninput="dtAutocomplete(this,'destino-vuelo-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-vuelo-list')">
             <div class="autocomplete-list" id="destino-vuelo-list"></div>
           </div>
         </div>
         <div class="form-group">
           <label>Mes aproximado de viaje</label>
           <div class="autocomplete-wrap">
-            <input class="autocomplete-input" id="mes-vuelo" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="autocomplete(this,'mes-vuelo-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-vuelo-list')">
+            <input class="autocomplete-input" id="mes-vuelo" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="dtAutocomplete(this,'mes-vuelo-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-vuelo-list')">
             <div class="autocomplete-list" id="mes-vuelo-list"></div>
           </div>
         </div>
@@ -602,14 +602,14 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
         <div class="form-group">
           <label>Destino</label>
           <div class="autocomplete-wrap">
-            <input class="autocomplete-input" id="destino-hotel" type="text" placeholder="Ej. Cancún, Los Cabos, París..." autocomplete="off" oninput="autocomplete(this,'destino-hotel-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-hotel-list')">
+            <input class="autocomplete-input" id="destino-hotel" type="text" placeholder="Ej. Cancún, Los Cabos, París..." autocomplete="off" oninput="dtAutocomplete(this,'destino-hotel-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-hotel-list')">
             <div class="autocomplete-list" id="destino-hotel-list"></div>
           </div>
         </div>
         <div class="form-group">
           <label>Mes de preferencia</label>
           <div class="autocomplete-wrap">
-            <input class="autocomplete-input" id="mes-hotel" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="autocomplete(this,'mes-hotel-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-hotel-list')">
+            <input class="autocomplete-input" id="mes-hotel" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="dtAutocomplete(this,'mes-hotel-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-hotel-list')">
             <div class="autocomplete-list" id="mes-hotel-list"></div>
           </div>
         </div>
@@ -1066,7 +1066,6 @@ async function submitAlert() {
 
   const alerta = {
     email, destino,
-    palabras_clave,
     telefono: document.getElementById('telefono').value.trim()||null,
     presupuesto: parseFloat(document.getElementById('presupuesto').value)||null,
     fuente: fuente,
@@ -1137,7 +1136,7 @@ const MESES_VIAJE = [
 ];
 
 // ── Motor de autocomplete ─────────────────────────────────────────────────────
-function autocomplete(input, listId, datos) {
+function dtAutocomplete(input, listId, datos) {
   const q = input.value.toLowerCase().trim();
   const list = document.getElementById(listId);
   if(!q || q.length < 2) { list.classList.remove('open'); return; }
