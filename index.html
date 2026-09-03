@@ -297,6 +297,18 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
   .alert-inner{grid-template-columns:1fr;}
   .footer-top{grid-template-columns:1fr 1fr;}
 }
+
+/* ── Autocomplete ── */
+.autocomplete-wrap{position:relative;}
+.autocomplete-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:0.875rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.autocomplete-input::placeholder{color:rgba(255,255,255,0.4);}
+.autocomplete-input:focus{border-color:var(--lime);}
+.autocomplete-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--border-2);border-radius:10px;box-shadow:0 8px 24px rgba(82,0,255,0.12);z-index:500;max-height:200px;overflow-y:auto;display:none;}
+.autocomplete-list.open{display:block;}
+.autocomplete-item{padding:10px 14px;font-size:0.875rem;color:var(--text);cursor:pointer;transition:background 0.15s;border-radius:6px;margin:2px 4px;}
+.autocomplete-item:hover,.autocomplete-item.active{background:var(--purple-light);color:var(--purple);}
+.autocomplete-item strong{color:var(--purple);}
+
 </style>
 </head>
 <body>
@@ -564,62 +576,24 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
       <div id="campos-vuelo" style="display:none;">
         <div class="form-group">
           <label>Ciudad de origen</label>
-          <select id="origen-vuelo">
-            <option value="">Selecciona origen</option>
-            <option value="Ciudad de México">Ciudad de México (CDMX)</option>
-            <option value="Monterrey">Monterrey (MTY)</option>
-            <option value="Guadalajara">Guadalajara (GDL)</option>
-            <option value="Cancún">Cancún (CUN)</option>
-            <option value="Tijuana">Tijuana</option>
-            <option value="Otro">Otra ciudad</option>
-          </select>
+          <div class="autocomplete-wrap">
+            <input class="autocomplete-input" id="origen-vuelo" type="text" placeholder="Ej. Ciudad de México, Monterrey..." autocomplete="off" oninput="autocomplete(this,'origen-vuelo-list',CIUDADES_ORIGEN)" onkeydown="acKeydown(event,'origen-vuelo-list')">
+            <div class="autocomplete-list" id="origen-vuelo-list"></div>
+          </div>
         </div>
         <div class="form-group">
           <label>Destino</label>
-          <select id="destino-vuelo">
-            <option value="">Selecciona destino</option>
-            <optgroup label="México">
-              <option value="Cancún">Cancún</option>
-              <option value="Los Cabos">Los Cabos</option>
-              <option value="Puerto Vallarta">Puerto Vallarta</option>
-              <option value="Puerto Escondido">Puerto Escondido</option>
-              <option value="Tulum">Tulum</option>
-              <option value="Oaxaca">Oaxaca</option>
-            </optgroup>
-            <optgroup label="EUA">
-              <option value="Miami">Miami</option>
-              <option value="Nueva York">Nueva York</option>
-              <option value="Los Ángeles">Los Ángeles</option>
-              <option value="Chicago">Chicago</option>
-              <option value="Houston">Houston</option>
-            </optgroup>
-            <optgroup label="Europa">
-              <option value="Madrid">Madrid</option>
-              <option value="París">París</option>
-              <option value="Londres">Londres</option>
-              <option value="Amsterdam">Amsterdam</option>
-            </optgroup>
-            <optgroup label="Latinoamérica">
-              <option value="Bogotá">Bogotá</option>
-              <option value="Medellín">Medellín</option>
-              <option value="Buenos Aires">Buenos Aires</option>
-              <option value="São Paulo">São Paulo</option>
-              <option value="Punta Cana">Punta Cana</option>
-            </optgroup>
-          </select>
+          <div class="autocomplete-wrap">
+            <input class="autocomplete-input" id="destino-vuelo" type="text" placeholder="Ej. Cancún, Madrid, Miami..." autocomplete="off" oninput="autocomplete(this,'destino-vuelo-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-vuelo-list')">
+            <div class="autocomplete-list" id="destino-vuelo-list"></div>
+          </div>
         </div>
         <div class="form-group">
           <label>Mes aproximado de viaje</label>
-          <select id="mes-vuelo">
-            <option value="">Cualquier fecha</option>
-            <option value="Septiembre">Septiembre 2026</option>
-            <option value="Octubre">Octubre 2026</option>
-            <option value="Noviembre">Noviembre 2026</option>
-            <option value="Diciembre">Diciembre 2026</option>
-            <option value="Enero">Enero 2027</option>
-            <option value="Febrero">Febrero 2027</option>
-            <option value="Marzo">Marzo 2027</option>
-          </select>
+          <div class="autocomplete-wrap">
+            <input class="autocomplete-input" id="mes-vuelo" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="autocomplete(this,'mes-vuelo-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-vuelo-list')">
+            <div class="autocomplete-list" id="mes-vuelo-list"></div>
+          </div>
         </div>
       </div>
 
@@ -627,44 +601,21 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
       <div id="campos-hotel" style="display:none;">
         <div class="form-group">
           <label>Destino</label>
-          <select id="destino-hotel">
-            <option value="">Selecciona destino</option>
-            <optgroup label="México">
-              <option value="Cancún">Cancún</option>
-              <option value="Los Cabos">Los Cabos</option>
-              <option value="Puerto Vallarta">Puerto Vallarta</option>
-              <option value="Tulum">Tulum</option>
-              <option value="Playa del Carmen">Playa del Carmen</option>
-              <option value="Ciudad de México">Ciudad de México</option>
-              <option value="Oaxaca">Oaxaca</option>
-            </optgroup>
-            <optgroup label="Internacional">
-              <option value="Miami">Miami</option>
-              <option value="Nueva York">Nueva York</option>
-              <option value="Madrid">Madrid</option>
-              <option value="París">París</option>
-              <option value="Punta Cana">Punta Cana</option>
-              <option value="Buenos Aires">Buenos Aires</option>
-              <option value="Bogotá">Bogotá</option>
-            </optgroup>
-          </select>
+          <div class="autocomplete-wrap">
+            <input class="autocomplete-input" id="destino-hotel" type="text" placeholder="Ej. Cancún, Los Cabos, París..." autocomplete="off" oninput="autocomplete(this,'destino-hotel-list',DESTINOS_VIAJE)" onkeydown="acKeydown(event,'destino-hotel-list')">
+            <div class="autocomplete-list" id="destino-hotel-list"></div>
+          </div>
         </div>
         <div class="form-group">
           <label>Mes de preferencia</label>
-          <select id="mes-hotel">
-            <option value="">Cualquier fecha</option>
-            <option value="Septiembre">Septiembre 2026</option>
-            <option value="Octubre">Octubre 2026</option>
-            <option value="Noviembre">Noviembre 2026</option>
-            <option value="Diciembre">Diciembre 2026</option>
-            <option value="Enero">Enero 2027</option>
-            <option value="Febrero">Febrero 2027</option>
-            <option value="Marzo">Marzo 2027</option>
-          </select>
+          <div class="autocomplete-wrap">
+            <input class="autocomplete-input" id="mes-hotel" type="text" placeholder="Ej. Diciembre, Enero 2027..." autocomplete="off" oninput="autocomplete(this,'mes-hotel-list',MESES_VIAJE)" onkeydown="acKeydown(event,'mes-hotel-list')">
+            <div class="autocomplete-list" id="mes-hotel-list"></div>
+          </div>
         </div>
         <div class="form-group">
           <label>Número de noches aprox.</label>
-          <select id="noches-hotel">
+          <select id="noches-hotel" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;font-size:0.875rem;font-family:'DM Sans',sans-serif;outline:none;">
             <option value="">Cualquiera</option>
             <option value="2">2 noches</option>
             <option value="3">3 noches</option>
@@ -753,6 +704,19 @@ footer{background:#0a0a0a;color:#fff;padding:48px 5% 24px;}
       <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Puse una alerta para vuelo a Cancún y en 2 días me llegó la notificación. Ahorré casi $800 vs lo que había visto antes."</p><div class="testi-author"><div class="testi-avatar">MA</div><div><div class="testi-name">María Alejandra R.</div><div class="testi-loc">Ciudad de México</div></div></div></div>
       <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"Llevaba semanas buscando hotel en Los Cabos. Me avisaron cuando bajó el precio y ahorré $2,500 en 3 noches."</p><div class="testi-author"><div class="testi-avatar">CR</div><div><div class="testi-name">Carlos Reyes M.</div><div class="testi-loc">Guadalajara</div></div></div></div>
       <div class="testi"><div class="stars">★★★★★</div><p class="testi-text">"No sabía que existía algo así. Puse alerta para unas Nike y en 4 días me avisaron que estaban en oferta. Increíble."</p><div class="testi-author"><div class="testi-avatar">LP</div><div><div class="testi-name">Laura P. Gómez</div><div class="testi-loc">Monterrey</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN EDITORIAL -->
+<section style="padding:40px 5%;background:var(--bg);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="margin-bottom:20px;">
+      <span class="section-eyebrow">Contenido editorial</span>
+      <h2 class="section-title">Viaja inteligente esta temporada</h2>
+    </div>
+    <div id="editorial-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+      <div style="background:var(--purple-light);border-radius:16px;padding:24px;display:flex;align-items:center;justify-content:center;color:var(--text-3);font-size:0.85rem;">Cargando artículos...</div>
     </div>
   </div>
 </section>
@@ -989,7 +953,9 @@ async function cargarOfertas() {
         return (b.descuento_pct||0)-(a.descuento_pct||0);
       });
       document.getElementById('total-ofertas').textContent = `${ofertas.length} ofertas activas`;
+      window._todasOfertas = ofertas;
       renderViajes(ofertas);
+      renderEditorial();
       const soloProductos = ofertas.filter(o => o.tipo !== 'viajes' && o.fuente !== 'Vuelos Kayak' && o.fuente !== 'Hoteles Booking');
       todasLasOfertas = soloProductos;
       ofertasFiltradas = soloProductos;
@@ -1133,6 +1099,175 @@ function toggleSidebar() {
   document.getElementById('sidebar-overlay').classList.toggle('open');
   document.body.style.overflow = document.getElementById('sidebar').classList.contains('open') ? 'hidden' : '';
 }
+
+// ── Datos para autocomplete ───────────────────────────────────────────────────
+const CIUDADES_ORIGEN = [
+  'Ciudad de México AICM (MEX)','Ciudad de México AIFA (NLU)',
+  'Guadalajara (GDL)','Monterrey (MTY)','Cancún (CUN)',
+  'Tijuana (TIJ)','Hermosillo (HMO)','León (BJX)',
+  'Los Cabos (SJD)','Puerto Vallarta (PVR)','Mérida (MID)',
+  'Oaxaca (OAX)','Veracruz (VER)','Acapulco (ACA)',
+];
+
+const DESTINOS_VIAJE = [
+  // México
+  'Cancún','Los Cabos','Puerto Vallarta','Puerto Escondido',
+  'Tulum','Playa del Carmen','Oaxaca','Ciudad de México',
+  'Guadalajara','Mérida','Huatulco','Acapulco','Mazatlán',
+  // EUA
+  'Miami, Florida','Nueva York, NY','Los Ángeles, CA',
+  'Chicago, IL','Houston, TX','Las Vegas, NV','Orlando, FL',
+  'San Francisco, CA','Washington DC','Boston, MA',
+  // Europa
+  'Madrid, España','Barcelona, España','París, Francia',
+  'Londres, Reino Unido','Amsterdam, Holanda','Roma, Italia',
+  'Lisboa, Portugal','Berlín, Alemania','Ámsterdam, Holanda',
+  // Latinoamérica
+  'Bogotá, Colombia','Medellín, Colombia','Cartagena, Colombia',
+  'Buenos Aires, Argentina','São Paulo, Brasil','Río de Janeiro, Brasil',
+  'Lima, Perú','Santiago, Chile','Punta Cana, Rep. Dom.',
+  'La Habana, Cuba','Ciudad de Panamá','San José, Costa Rica',
+];
+
+const MESES_VIAJE = [
+  'Septiembre 2026','Octubre 2026','Noviembre 2026',
+  'Diciembre 2026','Enero 2027','Febrero 2027',
+  'Marzo 2027','Abril 2027','Mayo 2027',
+  'Junio 2027','Julio 2027','Agosto 2027',
+];
+
+// ── Motor de autocomplete ─────────────────────────────────────────────────────
+function autocomplete(input, listId, datos) {
+  const q = input.value.toLowerCase().trim();
+  const list = document.getElementById(listId);
+  if(!q || q.length < 2) { list.classList.remove('open'); return; }
+
+  const matches = datos.filter(d => d.toLowerCase().includes(q)).slice(0, 8);
+  if(!matches.length) { list.classList.remove('open'); return; }
+
+  list.innerHTML = matches.map(m => {
+    const idx = m.toLowerCase().indexOf(q);
+    const bold = m.slice(0, idx) + '<strong>' + m.slice(idx, idx + q.length) + '</strong>' + m.slice(idx + q.length);
+    return `<div class="autocomplete-item" onclick="seleccionarAC('${m}','${input.id}','${listId}')">${bold}</div>`;
+  }).join('');
+  list.classList.add('open');
+}
+
+function seleccionarAC(valor, inputId, listId) {
+  document.getElementById(inputId).value = valor;
+  document.getElementById(listId).classList.remove('open');
+}
+
+function acKeydown(e, listId) {
+  const list = document.getElementById(listId);
+  const items = list.querySelectorAll('.autocomplete-item');
+  const active = list.querySelector('.autocomplete-item.active');
+  if(e.key === 'ArrowDown') {
+    e.preventDefault();
+    if(!active) items[0]?.classList.add('active');
+    else { active.classList.remove('active'); active.nextElementSibling?.classList.add('active'); }
+  } else if(e.key === 'ArrowUp') {
+    e.preventDefault();
+    if(active) { active.classList.remove('active'); active.previousElementSibling?.classList.add('active'); }
+  } else if(e.key === 'Enter' && active) {
+    e.preventDefault();
+    const inputId = listId.replace('-list','');
+    seleccionarAC(active.textContent, inputId, listId);
+  } else if(e.key === 'Escape') {
+    list.classList.remove('open');
+  }
+}
+
+// Cerrar autocomplete al hacer clic fuera
+document.addEventListener('click', e => {
+  if(!e.target.closest('.autocomplete-wrap')) {
+    document.querySelectorAll('.autocomplete-list').forEach(l => l.classList.remove('open'));
+  }
+});
+
+// ── Sección editorial — render ────────────────────────────────────────────────
+function renderEditorial() {
+  const hoy = new Date();
+  const mes = hoy.getMonth(); // 0=enero, 11=diciembre
+
+  const articulos = [
+    {
+      slug: 'navidad-2026',
+      titulo: 'Los mejores destinos para tu Navidad 2026',
+      subtitulo: 'Vuelos y hoteles con descuento para diciembre',
+      imagen: '🎄',
+      color: 'linear-gradient(135deg,#1a1a2e,#16213e)',
+      filtro: o => {
+        const txt = ((o.destino||'')+(o.palabras_clave||'')).toLowerCase();
+        const esDic = (o.tipo_promo||'').toLowerCase().includes('dic') || (o.fecha||'').includes('12/');
+        return o.tipo === 'viajes' && (esDic || txt.includes('cancún') || txt.includes('los cabos') || txt.includes('madrid') || txt.includes('nueva york'));
+      },
+      destinos: ['Cancún','Los Cabos','Madrid','Nueva York','Miami'],
+    },
+    {
+      slug: 'puente-noviembre',
+      titulo: 'Puente de Noviembre: escápate sin gastar de más',
+      subtitulo: 'Las mejores ofertas para el puente del 2 de noviembre',
+      imagen: '🍂',
+      color: 'linear-gradient(135deg,#2d1b00,#7c3a00)',
+      filtro: o => {
+        const txt = ((o.destino||'')+(o.palabras_clave||'')).toLowerCase();
+        return o.tipo === 'viajes' && (txt.includes('oaxaca') || txt.includes('guadalajara') || txt.includes('mérida') || txt.includes('puebla') || txt.includes('guanajuato'));
+      },
+      destinos: ['Oaxaca','Guadalajara','Mérida','Guanajuato'],
+    },
+    {
+      slug: 'vuelos-baratos',
+      titulo: 'Vuelos por debajo del precio promedio esta semana',
+      subtitulo: 'Ofertas relámpago detectadas en las últimas 24h',
+      imagen: '✈',
+      color: 'linear-gradient(135deg,#0a0a2e,#1a1a6e)',
+      filtro: o => o.fuente === 'Vuelos Kayak' && (o.descuento_pct || 0) >= 15,
+      destinos: [],
+    },
+  ];
+
+  const section = document.getElementById('editorial-grid');
+  if(!section) return;
+
+  section.innerHTML = articulos.map(art => {
+    const ofertas = (window._todasOfertas || []).filter(art.filtro).slice(0, 3);
+    const tags = art.destinos.length
+      ? art.destinos.map(d => `<span style="background:rgba(255,255,255,0.15);color:#fff;font-size:0.68rem;padding:3px 10px;border-radius:980px;">${d}</span>`).join('')
+      : ofertas.map(o => `<span style="background:rgba(255,255,255,0.15);color:#fff;font-size:0.68rem;padding:3px 10px;border-radius:980px;">${(o.destino||'').split('→')[1]?.trim()||o.destino}</span>`).join('');
+
+    const previews = ofertas.length ? ofertas.map(o => `
+      <a href="${o.url}" target="_blank" rel="noopener noreferrer" style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;text-decoration:none;margin-bottom:6px;">
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.9);flex:1;">${(o.destino||'').replace('Vuelo ','').split(' — ')[0]}</span>
+        <span style="font-size:0.85rem;font-weight:700;color:#CCFF00;white-space:nowrap;margin-left:8px;">${o.precio_fmt}</span>
+      </a>`).join('') : `<p style="font-size:0.78rem;color:rgba(255,255,255,0.5);text-align:center;padding:8px 0;">Actualizando ofertas...</p>`;
+
+    return `
+    <div style="background:${art.color};border-radius:16px;overflow:hidden;cursor:pointer;" onclick="verArticulo('${art.slug}')">
+      <div style="padding:24px 20px 16px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;">${art.imagen}</div>
+        <h3 style="font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin:0 0 6px;line-height:1.3;">${art.titulo}</h3>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin:0 0 12px;">${art.subtitulo}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">${tags}</div>
+        <div>${previews}</div>
+      </div>
+      <div style="padding:12px 20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.72rem;color:rgba(255,255,255,0.5);">Actualizado hoy</span>
+        <span style="font-size:0.78rem;color:#CCFF00;font-weight:600;">Ver todas →</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function verArticulo(slug) {
+  // Por ahora hace scroll a ofertas filtradas por el artículo
+  document.getElementById('ofertas').scrollIntoView({behavior:'smooth'});
+  if(slug === 'vuelos-baratos') {
+    cambiarTab('viajes', document.querySelector('.section-tab'));
+    setTimeout(() => filtrarViaje('vuelos', document.querySelectorAll('.viaje-filter-btn')[1]), 300);
+  }
+}
+
 </script>
 </body>
 </html>
